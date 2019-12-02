@@ -15,6 +15,9 @@ class MainActivity : AppCompatActivity() {
         api.getGithub()
         api.getSessionID("test_name")
         api.getTracks("test", 20)
+        api.getCurrentQueues()
+        api.addTrackToQueue("strange_test_id")
+        api.voteTrack("strange_test_id", 1)
         var test = 1
     }
 }

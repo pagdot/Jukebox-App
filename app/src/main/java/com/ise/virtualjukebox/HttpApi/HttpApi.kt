@@ -50,8 +50,6 @@ class HttpApi(var serverName : String) {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
-
-                sessionID = jsonDataArray.getJSONObject(0)["session_id"].toString()
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
@@ -59,7 +57,71 @@ class HttpApi(var serverName : String) {
             }
         })
     }
-//"https://api.github.com/users/MADITT/repos"
+
+    fun getCurrentQueues() {
+        val segments = this.baseUrlSegments.toMutableList()
+        segments.add("getCurrentQueues")
+
+        val hashMap : HashMap<String, String> = HashMap()
+        hashMap.put("session_id", sessionID.toString())
+
+        restClient.queueGetCall(this.baseScheme, this.serverName, segments, hashMap, object : RestClient.HttpCallback {
+            override fun onSuccess(response: Response) {
+                val jsonDataString = response.body?.string()
+                val jsonDataArray = JSONArray(jsonDataString)
+            }
+
+            override fun onFailure(response: Response?, exception: IOException?) {
+                Log.e("test", "test_failure")
+            }
+        })
+    }
+
+    //queue-Type is always set to normal since we don't support any admin feature
+    fun addTrackToQueue(trackID : String) {
+        val segments = this.baseUrlSegments.toMutableList()
+        segments.add("addTrackToQueue")
+
+        val hashMap : HashMap<String, String> = HashMap()
+        hashMap.put("session_id", sessionID.toString())
+        hashMap.put("track_id", trackID)
+        hashMap.put("queue_type", "normal")
+
+        restClient.quePostCall(this.baseScheme, this.serverName, segments, hashMap, object : RestClient.HttpCallback {
+            override fun onSuccess(response: Response) {
+                val jsonDataString = response.body?.string()
+                val jsonDataArray = JSONArray(jsonDataString)
+            }
+
+            override fun onFailure(response: Response?, exception: IOException?) {
+                Log.e("test", "test_failure")
+            }
+        })
+    }
+
+    //TODO:Check vote parameter it should not be a string.
+    fun voteTrack(trackID : String, vote : Int) {
+        val segments = this.baseUrlSegments.toMutableList()
+        segments.add("voteTrack")
+
+        val hashMap : HashMap<String, String> = HashMap()
+        hashMap.put("session_id", sessionID.toString())
+        hashMap.put("track_id", trackID)
+        hashMap.put("vote", vote.toString())
+
+        restClient.quePutCall(this.baseScheme, this.serverName, segments, hashMap, object : RestClient.HttpCallback {
+            override fun onSuccess(response: Response) {
+                val jsonDataString = response.body?.string()
+                val jsonDataArray = JSONArray(jsonDataString)
+            }
+
+            override fun onFailure(response: Response?, exception: IOException?) {
+                Log.e("test", "test_failure")
+            }
+        })
+    }
+
+    //"https://api.github.com/users/MADITT/repos"
     fun getGithub() {
         val segments = mutableListOf("users", "MADITT", "repos")
 
