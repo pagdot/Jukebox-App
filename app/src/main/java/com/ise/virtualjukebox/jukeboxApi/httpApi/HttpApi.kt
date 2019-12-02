@@ -1,4 +1,4 @@
-package com.ise.virtualjukebox.httpApi
+package com.ise.virtualjukebox.jukeboxApi.httpApi
 
 import android.util.Log
 import okhttp3.Response
@@ -11,7 +11,8 @@ import kotlin.collections.HashMap
 class HttpApi(var serverName : String) {
     private var baseScheme : String = "http"
     private var baseUrlSegments = mutableListOf("api", "v1")
-    private var restClient = RestClient()
+    private var restClient =
+        RestClient()
 
     var sessionID : String? = "124234dgd"//null
 
@@ -22,7 +23,8 @@ class HttpApi(var serverName : String) {
         val hashMap : HashMap<String, String> = HashMap()
         hashMap.put("nickname", nickname)
 
-        restClient.quePostCall(this.baseScheme, this.serverName, segments, hashMap, object : RestClient.HttpCallback {
+        restClient.quePostCall(this.baseScheme, this.serverName, segments, hashMap, object :
+            RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
@@ -46,7 +48,8 @@ class HttpApi(var serverName : String) {
         if(max_entries != 0)
             hashMap.put("max_entries", max_entries.toString())
 
-        restClient.queueGetCall(this.baseScheme, this.serverName, segments, hashMap, object : RestClient.HttpCallback {
+        restClient.queueGetCall(this.baseScheme, this.serverName, segments, hashMap, object :
+            RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
@@ -65,7 +68,8 @@ class HttpApi(var serverName : String) {
         val hashMap : HashMap<String, String> = HashMap()
         hashMap.put("session_id", sessionID.toString())
 
-        restClient.queueGetCall(this.baseScheme, this.serverName, segments, hashMap, object : RestClient.HttpCallback {
+        restClient.queueGetCall(this.baseScheme, this.serverName, segments, hashMap, object :
+            RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
@@ -87,7 +91,8 @@ class HttpApi(var serverName : String) {
         hashMap.put("track_id", trackID)
         hashMap.put("queue_type", "normal")
 
-        restClient.quePostCall(this.baseScheme, this.serverName, segments, hashMap, object : RestClient.HttpCallback {
+        restClient.quePostCall(this.baseScheme, this.serverName, segments, hashMap, object :
+            RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
@@ -109,7 +114,8 @@ class HttpApi(var serverName : String) {
         hashMap.put("track_id", trackID)
         hashMap.put("vote", vote.toString())
 
-        restClient.quePutCall(this.baseScheme, this.serverName, segments, hashMap, object : RestClient.HttpCallback {
+        restClient.quePutCall(this.baseScheme, this.serverName, segments, hashMap, object :
+            RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
@@ -128,7 +134,8 @@ class HttpApi(var serverName : String) {
         val hashMap : HashMap<String, String> = HashMap()
         hashMap.put("", "")
 
-        restClient.queueGetCall("https", "api.github.com", segments, hashMap, object : RestClient.HttpCallback {
+        restClient.queueGetCall("https", "api.github.com", segments, hashMap, object :
+            RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)

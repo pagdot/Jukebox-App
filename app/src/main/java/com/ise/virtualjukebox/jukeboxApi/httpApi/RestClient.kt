@@ -1,4 +1,4 @@
-package com.ise.virtualjukebox.httpApi
+package com.ise.virtualjukebox.jukeboxApi.httpApi
 
 import okhttp3.RequestBody.Companion.toRequestBody
 
