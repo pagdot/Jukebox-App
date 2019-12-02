@@ -13,7 +13,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         api.getGithub()
-
+        api.getSessionID("test_name")
+        api.getTracks("test", 20)
         var test = 1
     }
 }

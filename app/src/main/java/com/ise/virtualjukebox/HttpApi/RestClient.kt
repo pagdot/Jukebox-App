@@ -1,16 +1,11 @@
 package com.ise.virtualjukebox.httpApi
 
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.Call
-import okhttp3.FormBody
-
 import okhttp3.RequestBody.Companion.toRequestBody
 
 import java.io.IOException
 import android.util.Log
+import androidx.core.net.toUri
+import okhttp3.*
 
 class RestClient {
 
@@ -33,27 +28,35 @@ class RestClient {
         fun onSuccess(response: Response)
     }
 
-    fun queueGetCall(url: String, cb: HttpCallback) {
-        val hashMap : HashMap<String, String> = HashMap()
-        hashMap.put("", "")
-        this.call("GET", url, hashMap, cb)
+    fun queueGetCall(scheme : String, host: String, segment : List<String>, parameters: HashMap<String, String>, cb: HttpCallback) {
+        this.call("GET", scheme, host, segment, parameters, cb)
     }
 
-    fun quePostCall(url: String, parameters: HashMap<String, String>, cb: HttpCallback) {
-        //call("POST", url, cb)
+    fun quePostCall(scheme : String, host: String, segment : List<String>, parameters: HashMap<String, String>, cb: HttpCallback) {
+        this.call("POST", scheme, host, segment, parameters, cb)
     }
 
-    fun quePutCall(url: String, parameters: HashMap<String, String>, cb: HttpCallback) {
-        //call("PUT", url, cb)
+    fun quePutCall(scheme : String, host: String, segment : List<String>, parameters: HashMap<String, String>, cb: HttpCallback) {
+        this.call("PUT", scheme, host, segment, parameters, cb)
     }
 
-    private fun call(method: String, url: String, parameters: HashMap<String, String>, cb: HttpCallback) {
+    private fun call(method: String, scheme : String, host: String, segments : List<String>, parameters: HashMap<String, String>, cb: HttpCallback) {
         var request : Request
+        val urlBuilder = HttpUrl.Builder().scheme(scheme).host(host)
+        segments.forEach { urlBuilder.addPathSegments(it) }
+
         if(method == "GET")
         {
+            val it = parameters.entries.iterator()
+            while (it.hasNext()) {
+                val pair = it.next() as Map.Entry<*, *>
+                    if(pair.key != "" && pair.value != "")
+                        urlBuilder.addEncodedQueryParameter(pair.key.toString(), pair.value.toString())
+            }
+            val builtUrl = urlBuilder.build()
             request = Request.Builder()
                 .method(method, null)
-                .url(url)
+                .url(builtUrl)
                 .build()
         }
         else
@@ -67,9 +70,10 @@ class RestClient {
             val body = restBodyBuilder.build()
             //val payload : String = "test = 2"
             //val body = payload.toRequestBody()
+            val builtUrl = urlBuilder.build()
             request = Request.Builder()
                 .method(method, body)
-                .url(url)
+                .url(builtUrl)
                 .build()
         }
 
