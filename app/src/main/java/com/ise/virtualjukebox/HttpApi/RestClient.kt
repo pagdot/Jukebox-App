@@ -1,10 +1,14 @@
-package com.ise.virtualjukebox.HttpApi
+package com.ise.virtualjukebox.httpApi
 
 import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Call
+import okhttp3.FormBody
+
+import okhttp3.RequestBody.Companion.toRequestBody
+
 import java.io.IOException
 import android.util.Log
 
@@ -30,22 +34,44 @@ class RestClient {
     }
 
     fun queueGetCall(url: String, cb: HttpCallback) {
-        this.call("GET", url, cb)
+        val hashMap : HashMap<String, String> = HashMap()
+        hashMap.put("", "")
+        this.call("GET", url, hashMap, cb)
     }
 
-    public fun quePostCall(url: String, cb: HttpCallback) {
-        call("POST", url, cb)
+    fun quePostCall(url: String, parameters: HashMap<String, String>, cb: HttpCallback) {
+        //call("POST", url, cb)
     }
 
-    public fun quePutCall(url: String, cb: HttpCallback) {
-        call("PUT", url, cb)
+    fun quePutCall(url: String, parameters: HashMap<String, String>, cb: HttpCallback) {
+        //call("PUT", url, cb)
     }
 
-    private fun call(method: String, url: String, cb: HttpCallback) {
-        val request = Request.Builder()
-            .method(method, null)
-            .url(url)
-            .build()  //TODO: Body for put or post
+    private fun call(method: String, url: String, parameters: HashMap<String, String>, cb: HttpCallback) {
+        var request : Request
+        if(method == "GET")
+        {
+            request = Request.Builder()
+                .method(method, null)
+                .url(url)
+                .build()
+        }
+        else
+        {
+            val restBodyBuilder = FormBody.Builder()
+            val it = parameters.entries.iterator()
+            while (it.hasNext()) {
+                val pair = it.next() as Map.Entry<*, *>
+                restBodyBuilder.add(pair.key.toString(), pair.value.toString())
+            }
+            val body = restBodyBuilder.build()
+            //val payload : String = "test = 2"
+            //val body = payload.toRequestBody()
+            request = Request.Builder()
+                .method(method, body)
+                .url(url)
+                .build()
+        }
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {

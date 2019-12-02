@@ -2,11 +2,11 @@ package com.ise.virtualjukebox
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.ise.virtualjukebox.HttpApi.HttpApi
+import com.ise.virtualjukebox.httpApi.HttpApi
 
 class MainActivity : AppCompatActivity() {
 
-    var api = HttpApi()
+    var api = HttpApi("127.0.0.1")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
