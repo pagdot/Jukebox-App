@@ -1,7 +1,7 @@
 package com.ise.virtualjukebox.jukeboxApi.dataStructure
 
 class Queues {
-    var current = PlayingTrack(false, 0)
-    var normal_que = mutableListOf(VoteTrack(0, false))
-    var admin_que = mutableListOf(Track())
+    var current : PlayingTrack? = null
+    var normal_que : MutableList<VoteTrack>? = null
+    var admin_que :MutableList<Track>? = null
 }

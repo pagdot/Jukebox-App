@@ -1,5 +1,6 @@
 package com.ise.virtualjukebox.jukeboxApi.dataStructure
 
-data class PlayingTrack(var playing : Boolean, var playingFor : Int) : Track() {
-
+class PlayingTrack: Track() {
+    var playing : Boolean = false
+    var playingFor : Int = 0
 }

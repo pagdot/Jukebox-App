@@ -3,15 +3,18 @@ package com.ise.virtualjukebox.jukeboxApi
 import android.util.Log
 import com.ise.virtualjukebox.jukeboxApi.httpApi.HttpApi
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Queues
+import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.httpApi.RestClient
 
 import okhttp3.Response
 import org.json.JSONArray
+import org.json.JSONException
 import java.io.IOException
 
-class JukeboxApi(var hostName : String) {
+class JukeboxApi(hostName : String) {
     private var api = HttpApi(hostName)
     var queues = Queues()
+    var searchTracks : MutableList<Track>? = null
 
     fun getSessionID(nickname :String) {
         api.getSessionID(nickname, object : RestClient.HttpCallback {
@@ -35,11 +38,28 @@ class JukeboxApi(var hostName : String) {
    fun getTracks(searchPattern : String, maxEntries : Int) {
         api.getTracks(searchPattern, maxEntries, object : RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
+                searchTracks?.clear()
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
-                var tmp = jsonDataArray.getJSONObject(0)["name"].toString()
+                for (i in 0 until jsonDataArray.length()) {
+                    try {
+                        val tmpTrack = Track()
+                        val jsonObj = jsonDataArray.getJSONObject(i)
+                        if(jsonObj != null) {
+                            tmpTrack.trackId = jsonObj["track_id"].toString().toInt()
+                            tmpTrack.title = jsonObj["title"].toString()
+                            tmpTrack.album = jsonObj["album"].toString()
+                            tmpTrack.artist = jsonObj["artist"].toString()
+                            tmpTrack.duration = jsonObj["duration"].toString().toInt()
+                            tmpTrack.icon_uri = jsonObj["icon_uri"].toString()
 
-                Log.d("getTracks success", ("SessionID: $tmp"))
+                            searchTracks?.add(tmpTrack)
+                            Log.d("getTracks successful", searchTracks.toString())
+                        }
+                    } catch (e: JSONException) { // If there is an error then output this to the logs.
+                        Log.e("getTracks JSON ex", "Invalid JSON Object.")
+                    }
+                }
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
@@ -56,7 +76,9 @@ class JukeboxApi(var hostName : String) {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
-                var tmp = jsonDataArray.getJSONObject(0)["name"].toString()
+                val tmp = jsonDataArray.getJSONObject(0)["name"].toString()
+
+                
 
                 Log.d("getCurQueues success", ("SessionID: $tmp"))
             }
@@ -73,11 +95,7 @@ class JukeboxApi(var hostName : String) {
     fun addTrackToQueue(trackID : String) {
         api.addTrackToQueue(trackID, object : RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
-                val jsonDataString = response.body?.string()
-                val jsonDataArray = JSONArray(jsonDataString)
-                var tmp = jsonDataArray.getJSONObject(0)["name"].toString()
-
-                Log.d("addTrackToQ success", ("SessionID: $tmp"))
+                Log.d("addTrackToQ success", "empty response")
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
@@ -92,11 +110,7 @@ class JukeboxApi(var hostName : String) {
     fun voteTrack(trackID : String, vote : Int) {
         api.voteTrack(trackID, vote, object : RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
-                val jsonDataString = response.body?.string()
-                val jsonDataArray = JSONArray(jsonDataString)
-                var tmp = jsonDataArray.getJSONObject(0)["name"].toString()
-
-                Log.d("voteTrack success", ("SessionID: $tmp"))
+                Log.d("addTrackToQ success", "empty response")
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
@@ -113,7 +127,7 @@ class JukeboxApi(var hostName : String) {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
-                var tmp = jsonDataArray.getJSONObject(0)["name"].toString()
+                val tmp = jsonDataArray.getJSONObject(0)["name"].toString()
 
                 Log.d("getGithub success", ("Repo Name: $tmp"))
             }
