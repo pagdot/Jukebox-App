@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.core.net.toUri
 import okhttp3.*
 
-class RestClient {
+open class RestClient {
 
     private var client = OkHttpClient()
 

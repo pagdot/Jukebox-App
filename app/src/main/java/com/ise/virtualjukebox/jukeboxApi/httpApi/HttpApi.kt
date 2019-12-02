@@ -8,37 +8,24 @@ import org.json.JSONArray
 import java.util.*
 import kotlin.collections.HashMap
 
-class HttpApi(var serverName : String) {
+open class HttpApi(var serverName : String) : RestClient() {
     private var baseScheme : String = "http"
     private var baseUrlSegments = mutableListOf("api", "v1")
-    private var restClient =
-        RestClient()
+    private var restClient = RestClient()
 
     var sessionID : String? = "124234dgd"//null
 
-    fun getSessionID(nickname : String) {
+    open fun getSessionID(nickname : String, cb : HttpCallback) {
         val segments = this.baseUrlSegments.toMutableList()
         segments.add("generateSession")
 
         val hashMap : HashMap<String, String> = HashMap()
         hashMap.put("nickname", nickname)
 
-        restClient.quePostCall(this.baseScheme, this.serverName, segments, hashMap, object :
-            RestClient.HttpCallback {
-            override fun onSuccess(response: Response) {
-                val jsonDataString = response.body?.string()
-                val jsonDataArray = JSONArray(jsonDataString)
-
-                sessionID = jsonDataArray.getJSONObject(0)["session_id"].toString()
-            }
-
-            override fun onFailure(response: Response?, exception: IOException?) {
-                Log.e("test", "test_failure")
-            }
-        })
+        restClient.quePostCall(this.baseScheme, this.serverName, segments, hashMap, cb)
     }
 
-    fun getTracks(searchPattern : String, max_entries : Int) {
+    fun getTracks(searchPattern : String, max_entries : Int, cb : HttpCallback) {
         val segments = this.baseUrlSegments.toMutableList()
         segments.add("querryTracks")
 
@@ -48,41 +35,21 @@ class HttpApi(var serverName : String) {
         if(max_entries != 0)
             hashMap.put("max_entries", max_entries.toString())
 
-        restClient.queueGetCall(this.baseScheme, this.serverName, segments, hashMap, object :
-            RestClient.HttpCallback {
-            override fun onSuccess(response: Response) {
-                val jsonDataString = response.body?.string()
-                val jsonDataArray = JSONArray(jsonDataString)
-            }
-
-            override fun onFailure(response: Response?, exception: IOException?) {
-                Log.e("test", "test_failure")
-            }
-        })
+        restClient.queueGetCall(this.baseScheme, this.serverName, segments, hashMap, cb)
     }
 
-    fun getCurrentQueues() {
+    fun getCurrentQueues(cb : HttpCallback) {
         val segments = this.baseUrlSegments.toMutableList()
         segments.add("getCurrentQueues")
 
         val hashMap : HashMap<String, String> = HashMap()
         hashMap.put("session_id", sessionID.toString())
 
-        restClient.queueGetCall(this.baseScheme, this.serverName, segments, hashMap, object :
-            RestClient.HttpCallback {
-            override fun onSuccess(response: Response) {
-                val jsonDataString = response.body?.string()
-                val jsonDataArray = JSONArray(jsonDataString)
-            }
-
-            override fun onFailure(response: Response?, exception: IOException?) {
-                Log.e("test", "test_failure")
-            }
-        })
+        restClient.queueGetCall(this.baseScheme, this.serverName, segments, hashMap, cb)
     }
 
     //queue-Type is always set to normal since we don't support any admin feature
-    fun addTrackToQueue(trackID : String) {
+    fun addTrackToQueue(trackID : String, cb : HttpCallback) {
         val segments = this.baseUrlSegments.toMutableList()
         segments.add("addTrackToQueue")
 
@@ -91,21 +58,11 @@ class HttpApi(var serverName : String) {
         hashMap.put("track_id", trackID)
         hashMap.put("queue_type", "normal")
 
-        restClient.quePostCall(this.baseScheme, this.serverName, segments, hashMap, object :
-            RestClient.HttpCallback {
-            override fun onSuccess(response: Response) {
-                val jsonDataString = response.body?.string()
-                val jsonDataArray = JSONArray(jsonDataString)
-            }
-
-            override fun onFailure(response: Response?, exception: IOException?) {
-                Log.e("test", "test_failure")
-            }
-        })
+        restClient.quePostCall(this.baseScheme, this.serverName, segments, hashMap, cb)
     }
 
     //TODO:Check vote parameter it should not be a string.
-    fun voteTrack(trackID : String, vote : Int) {
+    fun voteTrack(trackID : String, vote : Int, cb : HttpCallback) {
         val segments = this.baseUrlSegments.toMutableList()
         segments.add("voteTrack")
 
@@ -114,36 +71,16 @@ class HttpApi(var serverName : String) {
         hashMap.put("track_id", trackID)
         hashMap.put("vote", vote.toString())
 
-        restClient.quePutCall(this.baseScheme, this.serverName, segments, hashMap, object :
-            RestClient.HttpCallback {
-            override fun onSuccess(response: Response) {
-                val jsonDataString = response.body?.string()
-                val jsonDataArray = JSONArray(jsonDataString)
-            }
-
-            override fun onFailure(response: Response?, exception: IOException?) {
-                Log.e("test", "test_failure")
-            }
-        })
+        restClient.quePutCall(this.baseScheme, this.serverName, segments, hashMap, cb)
     }
 
     //"https://api.github.com/users/MADITT/repos"
-    fun getGithub() {
+    open fun getGithub(cb : HttpCallback) {
         val segments = mutableListOf("users", "MADITT", "repos")
 
         val hashMap : HashMap<String, String> = HashMap()
         hashMap.put("", "")
 
-        restClient.queueGetCall("https", "api.github.com", segments, hashMap, object :
-            RestClient.HttpCallback {
-            override fun onSuccess(response: Response) {
-                val jsonDataString = response.body?.string()
-                val jsonDataArray = JSONArray(jsonDataString)
-            }
-
-            override fun onFailure(response: Response?, exception: IOException?) {
-                Log.e("test", "test_failure")
-            }
-        })
+        restClient.queueGetCall("https", "api.github.com", segments, hashMap, cb)
     }
 }
