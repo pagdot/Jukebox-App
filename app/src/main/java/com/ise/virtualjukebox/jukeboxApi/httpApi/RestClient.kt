@@ -79,7 +79,7 @@ open class RestClient {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.e("Rest" + method + "Call Exception:", e.toString())
+                Log.e("Rest: $method Call Exception:", e.toString())
                 cb.onFailure(null, e)
                 return
             }
@@ -89,6 +89,7 @@ open class RestClient {
                     cb.onSuccess(response)
                     return
                 } else {
+                    Log.e("Rest: $method code exception:", "Code: ${response.code}")
                     cb.onFailure(response, null)
                     return
                 }

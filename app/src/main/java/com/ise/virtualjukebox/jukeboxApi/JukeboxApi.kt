@@ -18,12 +18,16 @@ class JukeboxApi(var hostName : String) {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
-                var test = jsonDataArray.getJSONObject(0)["name"].toString()
-                Log.e("test", "test_failure")
+                val tmp = jsonDataArray.getJSONObject(0)["session_id"].toString()
+                api.sessionID = tmp
+                Log.d("getSessionID success", ("SessionID: $tmp"))
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                Log.e("test", "test_failure")
+                if(exception == null)
+                    Log.e("getSessionID code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
+                else
+                    Log.e("getSessionID exception", "${exception.message}")
             }
         })
     }
@@ -33,12 +37,16 @@ class JukeboxApi(var hostName : String) {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
-                var test = jsonDataArray.getJSONObject(0)["name"].toString()
-                Log.e("test", "test_failure")
+                var tmp = jsonDataArray.getJSONObject(0)["name"].toString()
+
+                Log.d("getTracks success", ("SessionID: $tmp"))
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                Log.e("test", "test_failure")
+                if(exception == null)
+                    Log.e("getTracks code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
+                else
+                    Log.e("getTracks exception", "${exception.message}")
             }
         })
     }
@@ -48,12 +56,16 @@ class JukeboxApi(var hostName : String) {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
-                var test = jsonDataArray.getJSONObject(0)["name"].toString()
-                Log.e("test", "test_failure")
+                var tmp = jsonDataArray.getJSONObject(0)["name"].toString()
+
+                Log.d("getCurQueues success", ("SessionID: $tmp"))
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                Log.e("test", "test_failure")
+                if(exception == null)
+                    Log.e("getCurQueues code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
+                else
+                    Log.e("getCurQueues exception", "${exception.message}")
             }
         })
     }
@@ -63,12 +75,16 @@ class JukeboxApi(var hostName : String) {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
-                var test = jsonDataArray.getJSONObject(0)["name"].toString()
-                Log.e("test", "test_failure")
+                var tmp = jsonDataArray.getJSONObject(0)["name"].toString()
+
+                Log.d("addTrackToQ success", ("SessionID: $tmp"))
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                Log.e("test", "test_failure")
+                if(exception == null)
+                    Log.e("addTrackToQ code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
+                else
+                    Log.e("addTrackToQ exception", "${exception.message}")
             }
         })
     }
@@ -78,12 +94,16 @@ class JukeboxApi(var hostName : String) {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
-                var test = jsonDataArray.getJSONObject(0)["name"].toString()
-                Log.e("test", "test_failure")
+                var tmp = jsonDataArray.getJSONObject(0)["name"].toString()
+
+                Log.d("voteTrack success", ("SessionID: $tmp"))
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                Log.e("test", "test_failure")
+                if(exception == null)
+                    Log.e("voteTrack code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
+                else
+                    Log.e("voteTrack exception", "${exception.message}")
             }
         })
     }
@@ -93,12 +113,16 @@ class JukeboxApi(var hostName : String) {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
                 val jsonDataArray = JSONArray(jsonDataString)
-                var test = jsonDataArray.getJSONObject(0)["name"].toString()
-                Log.e("test", "test_failure")
+                var tmp = jsonDataArray.getJSONObject(0)["name"].toString()
+
+                Log.d("getGithub success", ("Repo Name: $tmp"))
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                Log.e("test", "test_failure")
+                if(exception == null)
+                    Log.e("getGithub code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
+                else
+                    Log.e("getGithub exception", "${exception.message}")
             }
         })
     }
