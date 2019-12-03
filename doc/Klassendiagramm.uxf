@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>576</x>
-      <y>424</y>
+      <x>408</x>
+      <y>304</y>
       <w>240</w>
       <h>96</h>
     </coordinates>
@@ -20,40 +20,41 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>224</x>
-      <y>424</y>
-      <w>296</w>
-      <h>128</h>
+      <x>392</x>
+      <y>432</y>
+      <w>304</w>
+      <h>136</h>
     </coordinates>
     <panel_attributes>JukeboxApi
 --
 - http : HttpApi
+- server : string
 - token : string
 --
-+ JukeboxApi(servername:string)
-+ queryTracks() : Track[]
-+ getCurrentQueues() : Queues
-+ addTrack(id : int) : void
-+ vote(id : int) : void
++ JukeboxApi(server : string, token : string)
++ queryTracks() -&gt; Callback(status, Track[])
++ getCurrentQueues() -&gt; Callback(status, Queues)
++ addTrack(id : int) -&gt; Callback(status)
++ setVote(id : int, voted : bool) -&gt; Callback(status)
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>512</x>
-      <y>464</y>
-      <w>80</w>
-      <h>24</h>
+      <x>520</x>
+      <y>392</y>
+      <w>24</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>544</x>
-      <y>336</y>
+      <x>384</x>
+      <y>224</y>
       <w>160</w>
       <h>48</h>
     </coordinates>
@@ -66,8 +67,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>752</x>
-      <y>328</y>
+      <x>560</x>
+      <y>216</y>
       <w>160</w>
       <h>64</h>
     </coordinates>
@@ -81,19 +82,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>624</x>
-      <y>376</y>
-      <w>24</w>
-      <h>64</h>
-    </coordinates>
-    <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>768</x>
-      <y>384</y>
+      <x>456</x>
+      <y>264</y>
       <w>24</w>
       <h>56</h>
     </coordinates>
@@ -101,57 +91,69 @@
     <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
   </element>
   <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>600</x>
+      <y>272</y>
+      <w>24</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>200</x>
-      <y>320</y>
+      <x>784</x>
+      <y>480</y>
       <w>216</w>
       <h>64</h>
     </coordinates>
     <panel_attributes>Queues
 --
 + current : PlayingTrack
-+ normal_queue : VoteTrack[]
-+ admin_queue : Track[]</panel_attributes>
++ queue : QueueTrack[]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>336</x>
-      <y>224</y>
+      <x>920</x>
+      <y>384</y>
       <w>160</w>
-      <h>56</h>
+      <h>64</h>
     </coordinates>
-    <panel_attributes>VoteTrack
+    <panel_attributes>QueueTrack
 --
++ admin : bool
 + votes : int
-+ has_voted : bool</panel_attributes>
++ current_vote : bool</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>240</x>
-      <y>88</y>
+      <x>824</x>
+      <y>232</y>
       <w>160</w>
-      <h>104</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>Track
 --
-+ track_id : int
++ track_id : string
 + tilte : string
 + album : string
 + artist : string
 + duration : int
-+ icon_uri : string</panel_attributes>
++ icon_uri : string
++ added_by : string</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>144</x>
-      <y>224</y>
+      <x>728</x>
+      <y>384</y>
       <w>160</w>
       <h>56</h>
     </coordinates>
@@ -164,8 +166,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>216</x>
-      <y>184</y>
+      <x>800</x>
+      <y>344</y>
       <w>80</w>
       <h>56</h>
     </coordinates>
@@ -175,8 +177,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>360</x>
-      <y>184</y>
+      <x>944</x>
+      <y>344</y>
       <w>72</w>
       <h>56</h>
     </coordinates>
@@ -186,19 +188,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>312</x>
-      <y>184</y>
-      <w>24</w>
-      <h>152</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;170.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>240</x>
-      <y>272</y>
+      <x>824</x>
+      <y>432</y>
       <w>24</w>
       <h>64</h>
     </coordinates>
@@ -208,90 +199,106 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>376</x>
-      <y>272</y>
+      <x>960</x>
+      <y>440</y>
       <w>24</w>
-      <h>64</h>
+      <h>56</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>296</x>
-      <y>376</y>
-      <w>24</w>
-      <h>64</h>
+      <x>688</x>
+      <y>504</y>
+      <w>112</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+    <additional_attributes>120.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>280</x>
-      <y>632</y>
+      <x>456</x>
+      <y>656</y>
       <w>240</w>
-      <h>168</h>
+      <h>96</h>
     </coordinates>
     <panel_attributes>Main
 --
-+ servername:string
++ server : string
 - api : JukeboxApi
 - ui : JukeboxUI
 + queues : Queues
 --
-+ main()
-+ Update() : void</panel_attributes>
++ main()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>392</x>
-      <y>544</y>
+      <x>568</x>
+      <y>560</y>
       <w>24</w>
-      <h>104</h>
+      <h>112</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>176</x>
-      <y>376</y>
-      <w>120</w>
-      <h>296</h>
+      <x>648</x>
+      <y>536</y>
+      <w>184</w>
+      <h>136</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
-    <additional_attributes>60.0;10.0;60.0;40.0;10.0;40.0;10.0;350.0;130.0;350.0</additional_attributes>
+    <additional_attributes>210.0;10.0;210.0;70.0;10.0;70.0;10.0;150.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>648</x>
-      <y>632</y>
-      <w>240</w>
-      <h>96</h>
+      <x>792</x>
+      <y>616</y>
+      <w>288</w>
+      <h>152</h>
     </coordinates>
     <panel_attributes>JukeboxUI
 --
+- queue : Queues
+- server : string
+- username : string
 --
 + JukeboxUI()
-+ OnUpdate() : void</panel_attributes>
++ OnQueueUpdate(queue : Queues) : void
++ OnServerUpdate(server : string) : void
++ OnUsernameUpdate(username : string) : void
++ OnSearchResult(result : Track[]) : void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>512</x>
-      <y>664</y>
-      <w>152</w>
+      <x>688</x>
+      <y>688</y>
+      <w>120</w>
       <h>24</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
-    <additional_attributes>170.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>130.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>896</x>
+      <y>536</y>
+      <w>24</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
   </element>
 </diagram>
