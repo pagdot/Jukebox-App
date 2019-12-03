@@ -27,19 +27,19 @@ open class RestClient {
         fun onSuccess(response: Response)
     }
 
-    fun queueGetCall(scheme : String, host: String, segment : List<String>, parameters: HashMap<String, String>?, bodyPayload : String?, cb: HttpCallback) {
+    fun queueGetCall(scheme : String, host : String, segment : List<String>, parameters : HashMap<String, String>?, bodyPayload : String?, cb : HttpCallback) {
         this.call("GET", scheme, host, segment, parameters, bodyPayload, cb)
     }
 
-    fun quePostCall(scheme : String, host: String, segment : List<String>, parameters: HashMap<String, String>?, bodyPayload : String?, cb: HttpCallback) {
+    fun quePostCall(scheme : String, host : String, segment : List<String>, parameters : HashMap<String, String>?, bodyPayload : String?, cb : HttpCallback) {
         this.call("POST", scheme, host, segment, parameters, bodyPayload, cb)
     }
 
-    fun quePutCall(scheme : String, host: String, segment : List<String>, parameters: HashMap<String, String>?, bodyPayload : String?, cb: HttpCallback) {
+    fun quePutCall(scheme : String, host : String, segment : List<String>, parameters : HashMap<String, String>?, bodyPayload : String?, cb : HttpCallback) {
         this.call("PUT", scheme, host, segment, parameters, bodyPayload, cb)
     }
 
-    private fun call(method: String, scheme : String, host: String, segments : List<String>, parameters: HashMap<String, String>?, bodyPayload : String?, cb: HttpCallback) {
+    private fun call(method : String, scheme : String, host : String, segments : List<String>, parameters : HashMap<String, String>?, bodyPayload : String?, cb : HttpCallback) {
         var request : Request
         val urlBuilder = HttpUrl.Builder().scheme(scheme).host(host).port(8888)
         segments.forEach { urlBuilder.addPathSegments(it) }
