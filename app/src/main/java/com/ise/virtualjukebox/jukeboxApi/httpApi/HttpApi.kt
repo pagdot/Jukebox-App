@@ -19,15 +19,14 @@ open class HttpApi(var serverName : String) : RestClient() {
         val segments = this.baseUrlSegments.toMutableList()
         segments.add("generateSession")
 
-        val hashMap : HashMap<String, String> = HashMap()
-        hashMap.put("nickname", nickname)
+        var bodyPayload = "{\"nickname\": \"$nickname\"}"
 
-        restClient.quePostCall(this.baseScheme, this.serverName, segments, hashMap, cb)
+        restClient.quePostCall(this.baseScheme, this.serverName, segments, null, bodyPayload, cb)
     }
 
     fun getTracks(searchPattern : String, max_entries : Int, cb : HttpCallback) {
         val segments = this.baseUrlSegments.toMutableList()
-        segments.add("querryTracks")
+        segments.add("queryTracks")
 
         val hashMap : HashMap<String, String> = HashMap()
         hashMap.put("session_id", sessionID.toString())
@@ -35,7 +34,7 @@ open class HttpApi(var serverName : String) : RestClient() {
         if(max_entries != 0)
             hashMap.put("max_entries", max_entries.toString())
 
-        restClient.queueGetCall(this.baseScheme, this.serverName, segments, hashMap, cb)
+        restClient.queueGetCall(this.baseScheme, this.serverName, segments, hashMap, null, cb)
     }
 
     fun getCurrentQueues(cb : HttpCallback) {
@@ -45,7 +44,7 @@ open class HttpApi(var serverName : String) : RestClient() {
         val hashMap : HashMap<String, String> = HashMap()
         hashMap.put("session_id", sessionID.toString())
 
-        restClient.queueGetCall(this.baseScheme, this.serverName, segments, hashMap, cb)
+        restClient.queueGetCall(this.baseScheme, this.serverName, segments, hashMap, null, cb)
     }
 
     //queue-Type is always set to normal since we don't support any admin feature
@@ -53,34 +52,17 @@ open class HttpApi(var serverName : String) : RestClient() {
         val segments = this.baseUrlSegments.toMutableList()
         segments.add("addTrackToQueue")
 
-        val hashMap : HashMap<String, String> = HashMap()
-        hashMap.put("session_id", sessionID.toString())
-        hashMap.put("track_id", trackID)
-        hashMap.put("queue_type", "normal")
+        var bodyPayload = "{\"session_id\": \"${this.sessionID}\", \"track_id\": \"$trackID\", \"queue_type\": \"normal\"}"
 
-        restClient.quePostCall(this.baseScheme, this.serverName, segments, hashMap, cb)
+        restClient.quePostCall(this.baseScheme, this.serverName, segments, null, bodyPayload, cb)
     }
 
-    //TODO:Check vote parameter it should not be a string.
     fun voteTrack(trackID : String, vote : Int, cb : HttpCallback) {
         val segments = this.baseUrlSegments.toMutableList()
         segments.add("voteTrack")
 
-        val hashMap : HashMap<String, String> = HashMap()
-        hashMap.put("session_id", sessionID.toString())
-        hashMap.put("track_id", trackID)
-        hashMap.put("vote", vote.toString())
+        var bodyPayload = "{\"session_id\": \"${this.sessionID}\", \"track_id\": \"$trackID\", \"vote\": $vote}"
 
-        restClient.quePutCall(this.baseScheme, this.serverName, segments, hashMap, cb)
-    }
-
-    //"https://api.github.com/users/MADITT/repos"
-    open fun getGithub(cb : HttpCallback) {
-        val segments = mutableListOf("users", "MADITT", "repos")
-
-        val hashMap : HashMap<String, String> = HashMap()
-        hashMap.put("", "")
-
-        restClient.queueGetCall("https", "api.github.com", segments, hashMap, cb)
+        restClient.quePutCall(this.baseScheme, this.serverName, segments, null, bodyPayload, cb)
     }
 }
