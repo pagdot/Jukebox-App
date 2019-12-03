@@ -8,7 +8,6 @@ import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 import com.ise.virtualjukebox.jukeboxApi.httpApi.RestClient
 
 import okhttp3.Response
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -60,7 +59,7 @@ class JukeboxApi(hostName : String) {
                             tmpTrack.artist = jsonObj["artist"].toString()
                             tmpTrack.duration = jsonObj["duration"].toString().toInt()
                             tmpTrack.iconUri = jsonObj["icon_uri"].toString()
-                            //tmpTrack.addeBy = jsonObj["added_by"].toString()  //TODO:put it to queues
+                            tmpTrack.addedBy = ""  //TODO:put it to queues since it is not used
 
                             searchTracks.add(tmpTrack)
                             Log.d("getTracks successful", searchTracks.toString())
@@ -83,8 +82,8 @@ class JukeboxApi(hostName : String) {
     fun getCurrentQueues()  {
         api.getCurrentQueues(object : RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
-                queues.normal_que.clear()
-                queues.admin_que.clear()
+                queues.normalQueue.clear()
+                queues.adminQueue.clear()
 
                 val jsonDataString = response.body?.string()
                 val jsonDataObject = JSONObject(jsonDataString)
@@ -96,7 +95,9 @@ class JukeboxApi(hostName : String) {
                 queues.current.artist = jsonObj["artist"].toString()
                 queues.current.duration = jsonObj["duration"].toString().toInt()
                 queues.current.iconUri = jsonObj["icon_uri"].toString()
-                queues.current.addeBy = jsonObj["added_by"].toString()
+                queues.current.addedBy = jsonObj["added_by"].toString()
+                queues.current.playing = jsonObj["playing"].toString().toBoolean()
+                queues.current.playingFor = jsonObj["playing_for_ms"].toString().toInt()
 
                 var jsonDataArray = jsonDataObject.getJSONArray("normal_queue")
                 for (i in 0 until jsonDataArray.length()) {
@@ -110,11 +111,11 @@ class JukeboxApi(hostName : String) {
                             tmpVoteTrack.artist = jsonObj["artist"].toString()
                             tmpVoteTrack.duration = jsonObj["duration"].toString().toInt()
                             tmpVoteTrack.iconUri = jsonObj["icon_uri"].toString()
-                            tmpVoteTrack.addeBy = jsonObj["added_by"].toString()
+                            tmpVoteTrack.addedBy = jsonObj["added_by"].toString()
                             tmpVoteTrack.votes = jsonObj["votes"].toString().toInt()
                             tmpVoteTrack.hasVoted = jsonObj["current_vote"].toString().toBoolean()
 
-                            queues.normal_que.add(tmpVoteTrack)
+                            queues.normalQueue.add(tmpVoteTrack)
                             Log.d("getTracks successful", searchTracks.toString())
                         }
                     } catch (e: JSONException) { // If there is an error then output this to the logs.
@@ -133,16 +134,15 @@ class JukeboxApi(hostName : String) {
                             tmpTrack.artist = jsonObj["artist"].toString()
                             tmpTrack.duration = jsonObj["duration"].toString().toInt()
                             tmpTrack.iconUri = jsonObj["icon_uri"].toString()
-                            tmpTrack.addeBy = jsonObj["added_by"].toString()
+                            tmpTrack.addedBy = jsonObj["added_by"].toString()
 
-                            queues.admin_que.add(tmpTrack)
+                            queues.adminQueue.add(tmpTrack)
                             Log.d("getTracks successful", searchTracks.toString())
                         }
                     } catch (e: JSONException) { // If there is an error then output this to the logs.
                         Log.e("getTracks JSON ex", "Invalid JSON Object.")
                     }
                 }
-
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {

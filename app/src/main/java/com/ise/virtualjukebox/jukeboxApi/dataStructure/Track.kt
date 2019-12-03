@@ -7,5 +7,5 @@ open class Track {
     var artist : String = ""
     var duration : Int = 0
     var iconUri : String = ""
-    var addeBy : String = ""
+    var addedBy : String = ""
 }
