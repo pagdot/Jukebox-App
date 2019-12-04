@@ -1,9 +1,11 @@
 package com.ise.virtualjukebox
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import com.ise.virtualjukebox.jukeboxApi.httpApi.HttpApi
 import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
 
 
@@ -62,5 +64,11 @@ class MainActivity : Activity() {
         })
 
         var test = 1
+
+        btnGetStarted.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // clear top for avoid returning to login screen
+            startActivity(intent)
+        }
     }
 }
