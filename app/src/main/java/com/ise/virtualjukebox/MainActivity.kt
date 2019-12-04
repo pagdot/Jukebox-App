@@ -6,6 +6,8 @@ import com.ise.virtualjukebox.jukeboxApi.httpApi.HttpApi
 import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
 import java.io.IOException
 
+import com.ise.virtualjukebox.LoginHandler;
+
 class MainActivity : AppCompatActivity() {
 
     var api = JukeboxApi("193.170.132.206")
