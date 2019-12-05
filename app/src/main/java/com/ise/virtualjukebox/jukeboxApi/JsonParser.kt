@@ -89,33 +89,66 @@ class JsonParser {
     }
 
     fun parseQueuesFromResponse (response : Response) : Queues {
+        if(response == null)
+            throw Exception("Response is NULL")
+
         var tmpQueues = Queues()
         tmpQueues.adminQueue.clear()
         tmpQueues.normalQueue.clear()
 
-        val jsonDataString = response.body?.string()
-        val jsonDataObject = JSONObject(jsonDataString)
+        var jsonDataString : String?
+        var jsonDataObject : JSONObject
+        try {
+            jsonDataString = response.body?.string()
+            jsonDataObject = JSONObject(jsonDataString)
+        } catch (e : JSONException) {
+            Log.e("getTracks JSON ex", "Invalid JSON Object.")
+            throw e
+        }
 
-        val jsonObj = jsonDataObject.getJSONObject("currently_playing")
-        tmpQueues.current = parsePlayingTrackFromJsonObject(jsonObj)
+        try {
+            val jsonObj = jsonDataObject.getJSONObject("currently_playing")
+            tmpQueues.current = parsePlayingTrackFromJsonObject(jsonObj)
+        } catch (e : JSONException) {
+            Log.e("getTracks JSON ex", "Invalid JSON Object.")
+            throw e
+        }
 
-        var jsonDataArray = jsonDataObject.getJSONArray("normal_queue")
-        tmpQueues.normalQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
+        try {
+            val jsonDataArray = jsonDataObject.getJSONArray("normal_queue")
+            tmpQueues.normalQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
+        } catch (e : JSONException) {
+            Log.e("getTracks JSON ex", "Invalid JSON Object.")
+            throw e
+        }
 
-        jsonDataArray = jsonDataObject.getJSONArray("admin_queue")
-        tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray))
+        try {
+            val jsonDataArray = jsonDataObject.getJSONArray("admin_queue")
+            tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray))
+        } catch (e : JSONException) {
+            Log.e("getTracks JSON ex", "Invalid JSON Object.")
+            throw e
+        }
 
         return tmpQueues
     }
 
     fun parseTrackListFromResponse (response : Response) : MutableList<Track> {
+        if(response == null)
+            throw Exception("Response is NULL")
+
         var tmpList : MutableList<Track> = mutableListOf(Track())
+        tmpList.clear()
 
-        val jsonDataString = response.body?.string()
-        val jsonDataObject = JSONObject(jsonDataString)
-        val jsonDataArray = jsonDataObject.getJSONArray("tracks")
-
-        tmpList.addAll(parseTrackListFromJsonArray(jsonDataArray))
+        try {
+            val jsonDataString = response.body?.string()
+            val jsonDataObject = JSONObject(jsonDataString)
+            val jsonDataArray = jsonDataObject.getJSONArray("tracks")
+            tmpList.addAll(parseTrackListFromJsonArray(jsonDataArray))
+        } catch (e : JSONException) {
+            Log.e("getTracks JSON ex", "Invalid JSON Object.")
+            throw e
+        }
         
         return tmpList
     }
