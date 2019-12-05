@@ -30,6 +30,10 @@ class JukeboxApi(hostName : String) {
         fun onSuccess()
     }
 
+    fun disconnectClient() {
+        api.disconnectClient()
+    }
+
     fun getSessionID(nickname :String, cb : JukeboxApiCallback) {
         api.getSessionID(nickname, object : RestClient.HttpCallback {
             override fun onSuccess(response: Response) {

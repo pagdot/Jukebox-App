@@ -15,6 +15,10 @@ open class HttpApi(var serverName : String) : RestClient() {
 
     var sessionID : String? = "124234dgd"//null
 
+    fun disconnectClient() {
+        restClient.close()
+    }
+
     open fun getSessionID(nickname : String, cb : HttpCallback) {
         val segments = this.baseUrlSegments.toMutableList()
         segments.add("generateSession")

@@ -62,6 +62,19 @@ class LoginActivity : Activity() {
 
         var test = 1
 
+        api.disconnectClient()
+
+        test = 2
+
+        api.getSessionID("test_name", object : JukeboxApi.JukeboxApiCallback {
+            override fun onSuccess() {
+                getSessionFlag = true
+            }
+
+            override fun onFailure(statusCode: String?, exception: IOException?) {
+            }
+        })
+
         btnConnect.setOnClickListener {
             val intent = Intent(this, PlaylistActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // clear top for avoid returning to login screen
