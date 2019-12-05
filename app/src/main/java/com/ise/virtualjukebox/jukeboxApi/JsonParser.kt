@@ -14,15 +14,22 @@ class JsonParser {
     private fun parsePlayingTrackFromJsonObject(jsonObj : JSONObject) : PlayingTrack {
         var tmpPlayingTrack = PlayingTrack()
 
-        tmpPlayingTrack.trackId = jsonObj["track_id"].toString()
-        tmpPlayingTrack.title = jsonObj["title"].toString()
-        tmpPlayingTrack.album = jsonObj["album"].toString()
-        tmpPlayingTrack.artist = jsonObj["artist"].toString()
-        tmpPlayingTrack.duration = jsonObj["duration"].toString().toInt()
-        tmpPlayingTrack.iconUri = jsonObj["icon_uri"].toString()
-        tmpPlayingTrack.addedBy = jsonObj["added_by"].toString()
-        tmpPlayingTrack.playing = jsonObj["playing"].toString().toBoolean()
-        tmpPlayingTrack.playingFor = jsonObj["playing_for"].toString().toInt()
+        try {
+            tmpPlayingTrack.trackId = jsonObj["track_id"].toString()
+            tmpPlayingTrack.title = jsonObj["title"].toString()
+            tmpPlayingTrack.album = jsonObj["album"].toString()
+            tmpPlayingTrack.artist = jsonObj["artist"].toString()
+            tmpPlayingTrack.duration = jsonObj["duration"].toString().toInt()
+            tmpPlayingTrack.iconUri = jsonObj["icon_uri"].toString()
+            tmpPlayingTrack.addedBy = jsonObj["added_by"].toString()
+            tmpPlayingTrack.playing = jsonObj["playing"].toString().toBoolean()
+            tmpPlayingTrack.playingFor = jsonObj["playing_for"].toString().toInt()
+
+            Log.d("getQueues successful", tmpPlayingTrack.toString())
+        } catch (e : Exception) {
+            Log.e("getQueues JSON ex", "Invalid JSON Object: $jsonObj")
+            throw e
+        }
 
         return tmpPlayingTrack
     }
@@ -51,8 +58,8 @@ class JsonParser {
                     Log.d("getTracks successful", tmpList.toString())
                 }
             } catch (e: JSONException) { // If there is an error then output this to the logs.
-                Log.e("getTracks JSON ex", "Invalid JSON Object.")
-
+                Log.e("getTracks JSON ex", "Invalid JSON Object: $jsonDataArray")
+                throw e
             }
         }
         return tmpList
@@ -78,10 +85,11 @@ class JsonParser {
                     tmpVoteTrack.hasVoted = jsonObj["current_vote"].toString().toBoolean()
 
                     tmpList.add(tmpVoteTrack)
-                    Log.d("getTracks successful", tmpVoteTrack.toString())
+                    Log.d("getQueues successful", tmpVoteTrack.toString())
                 }
             } catch (e: JSONException) { // If there is an error then output this to the logs.
-                Log.e("getTracks JSON ex", "Invalid JSON Object.")
+                Log.e("getQueues JSON ex", "Invalid JSON Object: $jsonDataArray")
+                throw e
             }
         }
 
@@ -102,7 +110,7 @@ class JsonParser {
             jsonDataString = response.body?.string()
             jsonDataObject = JSONObject(jsonDataString)
         } catch (e : JSONException) {
-            Log.e("getTracks JSON ex", "Invalid JSON Object.")
+            Log.e("getQueues response ex", "Invalid response: $response")
             throw e
         }
 
@@ -110,7 +118,6 @@ class JsonParser {
             val jsonObj = jsonDataObject.getJSONObject("currently_playing")
             tmpQueues.current = parsePlayingTrackFromJsonObject(jsonObj)
         } catch (e : JSONException) {
-            Log.e("getTracks JSON ex", "Invalid JSON Object.")
             throw e
         }
 
@@ -118,7 +125,6 @@ class JsonParser {
             val jsonDataArray = jsonDataObject.getJSONArray("normal_queue")
             tmpQueues.normalQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
         } catch (e : JSONException) {
-            Log.e("getTracks JSON ex", "Invalid JSON Object.")
             throw e
         }
 
@@ -126,7 +132,6 @@ class JsonParser {
             val jsonDataArray = jsonDataObject.getJSONArray("admin_queue")
             tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray))
         } catch (e : JSONException) {
-            Log.e("getTracks JSON ex", "Invalid JSON Object.")
             throw e
         }
 
@@ -140,13 +145,22 @@ class JsonParser {
         var tmpList : MutableList<Track> = mutableListOf(Track())
         tmpList.clear()
 
+        var jsonDataString : String?
+        var jsonDataObject : JSONObject
+        var jsonDataArray : JSONArray
+
         try {
-            val jsonDataString = response.body?.string()
-            val jsonDataObject = JSONObject(jsonDataString)
-            val jsonDataArray = jsonDataObject.getJSONArray("tracks")
+            jsonDataString = response.body?.string()
+            jsonDataObject = JSONObject(jsonDataString)
+            jsonDataArray = jsonDataObject.getJSONArray("tracks")
+        } catch (e : Exception) {
+            Log.e("getTracks response ex", "Invalid response: $response")
+            throw e
+        }
+
+        try {
             tmpList.addAll(parseTrackListFromJsonArray(jsonDataArray))
         } catch (e : JSONException) {
-            Log.e("getTracks JSON ex", "Invalid JSON Object.")
             throw e
         }
         
