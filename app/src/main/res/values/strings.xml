@@ -9,6 +9,7 @@
     <string name="search">search</string>
     <string name="playlist">playlist</string>
     <string name="settings">settings</string>
+    <string name="add">add</string>
     <string name="imgLogoDescr">Virtual Jukebox logo</string>
     <string name="imgAlbumcoverDescr">Virtual Jukebox logo</string>
 </resources>
