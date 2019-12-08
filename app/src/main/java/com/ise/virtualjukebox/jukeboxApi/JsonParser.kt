@@ -81,8 +81,15 @@ class JsonParser {
                     tmpVoteTrack.duration = jsonObj["duration"].toString().toInt()
                     tmpVoteTrack.iconUri = jsonObj["icon_uri"].toString()
                     tmpVoteTrack.addedBy = jsonObj["added_by"].toString()
-                    tmpVoteTrack.votes = jsonObj["votes"].toString().toInt()
-                    tmpVoteTrack.hasVoted = jsonObj["current_vote"].toString().toBoolean()
+
+                    tmpVoteTrack.votes = -1
+                    if(jsonObj["votes"] != null) {
+                        tmpVoteTrack.votes = jsonObj["votes"].toString().toInt()
+                    }
+                    tmpVoteTrack.hasVoted = 0
+                    if(jsonObj["current_vote"] != null) {
+                        tmpVoteTrack.hasVoted = jsonObj["current_vote"].toString().toInt()
+                    }
 
                     tmpList.add(tmpVoteTrack)
                     Log.d("getQueues successful", tmpVoteTrack.toString())
@@ -103,6 +110,7 @@ class JsonParser {
         var tmpQueues = Queues()
         tmpQueues.adminQueue.clear()
         tmpQueues.normalQueue.clear()
+        tmpQueues.guiQueue.clear()
 
         var jsonDataString : String?
         var jsonDataObject : JSONObject
@@ -122,15 +130,17 @@ class JsonParser {
         }
 
         try {
-            val jsonDataArray = jsonDataObject.getJSONArray("normal_queue")
-            tmpQueues.normalQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
+            val jsonDataArray = jsonDataObject.getJSONArray("admin_queue")
+            //tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray))
+            tmpQueues.guiQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
         } catch (e : JSONException) {
             throw e
         }
 
         try {
-            val jsonDataArray = jsonDataObject.getJSONArray("admin_queue")
-            tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray))
+            val jsonDataArray = jsonDataObject.getJSONArray("normal_queue")
+            //tmpQueues.normalQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
+            tmpQueues.guiQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
         } catch (e : JSONException) {
             throw e
         }
