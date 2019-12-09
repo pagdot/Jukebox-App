@@ -12,7 +12,7 @@ import org.json.JSONObject
 
 class JsonParser {
     private fun parsePlayingTrackFromJsonObject(jsonObj : JSONObject) : PlayingTrack {
-        var tmpPlayingTrack = PlayingTrack()
+        val tmpPlayingTrack = PlayingTrack()
 
         try {
             tmpPlayingTrack.trackId = jsonObj["track_id"].toString()
@@ -35,7 +35,7 @@ class JsonParser {
     }
 
     private fun parseTrackListFromJsonArray(jsonDataArray : JSONArray) : MutableList<Track>{
-        var tmpList : MutableList<Track> = mutableListOf(Track())
+        val tmpList : MutableList<Track> = mutableListOf(Track())
         tmpList.clear()
 
         for (i in 0 until jsonDataArray.length()) {
@@ -65,7 +65,7 @@ class JsonParser {
         return tmpList
     }
 
-    private fun parseVoteTrackListFromJsonArray (jsonDataArray : JSONArray) :  MutableList<VoteTrack> {
+    private fun parseVoteTrackListFromJsonArray (jsonDataArray : JSONArray, adminFlag : Boolean) :  MutableList<VoteTrack> {
         val tmpList : MutableList<VoteTrack> = mutableListOf(VoteTrack())
         tmpList.clear()
 
@@ -83,11 +83,10 @@ class JsonParser {
                     tmpVoteTrack.addedBy = jsonObj["added_by"].toString()
 
                     tmpVoteTrack.votes = -1
-                    if(jsonObj["votes"] != null) {
-                        tmpVoteTrack.votes = jsonObj["votes"].toString().toInt()
-                    }
                     tmpVoteTrack.hasVoted = 0
-                    if(jsonObj["current_vote"] != null) {
+                    if(!adminFlag)
+                    {
+                        tmpVoteTrack.votes = jsonObj["votes"].toString().toInt()
                         tmpVoteTrack.hasVoted = jsonObj["current_vote"].toString().toInt()
                     }
 
@@ -107,13 +106,13 @@ class JsonParser {
         if(response == null)
             throw Exception("Response is NULL")
 
-        var tmpQueues = Queues()
+        val tmpQueues = Queues()
         tmpQueues.adminQueue.clear()
         tmpQueues.normalQueue.clear()
         tmpQueues.guiQueue.clear()
 
-        var jsonDataString : String?
-        var jsonDataObject : JSONObject
+        val jsonDataString : String?
+        val jsonDataObject : JSONObject
         try {
             jsonDataString = response.body?.string()
             jsonDataObject = JSONObject(jsonDataString)
@@ -132,7 +131,7 @@ class JsonParser {
         try {
             val jsonDataArray = jsonDataObject.getJSONArray("admin_queue")
             //tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray))
-            tmpQueues.guiQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
+            tmpQueues.guiQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray, true))
         } catch (e : JSONException) {
             throw e
         }
@@ -140,7 +139,7 @@ class JsonParser {
         try {
             val jsonDataArray = jsonDataObject.getJSONArray("normal_queue")
             //tmpQueues.normalQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
-            tmpQueues.guiQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
+            tmpQueues.guiQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray, false))
         } catch (e : JSONException) {
             throw e
         }
@@ -152,12 +151,12 @@ class JsonParser {
         if(response == null)
             throw Exception("Response is NULL")
 
-        var tmpList : MutableList<Track> = mutableListOf(Track())
+        val tmpList : MutableList<Track> = mutableListOf(Track())
         tmpList.clear()
 
-        var jsonDataString : String?
-        var jsonDataObject : JSONObject
-        var jsonDataArray : JSONArray
+        val jsonDataString : String?
+        val jsonDataObject : JSONObject
+        val jsonDataArray : JSONArray
 
         try {
             jsonDataString = response.body?.string()
