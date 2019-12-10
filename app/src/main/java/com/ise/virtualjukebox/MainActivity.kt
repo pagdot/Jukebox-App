@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         var settingsh : SettingsHandler = SettingsHandler(mainl);
         var playh : PlayHandler = PlayHandler(mainl);
         var searchh : SearchHandler = SearchHandler(mainl, 10);
-        searchh.SearchSong("");
+        searchh.SearchSong("   ");
 
 
 
