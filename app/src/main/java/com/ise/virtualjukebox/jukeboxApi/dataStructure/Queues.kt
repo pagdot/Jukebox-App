@@ -5,8 +5,6 @@ class Queues {
     var normalQueue : MutableList<VoteTrack> = mutableListOf(VoteTrack())
     var adminQueue : MutableList<Track> = mutableListOf(Track())
 
-    var guiQueue : MutableList<VoteTrack> = mutableListOf(VoteTrack())
-
     constructor() {
         normalQueue.clear()
         adminQueue.clear()

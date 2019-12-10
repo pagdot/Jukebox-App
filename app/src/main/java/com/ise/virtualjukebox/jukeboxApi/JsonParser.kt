@@ -65,7 +65,7 @@ class JsonParser {
         return tmpList
     }
 
-    private fun parseVoteTrackListFromJsonArray (jsonDataArray : JSONArray, adminFlag : Boolean) :  MutableList<VoteTrack> {
+    private fun parseVoteTrackListFromJsonArray (jsonDataArray : JSONArray) :  MutableList<VoteTrack> {
         val tmpList : MutableList<VoteTrack> = mutableListOf(VoteTrack())
         tmpList.clear()
 
@@ -81,14 +81,8 @@ class JsonParser {
                     tmpVoteTrack.duration = jsonObj["duration"].toString().toInt()
                     tmpVoteTrack.iconUri = jsonObj["icon_uri"].toString()
                     tmpVoteTrack.addedBy = jsonObj["added_by"].toString()
-
-                    tmpVoteTrack.votes = -1
-                    tmpVoteTrack.hasVoted = 0
-                    if(!adminFlag)
-                    {
-                        tmpVoteTrack.votes = jsonObj["votes"].toString().toInt()
-                        tmpVoteTrack.hasVoted = jsonObj["current_vote"].toString().toInt()
-                    }
+                    tmpVoteTrack.votes = jsonObj["votes"].toString().toInt()
+                    tmpVoteTrack.hasVoted = jsonObj["current_vote"].toString().toInt()
 
                     tmpList.add(tmpVoteTrack)
                     Log.d("getQueues successful", tmpVoteTrack.toString())
@@ -109,7 +103,6 @@ class JsonParser {
         val tmpQueues = Queues()
         tmpQueues.adminQueue.clear()
         tmpQueues.normalQueue.clear()
-        tmpQueues.guiQueue.clear()
 
         val jsonDataString : String?
         val jsonDataObject : JSONObject
@@ -130,16 +123,14 @@ class JsonParser {
 
         try {
             val jsonDataArray = jsonDataObject.getJSONArray("admin_queue")
-            //tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray))
-            tmpQueues.guiQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray, true))
+            tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray))
         } catch (e : JSONException) {
             throw e
         }
 
         try {
             val jsonDataArray = jsonDataObject.getJSONArray("normal_queue")
-            //tmpQueues.normalQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
-            tmpQueues.guiQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray, false))
+            tmpQueues.normalQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
         } catch (e : JSONException) {
             throw e
         }
