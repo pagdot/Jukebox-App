@@ -1,8 +1,9 @@
-package com.ise.virtualjukebox
+package com.ise.virtualjukebox.activity
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import com.ise.virtualjukebox.R
 import kotlinx.android.synthetic.main.activity_playlist.*
 
 class SettingsActivity : Activity() {

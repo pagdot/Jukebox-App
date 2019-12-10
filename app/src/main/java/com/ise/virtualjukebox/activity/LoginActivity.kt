@@ -1,20 +1,20 @@
-package com.ise.virtualjukebox
+package com.ise.virtualjukebox.activity
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import com.ise.virtualjukebox.jukeboxApi.httpApi.HttpApi
+import com.ise.virtualjukebox.R
 import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
+import kotlinx.android.synthetic.main.activity_login.*
 import java.io.IOException
 
+class LoginActivity : Activity() {
 
-// inherit from Actovity instead of AppCompatActivity to enable starting activity via Intents
-class MainActivity : Activity() {
-
-    var api = JukeboxApi("193.170.132.206")
+    var api = JukeboxApi("pagdot.tk")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
 
         var getSessionFlag = false
 
@@ -62,5 +62,11 @@ class MainActivity : Activity() {
         })
 
         var test = 1
+
+        btnConnect.setOnClickListener {
+            val intent = Intent(this, PlaylistActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // clear top for avoid returning to login screen
+            startActivity(intent)
+        }
     }
 }
