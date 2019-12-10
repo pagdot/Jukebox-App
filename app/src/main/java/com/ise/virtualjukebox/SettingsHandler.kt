@@ -1,8 +1,9 @@
 package com.ise.virtualjukebox
 
+import android.app.Activity
 import java.io.IOException
 
-class SettingsHandler{
+class SettingsHandler : Activity{
     private var _MainHandler: MainHandler;
 
     constructor(MainInstance : MainHandler){
