@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         mainl.StoreServerList();
         mainl.ReadServerList();
 
-        val neger = mainl.ConnectToServer("Neger", "pagdot.tk")
+        val test = mainl.ConnectToServer("test", "pagdot.tk")
 
         val handler = Handler(Looper.getMainLooper())
         var tester = 0;
