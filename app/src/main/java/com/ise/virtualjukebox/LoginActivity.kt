@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
+import com.ise.virtualjukebox.jukeboxApi.dataStructure.apiError
 import kotlinx.android.synthetic.main.activity_login.*
 import java.io.IOException
 
 class LoginActivity : Activity() {
 
+    //var api = JukeboxApi("193.170.132.206")
     var api = JukeboxApi("pagdot.tk")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +24,7 @@ class LoginActivity : Activity() {
                 getSessionFlag = true
             }
 
-            override fun onFailure(statusCode: String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: Exception?) {
             }
         })
 
@@ -32,7 +34,7 @@ class LoginActivity : Activity() {
             override fun onSuccess() {
             }
 
-            override fun onFailure(statusCode: String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: Exception?) {
             }
         })
 
@@ -40,7 +42,7 @@ class LoginActivity : Activity() {
             override fun onSuccess() {
             }
 
-            override fun onFailure(statusCode: String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: Exception?) {
             }
         })
 
@@ -48,7 +50,7 @@ class LoginActivity : Activity() {
             override fun onSuccess() {
             }
 
-            override fun onFailure(statusCode: String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: Exception?) {
             }
         })
 
@@ -56,11 +58,24 @@ class LoginActivity : Activity() {
             override fun onSuccess() {
             }
 
-            override fun onFailure(statusCode: String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: Exception?) {
             }
         })
 
         var test = 1
+
+        api.disconnectClient()
+
+        test = 2
+
+        api.getSessionID("test_name", object : JukeboxApi.JukeboxApiCallback {
+            override fun onSuccess() {
+                getSessionFlag = true
+            }
+
+            override fun onFailure(errorClass: apiError, exception: Exception?) {
+            }
+        })
 
         btnConnect.setOnClickListener {
             val intent = Intent(this, PlaylistActivity::class.java)
