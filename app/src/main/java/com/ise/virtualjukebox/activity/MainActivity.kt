@@ -1,14 +1,12 @@
-package com.ise.virtualjukebox.activity
+package com.ise.virtualjukebox
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.ise.virtualjukebox.R
+import com.ise.virtualjukebox.jukeboxApi.httpApi.HttpApi
 import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
 import java.io.IOException
 
-
-// inherit from Actovity instead of AppCompatActivity to enable starting activity via Intents
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
 
     var api = JukeboxApi("193.170.132.206")
 
