@@ -10,13 +10,14 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.ise.virtualjukebox.R
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
+import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 import okhttp3.internal.checkDuration
 
 //class RecyclerAdapter(private val data: List<RecyclerItem>) :
-class RecyclerAdapterSearch(private val data: MutableList<Track>) :
+class RecyclerAdapterSearch(private val data: MutableList<Track>, private val cbSearch: (Song: Track) -> MutableList<VoteTrack>) :
     RecyclerView.Adapter<RecyclerAdapterSearch.ViewHolderTrack>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapterSearch.ViewHolderTrack {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTrack {
         return ViewHolderTrack(LayoutInflater.from(parent.context).inflate((R.layout.searchitem_layout), parent, false))
     }
 
@@ -25,8 +26,8 @@ class RecyclerAdapterSearch(private val data: MutableList<Track>) :
         holder.artist.text = data[position].artist
 
         holder.btnAdd.setOnClickListener{
-            //TODO anpassen
-            //Tobi.AddToPlaylist(data[position])
+            //TODO: return ignored
+            cbSearch.invoke(data[position])
         }
     }
 

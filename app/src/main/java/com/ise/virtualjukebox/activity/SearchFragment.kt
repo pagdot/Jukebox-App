@@ -29,12 +29,38 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment1_layout, container, false)
+        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        first_fragment_text.text = "first fragment"
+
+        //TODO: check if right interface
+        val hSearch = (activity as MainActivityFragment).SearchHandler
+
+        rvSearch.layoutManager = LinearLayoutManager(context)
+
+        btnSearchSearch.setOnClickListener{
+            //TODO: Aufruf getTrack
+            val res = ArrayList<Track>()
+            val track1 = Track()
+            val track2 = Track()
+            val track3 = Track()
+            track1.title = "title 1"
+            track1.artist = "artist 1"
+
+            track2.title = "title 2"
+            track2.artist = "artist 2"
+
+            track3.title = "title 3"
+            track3.artist = "artist 3"
+
+            res.add(track1)
+            res.add(track2)
+            res.add(track3)
+
+            rvSearch.adapter = RecyclerAdapterSearch(res, hSearch.AddToPlaylist)
+        }
     }
 
     /*

@@ -3,7 +3,6 @@ package com.ise.virtualjukebox.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.ise.virtualjukebox.R
-import kotlinx.android.synthetic.main.fragment_layout.*
 
 class MainActivityFragment : AppCompatActivity() {
 
@@ -39,23 +38,23 @@ class MainActivityFragment : AppCompatActivity() {
         when (screenName) {
             Screens.Login -> {
                 // Replace whatever is in the fragment_container view with this fragment
-                transaction.replace(R.id.myFragment, LoginFragment())
+                transaction.replace(R.id.fragmentContainer, LoginFragment())
             }
             Screens.Playlist -> {
                 // Replace whatever is in the fragment_container view with this fragment
-                transaction.replace(R.id.myFragment, PlaylistFragment())
+                transaction.replace(R.id.fragmentContainer, PlaylistFragment())
             }
             Screens.Search -> {
                 // Replace whatever is in the fragment_container view with this fragment
-                transaction.replace(R.id.myFragment, SearchFragment())
+                transaction.replace(R.id.fragmentContainer, SearchFragment())
             }
             Screens.Settings -> {
                 // Replace whatever is in the fragment_container view with this fragment
-                transaction.replace(R.id.myFragment, SettingsFragment())
+                transaction.replace(R.id.fragmentContainer, SettingsFragment())
             }
             else -> {
                 // Replace whatever is in the fragment_container view with this fragment
-                transaction.replace(R.id.myFragment, LoginFragment())
+                transaction.replace(R.id.fragmentContainer, LoginFragment())
             }
         }
 

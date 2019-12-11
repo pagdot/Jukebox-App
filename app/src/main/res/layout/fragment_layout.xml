@@ -6,7 +6,7 @@
 
 
     <FrameLayout
-        android:id="@+id/myFragment"
+        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/actionBtn"/>
@@ -15,16 +15,30 @@
         android:id="@+id/actionBtn"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_alignParentBottom="true">
+        android:weightSum="3">
 
         <Button
-            android:id="@+id/btnOne"
+            android:id="@+id/btnPlaylist"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="1st fragment"/>
+            android:text="@string/playlist" />
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/search" />
+
+        <Button
+            android:id="@+id/btnSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/settings" />
 
     </LinearLayout>
 
