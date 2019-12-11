@@ -2,10 +2,7 @@ package com.ise.virtualjukebox.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.ise.virtualjukebox.LoginHandler
-import com.ise.virtualjukebox.MainHandler
-import com.ise.virtualjukebox.R
-import com.ise.virtualjukebox.SettingsHandler
+import com.ise.virtualjukebox.*
 
 class MainActivityFragment : AppCompatActivity() {
 
@@ -26,11 +23,9 @@ class MainActivityFragment : AppCompatActivity() {
 
         switchFragment(Screens.Login)
 
-        //btnOne.setOnClickListener{
-        //    val fragmentTransaction = fragmentManager.beginTransaction()
-        //    fragmentTransaction.replace(R.id.myFragment, testFragment)
-        //    fragmentTransaction.commit()
-        //}
+        btnOne.setOnClickListener{
+            switchFragment(Screens.Login)
+        }
 
         //val fragmentTransaction = fragmentManager.beginTransaction()
         //fragmentTransaction.replace(R.id.myFragment, testFragment)
@@ -47,7 +42,7 @@ class MainActivityFragment : AppCompatActivity() {
         when (screenName) {
             Screens.Login -> {
                 // Replace whatever is in the fragment_container view with this fragment
-                transaction.replace(R.id.fragmentContainer, LoginFragment())
+                transaction.replace(R.id.fragmentContainer, LoginFragment.newInstance())
             }
             Screens.Playlist -> {
                 // Replace whatever is in the fragment_container view with this fragment
@@ -57,10 +52,10 @@ class MainActivityFragment : AppCompatActivity() {
                 // Replace whatever is in the fragment_container view with this fragment
                 transaction.replace(R.id.fragmentContainer, SearchFragment())
             }
-            Screens.Settings -> {
-                // Replace whatever is in the fragment_container view with this fragment
-                transaction.replace(R.id.fragmentContainer, SettingsFragment())
-            }
+            //Screens.Settings -> {
+            //    // Replace whatever is in the fragment_container view with this fragment
+            //    transaction.replace(R.id.fragmentContainer, SettingsFragment())
+            //}
             else -> {
                 // Replace whatever is in the fragment_container view with this fragment
                 transaction.replace(R.id.fragmentContainer, LoginFragment())
