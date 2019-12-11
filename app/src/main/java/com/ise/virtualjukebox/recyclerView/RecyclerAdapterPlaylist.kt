@@ -49,14 +49,14 @@ class RecyclerAdapterPlaylist(private val data: List<VoteTrack>) :
             val toast = Toast.makeText(it!!.context, text, duration)
             toast.show()
         }
-    }
+}
 
 
-    // return the size of your data
-    override fun getItemCount() = data.size
+// return the size of your data
+override fun getItemCount() = data.size
 
 
-    // provide a reference to the views of the item layout
+// provide a reference to the views of the item layout
     class ViewHolderVoteTrack(view: View) : RecyclerView.ViewHolder(view) {
         val txvTitle    : TextView  = view.findViewById(R.id.txvTitle)
         val txvArtist   : TextView  = view.findViewById(R.id.txvArtist)
