@@ -4,7 +4,7 @@ import android.app.Activity
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.PlayingTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 
-class PlayHandler : Activity {
+class PlayHandler {
 
     private var _MainHandler: MainHandler;
     private var _PreviousState : MutableList<VoteTrack>? = null;

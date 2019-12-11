@@ -12,8 +12,7 @@ import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 
 
 class MainHandler(private var _MainHandler: MainActivity){
-
-    private var fname = "/Storage";
+    private var fname = "ICC";
     class ServerPair{
         var Net: JukeboxApi? = null;
         var Name: String? = null;
@@ -25,10 +24,13 @@ class MainHandler(private var _MainHandler: MainActivity){
         var Success : Boolean = false;
     }
     var ServList : MutableList<ServerPair> = mutableListOf<ServerPair>();
+    var TrackList : MutableList<VoteTrack>? = null//mutableListOf<VoteTrack>();
+    var CurrTrack : PlayingTrack? = null
 
-    private var Core : JukeboxApi? = null;
+    private var Core : ServerPair? = null;
 
     fun CreateNewServerWithoutConnect(ServIP:String, Name:String) : Boolean{
+        _MainHandler.sendToast("Created")
         var Pair : ServerPair = ServerPair();
         Pair.Name = Name;
         Pair.IP = ServIP;
@@ -50,14 +52,39 @@ class MainHandler(private var _MainHandler: MainActivity){
                 Pair.IsInit = true;
                 if(ServList.find { it.IP == Pair.IP } == null) {
                     ServList.add(Pair);
+                    Core?.Net?.Disconnect();
+                    Core = Pair;
+                }else{
+                    return false;
                 }
         }
         return rval.Success;
     }
     fun StoreServerList(){
+        if(ServList != null){
+            _MainHandler.storePrefs(ServList.size.toString(), fname, "size");
+            var it = 0;
+            for(item in ServList){
+                if(item != null && item.Name != null && item.IP != null){
+                    _MainHandler.storePrefs(item.Name.toString(), fname, "Name" + it.toString());
+                    _MainHandler.storePrefs(item.IP.toString(), fname, "IP" + it.toString());
+                }
+                it++;
+            }
+        }
     }
     fun ReadServerList(){
-
+        ServList.clear();
+        val size =_MainHandler.loadPrefs(fname, "size")?.toInt();
+        if(size != null){
+            for(i in 0 until size step 1){
+                val Name  = _MainHandler.loadPrefs(fname, "Name"+i.toString());
+                val IP =  _MainHandler.loadPrefs(fname, "IP"+i.toString());
+                if(Name != null && IP != null){
+                    CreateNewServerWithoutConnect(IP, Name);
+                }
+            }
+        }
     }
     fun ConnectToServer(Name:String, ServIP : String) : Retval{
         val NetCore : JukeboxApi = JukeboxApi(ServIP);
@@ -101,13 +128,14 @@ class MainHandler(private var _MainHandler: MainActivity){
     }
     fun DisconnectFromServer(ServIP: String){
         var found = ServList.find { it.IP == ServIP };
-        if(found != null){
+        if(found != null && found.IsInit == true){
             found.Net?.Disconnect();
+            found.IsInit = false;
             found.Net?.searchTracks
         };
     }
     fun SearchTrack(Input: String, ListSize : Int) :  MutableList<Track>?{
-        val found = ServList.find{ it: ServerPair -> it.IsInit == true};
+        val found = Core
         var list : MutableList<Track>? = null;
         if(found != null) {
             found.Net?.getTracks(Input, ListSize, object : JukeboxApi.JukeboxApiCallback {
@@ -136,33 +164,38 @@ class MainHandler(private var _MainHandler: MainActivity){
             buf.duration = item.duration
             buf.iconUri = item.iconUri
             buf.addedBy = item.addedBy
+            buf.votes = -1
             newlist?.add(buf);
         }
         return newlist;
     }
-    fun GetTracks() :  MutableList<VoteTrack>?{
-        val found = ServList.find{ it: ServerPair -> it.IsInit == true};
-        var list : MutableList<VoteTrack>? = mutableListOf<VoteTrack>();
+    fun RefreshTracks(){
+        val found = Core;
         if(found != null) {
+            TrackList?.clear();
             found.Net?.getCurrentQueues(object : JukeboxApi.JukeboxApiCallback {
                 override fun onSuccess() {
                     if(found.Net?.queues?.adminQueue != null){
-                        list = convertToVoteTrack(found.Net?.queues?.adminQueue);
+                        TrackList = convertToVoteTrack(found.Net?.queues?.adminQueue);
                     }
                     if(found.Net?.queues?.normalQueue != null){
-                        list?.addAll(found.Net?.queues!!.normalQueue);
+                        TrackList?.addAll(found.Net?.queues!!.normalQueue);
                     }
+                    CurrTrack = found.Net?.queues?.current;
                 }
                 override fun onFailure(statusCode: String?, exception: IOException?) {
-                    list = null;
+                    TrackList = null;
+                    CurrTrack = null;
                 }
             })
         }
-        return list;
+    }
+    fun GetTracks() :  MutableList<VoteTrack>?{
+        return TrackList;
     }
 
     fun VoteOnTrack(Song:Track):Boolean{
-        val found = ServList.find{ it: ServerPair -> it.IsInit == true};
+        val found = Core;
         var retval = false;
         found?.Net?.voteTrack(Song.trackId, 1, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
@@ -176,7 +209,7 @@ class MainHandler(private var _MainHandler: MainActivity){
         return retval;
     }
     fun AddOnTrack(Song:Track):Boolean{
-        val found = ServList.find{ it: ServerPair -> it.IsInit == true};
+        val found = Core;
         var retval = false;
         found?.Net?.addTrackToQueue(Song.trackId,  object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
@@ -190,19 +223,7 @@ class MainHandler(private var _MainHandler: MainActivity){
         return retval;
     }
     fun CurrentTrack() : PlayingTrack? {
-        val found = ServList.find{ it: ServerPair -> it.IsInit == true};
-        var track : PlayingTrack? = PlayingTrack();
-        if(found != null) {
-            found.Net?.getCurrentQueues(object : JukeboxApi.JukeboxApiCallback {
-                override fun onSuccess() {
-                   track = found.Net?.queues?.current;
-                }
-                override fun onFailure(statusCode: String?, exception: IOException?) {
-                    track = null;
-                }
-            })
-        }
-        return track;
+        return CurrTrack;
     }
     fun sendToast(ToBeSent: String){
         _MainHandler.sendToast(ToBeSent);

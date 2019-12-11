@@ -1,11 +1,8 @@
 package com.ise.virtualjukebox
-import android.app.Activity
-import android.content.Context
-import android.widget.Toast
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 
-class SearchHandler : Activity{
+class SearchHandler {
     private var _MainHandler: MainHandler;
     private val _llength : Int;
 
