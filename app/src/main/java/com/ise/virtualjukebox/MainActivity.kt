@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     var playh : PlayHandler = PlayHandler(mainl);
     var searchh : SearchHandler = SearchHandler(mainl, 10);
 
-    val Store = "Test1"
+    val Store = "JukeBox"
 
     fun sendToast(ToBeSent: String){
         Toast.makeText(this, ToBeSent, Toast.LENGTH_SHORT).show()
@@ -46,9 +46,8 @@ class MainActivity : AppCompatActivity() {
         mainl.ReadServerList();
 
         val test = mainl.ConnectToServer("test", "pagdot.tk")
-
         val handler = Handler(Looper.getMainLooper())
-        var tester = 0;
+
         handler.post(object : Runnable {
             override fun run() {
                // mainl.sendToast("Neger");

@@ -153,7 +153,7 @@ class MainHandler(private var _MainHandler: MainActivity){
     private fun convertToVoteTrack(list : MutableList<Track>?) : MutableList<VoteTrack>?{
         var newlist : MutableList<VoteTrack>? = mutableListOf<VoteTrack>();
         if(list == null){
-            return null;
+            return newlist;
         }
         for(item in list){
             var buf : VoteTrack = VoteTrack();
