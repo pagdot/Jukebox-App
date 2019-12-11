@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ise.virtualjukebox.R
-import kotlinx.android.synthetic.main.activity_playlist.*
+import kotlinx.android.synthetic.main.fragment_layout.*
 
 class PlaylistFragment : Fragment(){
 
@@ -21,24 +21,12 @@ class PlaylistFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        btnSearch.setOnClickListener {
-            // switch fragment
-            (activity as MainActivityFragment).switchFragment(Screens.Search)
-        }
-
-        btnSettings.setOnClickListener{
-            // switch fragment
-            (activity as MainActivityFragment).switchFragment(Screens.Settings)
-        }
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_playlist, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // todo set list contents
     }
 }

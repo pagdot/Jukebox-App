@@ -6,6 +6,7 @@ import java.io.IOException
 import android.content.SharedPreferences;
 import android.content.Context;
 import android.content.ContextWrapper
+import com.ise.virtualjukebox.activity.MainActivity
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.PlayingTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack

@@ -1,20 +1,21 @@
 package com.example.recyclerview
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.ise.virtualjukebox.R
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
-import okhttp3.internal.checkDuration
+import kotlin.reflect.KFunction1
 
 //class RecyclerAdapter(private val data: List<RecyclerItem>) :
-class RecyclerAdapterSearch(private val data: MutableList<Track>, private val cbSearch: (Song: Track) -> MutableList<VoteTrack>) :
+class RecyclerAdapterSearch(private val data: MutableList<Track>, private val cbSearch: KFunction1<@ParameterName(
+    name = "Song"
+) Track, MutableList<VoteTrack>?>
+) :
     RecyclerView.Adapter<RecyclerAdapterSearch.ViewHolderTrack>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTrack {
@@ -27,7 +28,7 @@ class RecyclerAdapterSearch(private val data: MutableList<Track>, private val cb
 
         holder.btnAdd.setOnClickListener{
             //TODO: return ignored
-            cbSearch.invoke(data[position])
+            //cbSearch.invoke(data[position])
         }
     }
 
