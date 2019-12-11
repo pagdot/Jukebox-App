@@ -1,17 +1,14 @@
 package com.example.recyclerview
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.ise.virtualjukebox.R
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
-import okhttp3.internal.checkDuration
 
 //class RecyclerAdapter(private val data: List<RecyclerItem>) :
 class RecyclerAdapterSearch(private val data: MutableList<Track>, private val cbSearch: (Song: Track) -> MutableList<VoteTrack>) :
@@ -37,6 +34,6 @@ class RecyclerAdapterSearch(private val data: MutableList<Track>, private val cb
     class ViewHolderTrack(view: View) : RecyclerView.ViewHolder(view) {
         val artist : TextView = view.findViewById(R.id.txvArtistSearch)
         val title : TextView = view.findViewById(R.id.txvTitleSearch)
-        val btnAdd : Button = view.findViewById(R.id.btnAddSearch)
+        val btnAdd : Button = view.findViewById(R.id.btnAdd)
     }
 }

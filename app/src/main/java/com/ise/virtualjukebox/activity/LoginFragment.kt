@@ -3,11 +3,11 @@ package com.ise.virtualjukebox.activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.activity_login.*
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.ise.virtualjukebox.R
-import kotlinx.android.synthetic.main.fragment1_layout.*
+import kotlinx.android.synthetic.main.fragment_login.*
 
 
 class LoginFragment : Fragment() {
@@ -27,7 +27,8 @@ class LoginFragment : Fragment() {
         btnConnect.setOnClickListener {
             // set serverIP
             if(!(activity as MainActivityFragment).loginh.setServerIP(txeServerIP.text.toString())) {
-
+                Toast.makeText(it.context, "Connect with server not successful.", Toast.LENGTH_SHORT)
+                    .show()
             }
 
             // set username

@@ -1,19 +1,15 @@
 package com.ise.virtualjukebox.activity
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.recyclerview.RecyclerAdapterSearch
 import com.ise.virtualjukebox.R     //ACHTUNG  ACHTUNG
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
-import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.fragment1_layout.*
+import kotlinx.android.synthetic.main.fragment_search.*
 
 class SearchFragment : Fragment() {
 
@@ -36,7 +32,7 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //TODO: check if right interface
-        val hSearch = (activity as MainActivityFragment).SearchHandler
+        val hSearch = (activity as MainActivityFragment).searchh
         
         rvSearch.layoutManager = LinearLayoutManager(context)
 

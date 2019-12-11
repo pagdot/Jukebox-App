@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ise.virtualjukebox.R
-import kotlinx.android.synthetic.main.activity_playlist.*
+import kotlinx.android.synthetic.main.playlistitem_layout.*
 
 class PlaylistFragment : Fragment(){
 
@@ -22,14 +22,12 @@ class PlaylistFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View {
 
-        btnSearch.setOnClickListener {
-            // switch fragment
-            (activity as MainActivityFragment).switchFragment(Screens.Search)
+        btnUpvote.setOnClickListener {
+            //(activity as MainActivityFragment).playh.Vote()
         }
 
-        btnSettings.setOnClickListener{
-            // switch fragment
-            (activity as MainActivityFragment).switchFragment(Screens.Settings)
+        btnDownvote.setOnClickListener{
+            //(activity as MainActivityFragment).playh.Vote()
         }
 
         // Inflate the layout for this fragment
