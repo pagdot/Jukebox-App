@@ -7,7 +7,7 @@ open class HttpApi(private var serverName : String) : RestClient() {
     private var baseUrlSegments = mutableListOf("api", "v1")
     private var restClient = RestClient()
 
-    var sessionID : String? = "124234dgd"
+    var sessionID : String? = null
 
     fun disconnectClient() {
         restClient.close()

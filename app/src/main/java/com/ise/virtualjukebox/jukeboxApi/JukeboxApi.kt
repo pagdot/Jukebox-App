@@ -28,7 +28,7 @@ class JukeboxApi(hostName : String) {
          * @param statusCode - contains the rest status code if the response was not OK (200). exception is then null
          * @param exception - contains the exception. statusCode is then null
          */
-        fun onFailure(errorClass : apiError, exception : IOException?)
+        fun onFailure(errorClass : apiError, exception : Exception?)
 
         fun onSuccess()
     }
@@ -40,11 +40,15 @@ class JukeboxApi(hostName : String) {
     fun getSessionID(nickname :String, cb : JukeboxApiCallback) {
         api.getSessionID(nickname, object : RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
-                val jsonDataString = response.body?.string()
-                val jsonDataObject = JSONObject(jsonDataString.toString())
-                val tmp = jsonDataObject["session_id"].toString()
-                api.sessionID = tmp
-                Log.d("getSessionID success", ("SessionID: $tmp"))
+                try {
+                    val jsonDataString = response.body?.string()
+                    val jsonDataObject = JSONObject(jsonDataString.toString())
+                    val tmp = jsonDataObject["session_id"].toString()
+                    api.sessionID = tmp
+                    Log.d("getSessionID success", ("SessionID: $tmp"))
+                } catch (e : Exception) {
+                    cb.onFailure(apiError(null, null), e)
+                }
 
                 cb.onSuccess()
             }
@@ -74,7 +78,7 @@ class JukeboxApi(hostName : String) {
                     val jsonDataString = response.body?.string()
                     searchTracks.addAll(jsonParser.parseTrackListFromResponse(jsonDataString))
                 } catch (e : Exception) {
-
+                    cb.onFailure(apiError(null, null), e)
                 }
 
                 cb.onSuccess()
@@ -104,8 +108,8 @@ class JukeboxApi(hostName : String) {
                 try {
                     val jsonDataString = response.body?.string()
                     queues = jsonParser.parseQueuesFromResponse(jsonDataString)
-                } catch (e : java.lang.Exception) {
-
+                } catch (e : Exception) {
+                    cb.onFailure(apiError(null, null), e)
                 }
 
                 cb.onSuccess()
