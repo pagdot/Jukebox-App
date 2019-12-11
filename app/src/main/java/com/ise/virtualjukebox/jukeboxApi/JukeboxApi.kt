@@ -25,7 +25,7 @@ class JukeboxApi(hostName : String) {
          * @param statusCode - contains the rest status code if the response was not OK (200). exception is then null
          * @param exception - contains the exception. statusCode is then null
          */
-        fun onFailure(statusCode : String?, exception : IOException?)
+        fun onFailure(statusCode : String?, responseMessage: String?, exception : IOException?)
 
         fun onSuccess()
     }
@@ -47,17 +47,19 @@ class JukeboxApi(hostName : String) {
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
+                var tmpString : String? = null
+                var tmpResponseCode : String? = null
                 if(exception == null) {
-                    var jsonDataString = response?.body?.string()
-                    Log.e(
-                        "getSessionID code fail",
-                        "Code: ${response?.code}; Message: ${response?.message.toString()}"
-                    )
+                    Log.e("getSessionID code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
+                    tmpResponseCode = response?.code.toString()
+                    tmpString = response?.message.toString()
+                    if(response?.code == 440)
+                        tmpString = "Login-Time-out"
                 }
                 else
                     Log.e("getSessionID exception", "${exception.message}")
 
-                cb.onFailure(response?.code.toString(), exception)
+                cb.onFailure(tmpResponseCode,tmpString, exception)
             }
         })
     }
@@ -76,12 +78,19 @@ class JukeboxApi(hostName : String) {
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                if(exception == null)
+                var tmpString : String? = null
+                var tmpResponseCode : String? = null
+                if(exception == null) {
                     Log.e("getTracks code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
+                    tmpResponseCode = response?.code.toString()
+                    tmpString = response?.message.toString()
+                    if(response?.code == 440)
+                        tmpString = "Login-Time-out"
+                }
                 else
                     Log.e("getTracks exception", "${exception.message}")
 
-                cb.onFailure(response?.code.toString(), exception)
+                cb.onFailure(tmpResponseCode,tmpString, exception)
             }
         })
     }
@@ -100,12 +109,19 @@ class JukeboxApi(hostName : String) {
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                if(exception == null)
+                var tmpString : String? = null
+                var tmpResponseCode : String? = null
+                if(exception == null) {
                     Log.e("getCurQueues code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
+                    tmpResponseCode = response?.code.toString()
+                    tmpString = response?.message.toString()
+                    if(response?.code == 440)
+                        tmpString = "Login-Time-out"
+                }
                 else
                     Log.e("getCurQueues exception", "${exception.message}")
 
-                cb.onFailure(response?.code.toString(), exception)
+                cb.onFailure(tmpResponseCode,tmpString, exception)
             }
         })
     }
@@ -119,12 +135,19 @@ class JukeboxApi(hostName : String) {
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                if(exception == null)
+                var tmpString : String? = null
+                var tmpResponseCode : String? = null
+                if(exception == null) {
                     Log.e("addTrackToQ code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
+                    tmpResponseCode = response?.code.toString()
+                    tmpString = response?.message.toString()
+                    if(response?.code == 440)
+                        tmpString = "Login-Time-out"
+                }
                 else
                     Log.e("addTrackToQ exception", "${exception.message}")
 
-                cb.onFailure(response?.code.toString(), exception)
+                cb.onFailure(tmpResponseCode,tmpString, exception)
             }
         })
     }
@@ -138,12 +161,19 @@ class JukeboxApi(hostName : String) {
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                if(exception == null)
+                var tmpString : String? = null
+                var tmpResponseCode : String? = null
+                if(exception == null) {
                     Log.e("voteTrack code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
+                    tmpResponseCode = response?.code.toString()
+                    tmpString = response?.message.toString()
+                    if(response?.code == 440)
+                        tmpString = "Login-Time-out"
+                }
                 else
                     Log.e("voteTrack exception", "${exception.message}")
 
-                cb.onFailure(response?.code.toString(), exception)
+                cb.onFailure(tmpResponseCode,tmpString, exception)
             }
         })
     }
