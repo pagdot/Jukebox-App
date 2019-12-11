@@ -69,7 +69,8 @@ class JukeboxApi(hostName : String) {
             override fun onSuccess(response: Response) {
                 searchTracks.clear()
                 try {
-                    searchTracks.addAll(jsonParser.parseTrackListFromResponse(response))
+                    val jsonDataString = response.body?.string()
+                    searchTracks.addAll(jsonParser.parseTrackListFromResponse(jsonDataString))
                 } catch (e : Exception) {
 
                 }
@@ -100,7 +101,8 @@ class JukeboxApi(hostName : String) {
             override fun onSuccess(response: Response) {
 
                 try {
-                    queues = jsonParser.parseQueuesFromResponse(response)
+                    val jsonDataString = response.body?.string()
+                    queues = jsonParser.parseQueuesFromResponse(jsonDataString)
                 } catch (e : java.lang.Exception) {
 
                 }

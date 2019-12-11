@@ -96,21 +96,19 @@ class JsonParser {
         return tmpList
     }
 
-    fun parseQueuesFromResponse (response : Response) : Queues {
-        if(response == null)
-            throw Exception("Response is NULL")
+    fun parseQueuesFromResponse (jsonDataString : String?) : Queues {
+        if(jsonDataString == null)
+            throw Exception("JsonDataString is NULL")
 
         val tmpQueues = Queues()
         tmpQueues.adminQueue.clear()
         tmpQueues.normalQueue.clear()
 
-        val jsonDataString : String?
         val jsonDataObject : JSONObject
         try {
-            jsonDataString = response.body?.string()
             jsonDataObject = JSONObject(jsonDataString)
         } catch (e : JSONException) {
-            Log.e("getQueues response ex", "Invalid response: $response")
+            Log.e("getQueues response ex", "Invalid JsonDataString: $jsonDataString")
             throw e
         }
 
@@ -138,23 +136,21 @@ class JsonParser {
         return tmpQueues
     }
 
-    fun parseTrackListFromResponse (response : Response) : MutableList<Track> {
-        if(response == null)
-            throw Exception("Response is NULL")
+    fun parseTrackListFromResponse (jsonDataString : String?) : MutableList<Track> {
+        if(jsonDataString == null)
+            throw Exception("JsonDataString is NULL")
 
         val tmpList : MutableList<Track> = mutableListOf(Track())
         tmpList.clear()
 
-        val jsonDataString : String?
         val jsonDataObject : JSONObject
         val jsonDataArray : JSONArray
 
         try {
-            jsonDataString = response.body?.string()
             jsonDataObject = JSONObject(jsonDataString)
             jsonDataArray = jsonDataObject.getJSONArray("tracks")
         } catch (e : Exception) {
-            Log.e("getTracks response ex", "Invalid response: $response")
+            Log.e("getTracks response ex", "Invalid JsonDataString: $jsonDataString")
             throw e
         }
 
