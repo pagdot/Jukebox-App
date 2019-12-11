@@ -6,13 +6,16 @@ import java.io.IOException
 import android.content.SharedPreferences;
 import android.content.Context;
 import android.content.ContextWrapper
+import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.PlayingTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.apiError
 
 
-class MainHandler(private var _MainHandler: MainActivity){
+class MainHandler(private var _MainHandler: MainActivity) {
     private var fname = "ICC";
     class ServerPair{
         var Net: JukeboxApi? = null;
@@ -43,6 +46,20 @@ class MainHandler(private var _MainHandler: MainActivity){
         }
         return false;
     }
+    fun BackProcess(){
+        val handler = Handler(Looper.getMainLooper())
+        handler.post(object : Runnable {
+            override fun run() {
+                sendToast("\u130B8");
+                RefreshTracks();
+                val fragment = fragmentManager.findFragmentById(R.layout.fragment_playlist) as PlaylistFragment
+                fragment.playlistContentChanged()
+                handler.postDelayed(this, 5000);
+            }
+        })
+    }
+
+
     fun CreateNewServer(Name:String, ServIP:String) : Boolean{
         val rval : Retval = ConnectToServer(ServIP, Name);
         if(rval.Success){

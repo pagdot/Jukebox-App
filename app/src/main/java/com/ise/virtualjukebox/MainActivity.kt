@@ -1,13 +1,14 @@
 package com.ise.virtualjukebox
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity()  {
     var mainl : MainHandler = MainHandler(this);
     var loginh : LoginHandler = LoginHandler(mainl);
     var settingsh : SettingsHandler = SettingsHandler(mainl);
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         return pref.getString(Store, null);
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         //searchh.SearchSong("   ");
@@ -44,13 +47,18 @@ class MainActivity : AppCompatActivity() {
         val test = mainl.ConnectToServer("test", "pagdot.tk")
         val handler = Handler(Looper.getMainLooper())
 
-        handler.post(object : Runnable {
+       /* handler.post(object : Runnable {
             override fun run() {
-               // mainl.sendToast("Neger");
+                mainl.sendToast("\u130B8");
                 mainl.RefreshTracks();
-                handler.postDelayed(this, 10000)
+
+                val intent = Intent();
+                intent.action = "com.example."
+
+                handler.postDelayed(this, 5000);
             }
-        })
+        })*/
+        mainl.BackProcess()
     }
     override fun onDestroy(){
         mainl.StoreServerList();
