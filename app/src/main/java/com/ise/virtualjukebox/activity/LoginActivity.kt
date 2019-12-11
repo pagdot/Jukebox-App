@@ -27,7 +27,7 @@ class LoginActivity : Activity() {
             }
         })
 
-        while(!getSessionFlag){}
+        //while(!getSessionFlag){}
 
         api.getTracks("test", 20, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {

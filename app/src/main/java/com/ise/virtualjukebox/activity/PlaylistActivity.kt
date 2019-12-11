@@ -14,11 +14,13 @@ class PlaylistActivity : Activity() {
 
         btnSearch.setOnClickListener{
             val intent = Intent(this, SearchActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent)
         }
 
         btnSettings.setOnClickListener{
             val intent = Intent(this, SettingsActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent)
         }
     }

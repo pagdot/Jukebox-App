@@ -11,10 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.PlaylistActivity"></activity>
-        <activity android:name=".activity.SearchActivity"></activity>
-        <activity android:name=".activity.SettingsActivity"></activity>
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".activity.MainActivityFragment">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
