@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
+import com.ise.virtualjukebox.jukeboxApi.dataStructure.apiError
 import kotlinx.android.synthetic.main.activity_login.*
 import java.io.IOException
 
@@ -23,7 +24,7 @@ class LoginActivity : Activity() {
                 getSessionFlag = true
             }
 
-            override fun onFailure(statusCode: String?, statusMessage : String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: IOException?) {
             }
         })
 
@@ -33,7 +34,7 @@ class LoginActivity : Activity() {
             override fun onSuccess() {
             }
 
-            override fun onFailure(statusCode: String?, statusMessage : String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: IOException?) {
             }
         })
 
@@ -41,7 +42,7 @@ class LoginActivity : Activity() {
             override fun onSuccess() {
             }
 
-            override fun onFailure(statusCode: String?, statusMessage : String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: IOException?) {
             }
         })
 
@@ -49,7 +50,7 @@ class LoginActivity : Activity() {
             override fun onSuccess() {
             }
 
-            override fun onFailure(statusCode: String?, statusMessage : String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: IOException?) {
             }
         })
 
@@ -57,7 +58,7 @@ class LoginActivity : Activity() {
             override fun onSuccess() {
             }
 
-            override fun onFailure(statusCode: String?, statusMessage : String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: IOException?) {
             }
         })
 
@@ -72,7 +73,7 @@ class LoginActivity : Activity() {
                 getSessionFlag = true
             }
 
-            override fun onFailure(statusCode: String?, statusMessage : String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: IOException?) {
             }
         })
 

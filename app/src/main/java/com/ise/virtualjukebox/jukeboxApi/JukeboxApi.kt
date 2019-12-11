@@ -4,6 +4,7 @@ import android.util.Log
 import com.ise.virtualjukebox.jukeboxApi.httpApi.HttpApi
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Queues
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
+import com.ise.virtualjukebox.jukeboxApi.dataStructure.apiError
 import com.ise.virtualjukebox.jukeboxApi.httpApi.RestClient
 
 import okhttp3.Response
@@ -16,6 +17,10 @@ class JukeboxApi(hostName : String) {
     var queues = Queues()
     var searchTracks : MutableList<Track> = mutableListOf(Track())
 
+    init {
+        searchTracks.clear()
+    }
+
     interface JukeboxApiCallback {
 
         /**
@@ -23,7 +28,7 @@ class JukeboxApi(hostName : String) {
          * @param statusCode - contains the rest status code if the response was not OK (200). exception is then null
          * @param exception - contains the exception. statusCode is then null
          */
-        fun onFailure(statusCode : String?, statusMessage: String?, exception : IOException?)
+        fun onFailure(errorClass : apiError, exception : IOException?)
 
         fun onSuccess()
     }
@@ -45,19 +50,18 @@ class JukeboxApi(hostName : String) {
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                var tmpString : String? = null
-                var tmpResponseCode : String? = null
+                val errorClass = apiError(null, null)
                 if(exception == null) {
-                    Log.e("getSessionID code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
-                    tmpResponseCode = response?.code.toString()
-                    tmpString = response?.message.toString()
-                    if(response?.code == 440)
-                        tmpString = "Login-Time-out"
+                    Log.e("getSessionID code fail", "Body: ${response?.body?.string()}")
+                    val jsonDataString = response?.body?.string()
+                    val jsonDataObject = JSONObject(jsonDataString.toString())
+                    errorClass.code = jsonDataObject["status"].toString()
+                    errorClass.message = jsonDataObject["error"].toString()
                 }
                 else
                     Log.e("getSessionID exception", "${exception.message}")
 
-                cb.onFailure(tmpResponseCode,tmpString, exception)
+                cb.onFailure(errorClass, exception)
             }
         })
     }
@@ -77,19 +81,18 @@ class JukeboxApi(hostName : String) {
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                var tmpString : String? = null
-                var tmpResponseCode : String? = null
+                val errorClass = apiError(null, null)
                 if(exception == null) {
                     Log.e("getTracks code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
-                    tmpResponseCode = response?.code.toString()
-                    tmpString = response?.message.toString()
-                    if(response?.code == 440)
-                        tmpString = "Login-Time-out"
+                    val jsonDataString = response?.body?.string()
+                    val jsonDataObject = JSONObject(jsonDataString.toString())
+                    errorClass.code = jsonDataObject["status"].toString()
+                    errorClass.message = jsonDataObject["error"].toString()
                 }
                 else
                     Log.e("getTracks exception", "${exception.message}")
 
-                cb.onFailure(tmpResponseCode,tmpString, exception)
+                cb.onFailure(errorClass, exception)
             }
         })
     }
@@ -109,19 +112,18 @@ class JukeboxApi(hostName : String) {
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                var tmpString : String? = null
-                var tmpResponseCode : String? = null
+                val errorClass = apiError(null, null)
                 if(exception == null) {
                     Log.e("getCurQueues code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
-                    tmpResponseCode = response?.code.toString()
-                    tmpString = response?.message.toString()
-                    if(response?.code == 440)
-                        tmpString = "Login-Time-out"
+                    val jsonDataString = response?.body?.string()
+                    val jsonDataObject = JSONObject(jsonDataString.toString())
+                    errorClass.code = jsonDataObject["status"].toString()
+                    errorClass.message = jsonDataObject["error"].toString()
                 }
                 else
                     Log.e("getCurQueues exception", "${exception.message}")
 
-                cb.onFailure(tmpResponseCode,tmpString, exception)
+                cb.onFailure(errorClass, exception)
             }
         })
     }
@@ -135,19 +137,18 @@ class JukeboxApi(hostName : String) {
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                var tmpString : String? = null
-                var tmpResponseCode : String? = null
+                val errorClass = apiError(null, null)
                 if(exception == null) {
                     Log.e("addTrackToQ code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
-                    tmpResponseCode = response?.code.toString()
-                    tmpString = response?.message.toString()
-                    if(response?.code == 440)
-                        tmpString = "Login-Time-out"
+                    val jsonDataString = response?.body?.string()
+                    val jsonDataObject = JSONObject(jsonDataString.toString())
+                    errorClass.code = jsonDataObject["status"].toString()
+                    errorClass.message = jsonDataObject["error"].toString()
                 }
                 else
                     Log.e("addTrackToQ exception", "${exception.message}")
 
-                cb.onFailure(tmpResponseCode,tmpString, exception)
+                cb.onFailure(errorClass, exception)
             }
         })
     }
@@ -161,19 +162,18 @@ class JukeboxApi(hostName : String) {
             }
 
             override fun onFailure(response: Response?, exception: IOException?) {
-                var tmpString : String? = null
-                var tmpResponseCode : String? = null
+                val errorClass = apiError(null, null)
                 if(exception == null) {
                     Log.e("voteTrack code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
-                    tmpResponseCode = response?.code.toString()
-                    tmpString = response?.message.toString()
-                    if(response?.code == 440)
-                        tmpString = "Login-Time-out"
+                    val jsonDataString = response?.body?.string()
+                    val jsonDataObject = JSONObject(jsonDataString.toString())
+                    errorClass.code = jsonDataObject["status"].toString()
+                    errorClass.message = jsonDataObject["error"].toString()
                 }
                 else
                     Log.e("voteTrack exception", "${exception.message}")
 
-                cb.onFailure(tmpResponseCode,tmpString, exception)
+                cb.onFailure(errorClass, exception)
             }
         })
     }
