@@ -1,25 +1,23 @@
 package com.ise.virtualjukebox.jukeboxApi.httpApi
 
-import android.util.Log
-import okhttp3.Response
-import java.io.IOException
-
-import org.json.JSONArray
-import java.util.*
 import kotlin.collections.HashMap
 
-open class HttpApi(var serverName : String) : RestClient() {
+open class HttpApi(private var serverName : String) : RestClient() {
     private var baseScheme : String = "http"
     private var baseUrlSegments = mutableListOf("api", "v1")
     private var restClient = RestClient()
 
-    var sessionID : String? = "124234dgd"//null
+    var sessionID : String? = null
+
+    fun disconnectClient() {
+        restClient.close()
+    }
 
     open fun getSessionID(nickname : String, cb : HttpCallback) {
         val segments = this.baseUrlSegments.toMutableList()
         segments.add("generateSession")
 
-        var bodyPayload = "{\"nickname\": \"$nickname\"}"
+        val bodyPayload = "{\"nickname\": \"$nickname\"}"
 
         restClient.quePostCall(this.baseScheme, this.serverName, segments, null, bodyPayload, cb)
     }
@@ -52,7 +50,7 @@ open class HttpApi(var serverName : String) : RestClient() {
         val segments = this.baseUrlSegments.toMutableList()
         segments.add("addTrackToQueue")
 
-        var bodyPayload = "{\"session_id\": \"${this.sessionID}\", \"track_id\": \"$trackID\", \"queue_type\": \"normal\"}"
+        val bodyPayload = "{\"session_id\": \"${this.sessionID}\", \"track_id\": \"$trackID\", \"queue_type\": \"normal\"}"
 
         restClient.quePostCall(this.baseScheme, this.serverName, segments, null, bodyPayload, cb)
     }
@@ -61,7 +59,7 @@ open class HttpApi(var serverName : String) : RestClient() {
         val segments = this.baseUrlSegments.toMutableList()
         segments.add("voteTrack")
 
-        var bodyPayload = "{\"session_id\": \"${this.sessionID}\", \"track_id\": \"$trackID\", \"vote\": $vote}"
+        val bodyPayload = "{\"session_id\": \"${this.sessionID}\", \"track_id\": \"$trackID\", \"vote\": $vote}"
 
         restClient.quePutCall(this.baseScheme, this.serverName, segments, null, bodyPayload, cb)
     }

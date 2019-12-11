@@ -9,6 +9,7 @@ import android.content.ContextWrapper
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.PlayingTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
+import com.ise.virtualjukebox.jukeboxApi.dataStructure.apiError
 
 
 class MainHandler(private var _MainHandler: MainActivity){
@@ -52,7 +53,7 @@ class MainHandler(private var _MainHandler: MainActivity){
                 Pair.IsInit = true;
                 if(ServList.find { it.IP == Pair.IP } == null) {
                     ServList.add(Pair);
-                    Core?.Net?.Disconnect();
+                    Core?.Net?.disconnectClient();
                     Core = Pair;
                 }else{
                     return false;
@@ -94,7 +95,7 @@ class MainHandler(private var _MainHandler: MainActivity){
                 rval.Success = true;
                 rval.Net = NetCore;
             }
-            override fun onFailure(statusCode: String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: Exception?) {
                 rval.Success = false;
             }
         })
@@ -112,7 +113,7 @@ class MainHandler(private var _MainHandler: MainActivity){
                 rval = true;
                 found.IsInit = true;
             }
-            override fun onFailure(statusCode: String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: Exception?) {
                 rval = false;
             }
         })
@@ -129,7 +130,7 @@ class MainHandler(private var _MainHandler: MainActivity){
     fun DisconnectFromServer(ServIP: String){
         var found = ServList.find { it.IP == ServIP };
         if(found != null && found.IsInit == true){
-            found.Net?.Disconnect();
+            found.Net?.disconnectClient();
             found.IsInit = false;
             found.Net?.searchTracks
         };
@@ -143,7 +144,7 @@ class MainHandler(private var _MainHandler: MainActivity){
                     list = found.Net?.searchTracks;
                 }
 
-                override fun onFailure(statusCode: String?, exception: IOException?) {
+                override fun onFailure(errorClass: apiError, exception: Exception?) {
                     list = null;
                 }
             })
@@ -183,7 +184,7 @@ class MainHandler(private var _MainHandler: MainActivity){
                     }
                     CurrTrack = found.Net?.queues?.current;
                 }
-                override fun onFailure(statusCode: String?, exception: IOException?) {
+                override fun onFailure(errorClass: apiError, exception: Exception?) {
                     TrackList = null;
                     CurrTrack = null;
                 }
@@ -202,7 +203,7 @@ class MainHandler(private var _MainHandler: MainActivity){
                 retval = true;
             }
 
-            override fun onFailure(statusCode: String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: Exception?) {
                 retval = false;
             }
         })
@@ -216,7 +217,7 @@ class MainHandler(private var _MainHandler: MainActivity){
                 retval = true;
             }
 
-            override fun onFailure(statusCode: String?, exception: IOException?) {
+            override fun onFailure(errorClass: apiError, exception: Exception?) {
                 retval = false;
             }
         })

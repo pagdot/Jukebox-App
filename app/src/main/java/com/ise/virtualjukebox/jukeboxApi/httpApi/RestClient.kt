@@ -27,6 +27,12 @@ open class RestClient {
         fun onSuccess(response: Response)
     }
 
+    fun close() {
+        client.dispatcher.executorService.shutdown()
+        client.connectionPool.evictAll()
+        client.cache?.close()
+    }
+
     fun queueGetCall(scheme : String, host : String, segment : List<String>, parameters : HashMap<String, String>?, bodyPayload : String?, cb : HttpCallback) {
         this.call("GET", scheme, host, segment, parameters, bodyPayload, cb)
     }
@@ -40,7 +46,7 @@ open class RestClient {
     }
 
     private fun call(method : String, scheme : String, host : String, segments : List<String>, parameters : HashMap<String, String>?, bodyPayload : String?, cb : HttpCallback) {
-        var request : Request
+        val request : Request
         val urlBuilder = HttpUrl.Builder().scheme(scheme).host(host).port(8888)
         segments.forEach { urlBuilder.addPathSegments(it) }
 

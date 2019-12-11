@@ -1,14 +1,11 @@
 package com.ise.virtualjukebox
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
-import android.os.Handler;
+import android.os.Handler
 import android.os.Looper
-import kotlinx.coroutines.delay
-import java.lang.Runnable
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     var mainl : MainHandler = MainHandler(this);
@@ -42,7 +39,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainl.StoreServerList();
         mainl.ReadServerList();
 
         val test = mainl.ConnectToServer("test", "pagdot.tk")
@@ -55,6 +51,10 @@ class MainActivity : AppCompatActivity() {
                 handler.postDelayed(this, 10000)
             }
         })
+    }
+    override fun onDestroy(){
+        mainl.StoreServerList();
+        super.onDestroy()
     }
 
 }
