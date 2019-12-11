@@ -50,7 +50,8 @@ class JsonParser {
                     tmpTrack.duration = jsonObj["duration"].toString().toInt()
                     tmpTrack.iconUri = jsonObj["icon_uri"].toString()
                     tmpTrack.addedBy = ""
-                    if(jsonObj["added_by"] != null) {
+
+                    if(jsonObj.has("added_by")) {
                         tmpTrack.addedBy = jsonObj["added_by"].toString()
                     }
 
