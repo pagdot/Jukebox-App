@@ -46,7 +46,7 @@ open class RestClient {
     }
 
     private fun call(method : String, scheme : String, host : String, segments : List<String>, parameters : HashMap<String, String>?, bodyPayload : String?, cb : HttpCallback) {
-        var request : Request
+        val request : Request
         val urlBuilder = HttpUrl.Builder().scheme(scheme).host(host).port(8888)
         segments.forEach { urlBuilder.addPathSegments(it) }
 

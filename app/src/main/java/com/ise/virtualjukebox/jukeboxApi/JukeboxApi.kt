@@ -4,11 +4,9 @@ import android.util.Log
 import com.ise.virtualjukebox.jukeboxApi.httpApi.HttpApi
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Queues
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
-import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 import com.ise.virtualjukebox.jukeboxApi.httpApi.RestClient
 
 import okhttp3.Response
-import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
@@ -25,7 +23,7 @@ class JukeboxApi(hostName : String) {
          * @param statusCode - contains the rest status code if the response was not OK (200). exception is then null
          * @param exception - contains the exception. statusCode is then null
          */
-        fun onFailure(statusCode : String?, responseMessage: String?, exception : IOException?)
+        fun onFailure(statusCode : String?, statusMessage: String?, exception : IOException?)
 
         fun onSuccess()
     }
@@ -38,7 +36,7 @@ class JukeboxApi(hostName : String) {
         api.getSessionID(nickname, object : RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
                 val jsonDataString = response.body?.string()
-                val jsonDataObject = JSONObject(jsonDataString)
+                val jsonDataObject = JSONObject(jsonDataString.toString())
                 val tmp = jsonDataObject["session_id"].toString()
                 api.sessionID = tmp
                 Log.d("getSessionID success", ("SessionID: $tmp"))
