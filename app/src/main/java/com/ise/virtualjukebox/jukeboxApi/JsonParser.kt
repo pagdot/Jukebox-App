@@ -5,14 +5,13 @@ import com.ise.virtualjukebox.jukeboxApi.dataStructure.PlayingTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Queues
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
-import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
 class JsonParser {
     private fun parsePlayingTrackFromJsonObject(jsonObj : JSONObject) : PlayingTrack {
-        var tmpPlayingTrack = PlayingTrack()
+        val tmpPlayingTrack = PlayingTrack()
 
         try {
             tmpPlayingTrack.trackId = jsonObj["track_id"].toString()
@@ -35,7 +34,7 @@ class JsonParser {
     }
 
     private fun parseTrackListFromJsonArray(jsonDataArray : JSONArray) : MutableList<Track>{
-        var tmpList : MutableList<Track> = mutableListOf(Track())
+        val tmpList : MutableList<Track> = mutableListOf(Track())
         tmpList.clear()
 
         for (i in 0 until jsonDataArray.length()) {
@@ -50,7 +49,8 @@ class JsonParser {
                     tmpTrack.duration = jsonObj["duration"].toString().toInt()
                     tmpTrack.iconUri = jsonObj["icon_uri"].toString()
                     tmpTrack.addedBy = ""
-                    if(jsonObj["added_by"] != null) {
+
+                    if(jsonObj.has("added_by")) {
                         tmpTrack.addedBy = jsonObj["added_by"].toString()
                     }
 
@@ -82,7 +82,7 @@ class JsonParser {
                     tmpVoteTrack.iconUri = jsonObj["icon_uri"].toString()
                     tmpVoteTrack.addedBy = jsonObj["added_by"].toString()
                     tmpVoteTrack.votes = jsonObj["votes"].toString().toInt()
-                    tmpVoteTrack.hasVoted = jsonObj["current_vote"].toString().toBoolean()
+                    tmpVoteTrack.hasVoted = jsonObj["current_vote"].toString().toInt()
 
                     tmpList.add(tmpVoteTrack)
                     Log.d("getQueues successful", tmpVoteTrack.toString())
@@ -96,21 +96,19 @@ class JsonParser {
         return tmpList
     }
 
-    fun parseQueuesFromResponse (response : Response) : Queues {
-        if(response == null)
-            throw Exception("Response is NULL")
+    fun parseQueuesFromResponse (jsonDataString : String?) : Queues {
+        if(jsonDataString == null)
+            throw Exception("JsonDataString is NULL")
 
-        var tmpQueues = Queues()
+        val tmpQueues = Queues()
         tmpQueues.adminQueue.clear()
         tmpQueues.normalQueue.clear()
 
-        var jsonDataString : String?
-        var jsonDataObject : JSONObject
+        val jsonDataObject : JSONObject
         try {
-            jsonDataString = response.body?.string()
             jsonDataObject = JSONObject(jsonDataString)
         } catch (e : JSONException) {
-            Log.e("getQueues response ex", "Invalid response: $response")
+            Log.e("getQueues response ex", "Invalid JsonDataString: $jsonDataString")
             throw e
         }
 
@@ -122,15 +120,15 @@ class JsonParser {
         }
 
         try {
-            val jsonDataArray = jsonDataObject.getJSONArray("normal_queue")
-            tmpQueues.normalQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
+            val jsonDataArray = jsonDataObject.getJSONArray("admin_queue")
+            tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray))
         } catch (e : JSONException) {
             throw e
         }
 
         try {
-            val jsonDataArray = jsonDataObject.getJSONArray("admin_queue")
-            tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray))
+            val jsonDataArray = jsonDataObject.getJSONArray("normal_queue")
+            tmpQueues.normalQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
         } catch (e : JSONException) {
             throw e
         }
@@ -138,23 +136,21 @@ class JsonParser {
         return tmpQueues
     }
 
-    fun parseTrackListFromResponse (response : Response) : MutableList<Track> {
-        if(response == null)
-            throw Exception("Response is NULL")
+    fun parseTrackListFromResponse (jsonDataString : String?) : MutableList<Track> {
+        if(jsonDataString == null)
+            throw Exception("JsonDataString is NULL")
 
-        var tmpList : MutableList<Track> = mutableListOf(Track())
+        val tmpList : MutableList<Track> = mutableListOf(Track())
         tmpList.clear()
 
-        var jsonDataString : String?
-        var jsonDataObject : JSONObject
-        var jsonDataArray : JSONArray
+        val jsonDataObject : JSONObject
+        val jsonDataArray : JSONArray
 
         try {
-            jsonDataString = response.body?.string()
             jsonDataObject = JSONObject(jsonDataString)
             jsonDataArray = jsonDataObject.getJSONArray("tracks")
         } catch (e : Exception) {
-            Log.e("getTracks response ex", "Invalid response: $response")
+            Log.e("getTracks response ex", "Invalid JsonDataString: $jsonDataString")
             throw e
         }
 

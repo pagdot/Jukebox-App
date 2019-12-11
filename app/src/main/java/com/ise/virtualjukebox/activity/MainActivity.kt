@@ -1,64 +1,60 @@
 package com.ise.virtualjukebox
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
-import com.ise.virtualjukebox.jukeboxApi.httpApi.HttpApi
-import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
-import java.io.IOException
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
+    var mainl : MainHandler = MainHandler(this);
+    var loginh : LoginHandler = LoginHandler(mainl);
+    var settingsh : SettingsHandler = SettingsHandler(mainl);
+    var playh : PlayHandler = PlayHandler(mainl);
+    var searchh : SearchHandler = SearchHandler(mainl, 10);
 
-    var api = JukeboxApi("193.170.132.206")
+    val Store = "JukeBox"
+
+    fun sendToast(ToBeSent: String){
+        Toast.makeText(this, ToBeSent, Toast.LENGTH_SHORT).show()
+    }
+
+    fun storePrefs(Prefs : String, Name: String, Store : String){
+        val pref = getSharedPreferences(Name, Context.MODE_PRIVATE)
+        val edit = pref.edit()
+        edit.putString(Store, Prefs);
+        edit.apply();
+    }
+
+    fun loadPrefs(Name: String, Store : String) : String?{
+        val pref = getSharedPreferences(Name, Context.MODE_PRIVATE);
+        return pref.getString(Store, null);
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        //searchh.SearchSong("   ");
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var getSessionFlag = false
+        mainl.ReadServerList();
 
-        api.getSessionID("test_name", object : JukeboxApi.JukeboxApiCallback {
-            override fun onSuccess() {
-                getSessionFlag = true
-            }
+        val test = mainl.ConnectToServer("test", "pagdot.tk")
+        val handler = Handler(Looper.getMainLooper())
 
-            override fun onFailure(statusCode: String?, exception: IOException?) {
-            }
-        })
-
-        while(!getSessionFlag){}
-
-        api.getTracks("test", 20, object : JukeboxApi.JukeboxApiCallback {
-            override fun onSuccess() {
-            }
-
-            override fun onFailure(statusCode: String?, exception: IOException?) {
+        handler.post(object : Runnable {
+            override fun run() {
+               // mainl.sendToast("Neger");
+                mainl.RefreshTracks();
+                handler.postDelayed(this, 10000)
             }
         })
-
-        api.getCurrentQueues(object : JukeboxApi.JukeboxApiCallback {
-            override fun onSuccess() {
-            }
-
-            override fun onFailure(statusCode: String?, exception: IOException?) {
-            }
-        })
-
-        api.addTrackToQueue("strange_test_id", object : JukeboxApi.JukeboxApiCallback {
-            override fun onSuccess() {
-            }
-
-            override fun onFailure(statusCode: String?, exception: IOException?) {
-            }
-        })
-
-        api.voteTrack("strange_test_id", 1, object : JukeboxApi.JukeboxApiCallback {
-            override fun onSuccess() {
-            }
-
-            override fun onFailure(statusCode: String?, exception: IOException?) {
-            }
-        })
-
-        var test = 1
     }
+    override fun onDestroy(){
+        mainl.StoreServerList();
+        super.onDestroy()
+    }
+
 }
