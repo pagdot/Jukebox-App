@@ -2,9 +2,18 @@ package com.ise.virtualjukebox.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.ise.virtualjukebox.LoginHandler
+import com.ise.virtualjukebox.MainHandler
 import com.ise.virtualjukebox.R
+import com.ise.virtualjukebox.SettingsHandler
 
 class MainActivityFragment : AppCompatActivity() {
+
+    var mainl : MainHandler = MainHandler(this);
+    var loginh : LoginHandler = LoginHandler(mainl);
+    var settingsh : SettingsHandler = SettingsHandler(mainl);
+    var playh : PlayHandler = PlayHandler(mainl);
+    var searchh : SearchHandler = SearchHandler(mainl, 10);
 
     private val fragmentManager = supportFragmentManager
     private val testFragment = SearchFragment.newInstace()

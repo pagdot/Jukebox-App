@@ -37,7 +37,7 @@ class SearchFragment : Fragment() {
 
         //TODO: check if right interface
         val hSearch = (activity as MainActivityFragment).SearchHandler
-
+        
         rvSearch.layoutManager = LinearLayoutManager(context)
 
         btnSearchSearch.setOnClickListener{
