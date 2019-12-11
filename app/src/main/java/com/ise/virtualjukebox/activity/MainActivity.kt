@@ -7,9 +7,17 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.ise.virtualjukebox.activity.PlaylistFragment
+import androidx.core.app.ComponentActivity
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 
 class MainActivity : AppCompatActivity() {
+
     var mainl : MainHandler = MainHandler(this);
     var loginh : LoginHandler = LoginHandler(mainl);
     var settingsh : SettingsHandler = SettingsHandler(mainl);
@@ -58,6 +66,8 @@ class MainActivity : AppCompatActivity() {
         mainl.StoreServerList();
         super.onDestroy()
     }
+
+
 
 }
 
