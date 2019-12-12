@@ -47,5 +47,6 @@ class LoginFragment : Fragment() {
             // switch fragment
             (activity as MainActivity).switchFragment(Screens.Playlist)
         }
+
     }
 }

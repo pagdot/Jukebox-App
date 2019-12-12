@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import com.ise.virtualjukebox.activity.MainActivity
+import com.ise.virtualjukebox.activity.PlaylistFragment
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.PlayingTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
@@ -205,10 +206,12 @@ class MainHandler(private var _MainHandler: MainActivity) {
     }
     fun RefreshTracks(){
         val found = Core;
+        var block = false;
         if(found != null) {
             TrackList?.clear();
             found.Net?.getCurrentQueues(object : JukeboxApi.JukeboxApiCallback {
                 override fun onSuccess() {
+                    block = true;
                     if(found.Net?.queues?.adminQueue != null){
                         TrackList = convertToVoteTrack(found.Net?.queues?.adminQueue);
                     }
@@ -218,10 +221,12 @@ class MainHandler(private var _MainHandler: MainActivity) {
                     CurrTrack = found.Net?.queues?.current;
                 }
                 override fun onFailure(errorClass: apiError, exception: Exception?) {
+                    block = true;
                     TrackList = null;
                     CurrTrack = null;
                 }
             })
+            while(!block);
 
         }
     }

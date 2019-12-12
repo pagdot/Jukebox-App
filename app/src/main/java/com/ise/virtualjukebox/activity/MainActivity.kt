@@ -78,6 +78,8 @@ package com.ise.virtualjukebox.activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import com.ise.virtualjukebox.*
 import kotlinx.android.synthetic.main.fragment_layout.*
@@ -116,6 +118,18 @@ class MainActivity : AppCompatActivity() {
 
         mainl.ReadServerList()
 
+        val handler = Handler(Looper.getMainLooper())
+        handler.post(object : Runnable {
+            override fun run() {
+                mainl.RefreshTracks();
+                if(playh.PlaylistChanged() != null){
+                    val fragment = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
+                    fragment.playlistContentChanged()
+                }
+                handler.postDelayed(this, 5000);
+            }
+        })
+
         switchFragment(Screens.Login)
 
         /*
@@ -146,28 +160,29 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
     // switch current fragment on screen with other fragment
     fun switchFragment(screenName: Screens) {
 
         val fragmentTransaction = fragmentManager.beginTransaction()
         //val transaction = supportFragmentManager.beginTransaction()
-
+        mainl.BackProcess();
         when (screenName) {
             Screens.Login -> {
                 // Replace whatever is in the fragment_container view with this fragment
-                fragmentTransaction.replace(R.id.fragmentContainer, LoginFragment.newInstance())
+                fragmentTransaction.replace(R.id.fragmentContainer, LoginFragment.newInstance(), Screens.Login.toString())
             }
             Screens.Playlist -> {
                 // Replace whatever is in the fragment_container view with this fragment
-                fragmentTransaction.replace(R.id.fragmentContainer, PlaylistFragment.newInstance())
+                fragmentTransaction.replace(R.id.fragmentContainer, PlaylistFragment.newInstance(), Screens.Playlist.toString())
             }
             Screens.Search -> {
                 // Replace whatever is in the fragment_container view with this fragment
-                fragmentTransaction.replace(R.id.fragmentContainer, SearchFragment.newInstance())
+                fragmentTransaction.replace(R.id.fragmentContainer, SearchFragment.newInstance(), Screens.Search.toString())
             }
             Screens.Settings -> {
                 // Replace whatever is in the fragment_container view with this fragment
-                fragmentTransaction.replace(R.id.fragmentContainer, SettingsFragment.newInstance())
+                fragmentTransaction.replace(R.id.fragmentContainer, SettingsFragment.newInstance(), Screens.Settings.toString())
             }
             else -> {
                 // Replace whatever is in the fragment_container view with this fragment
