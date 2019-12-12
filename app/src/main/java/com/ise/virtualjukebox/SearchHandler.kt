@@ -12,10 +12,10 @@ class SearchHandler(MainInstance : MainHandler, searchListLength : Int) {
     }
     fun addToPlaylist( Song: Track) : MutableList<VoteTrack>?   {
 
-        if(!_mainHandler.addOnTrack(Song)){
-            _mainHandler.sendToast("Added To Playlist")
+        if(_mainHandler.addOnTrack(Song)){
+            _mainHandler.sendToast("Added To Playlist.")
         }else{
-            _mainHandler.sendToast("Adding To Playlist Failed")
+            _mainHandler.sendToast("Adding To Playlist Failed.")
         }
         return _mainHandler.getTracks()
     }
