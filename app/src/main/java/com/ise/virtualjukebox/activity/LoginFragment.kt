@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.ise.virtualjukebox.R
-import kotlinx.android.synthetic.main.fragment1_layout.*
 import kotlinx.android.synthetic.main.fragment_login.*
-
 
 class LoginFragment : Fragment() {
 
@@ -19,12 +17,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 

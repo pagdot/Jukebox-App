@@ -1,30 +1,26 @@
 package com.ise.virtualjukebox
 
-class LoginHandler {
-    private var _MainHandler: MainHandler
+class LoginHandler(MainInstance : MainHandler) {
+    private var mainHandler: MainHandler = MainInstance
 
-    constructor(MainInstance : MainHandler){
-        _MainHandler = MainInstance
-    }
-
-    private var _IP:String = ""
-    private var _Name:String = ""
+    private var ip:String = ""
+    private var name:String = ""
 
     private fun notifyMainClass() : Boolean{
-        return _MainHandler.CreateNewServer(_Name, _IP)
+        return mainHandler.CreateNewServer(name, ip)
     }
 
     fun setServerIP(IP:String) : Boolean{
         if(IP.isEmpty()){
             return false
         }
-        _IP = IP
+        ip = IP
         return true
     }
     fun setUserName(Name:String) : Boolean{
         if(Name.isEmpty())
             return false
-        _Name = Name
+        name = Name
         return true
     }
 
