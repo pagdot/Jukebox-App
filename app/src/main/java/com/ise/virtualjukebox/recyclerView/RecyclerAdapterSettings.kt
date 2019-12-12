@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.ise.virtualjukebox.MainHandler
 import com.ise.virtualjukebox.R
@@ -22,8 +23,14 @@ class RecyclerAdapterSettings(private val data: MutableList<MainHandler.ServerPa
     override fun onBindViewHolder(holder: ViewHolderServer, position: Int) {
         holder.serverIP.text = data[position].IP
         holder.btnConnect.setOnClickListener{
-            //TODO: add callback
-            handler.Connect(data[position].IP.toString())
+
+            if(handler.Connect(data[position].IP.toString())) {
+                Toast.makeText(it!!.context, "Connection successfully created.", Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                Toast.makeText(it!!.context, "Connection failed to create.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

@@ -37,11 +37,11 @@ class LoginFragment : Fragment() {
 
             // set serverIP
             if((activity as MainActivity).loginh.setServerIP(txeServerIP.text.toString())) {
-                Toast.makeText(it!!.context, "Connection success.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(it!!.context, "Connection successfully created.", Toast.LENGTH_SHORT).show()
             }
             else
             {
-                Toast.makeText(it!!.context, "Connection fail.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(it!!.context, "Connection failed to create.", Toast.LENGTH_SHORT).show()
             }
 
             // switch fragment
