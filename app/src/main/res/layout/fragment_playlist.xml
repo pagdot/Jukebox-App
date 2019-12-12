@@ -8,8 +8,8 @@
     <LinearLayout
         android:id="@+id/linSonginfo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="50"
+        android:layout_height="0dp"
+        android:layout_weight="15"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -26,7 +26,7 @@
                 android:layout_weight="0.3"
                 android:gravity="center_vertical"
                 android:text="@string/title"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -35,7 +35,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.7"
                 android:text="@string/artist"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -53,7 +53,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/votes"
                 android:textAlignment="center"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/txvUsername"
@@ -62,7 +62,7 @@
                 android:layout_weight="0.7"
                 android:text="@string/username"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
         <ImageView
@@ -79,12 +79,13 @@
         android:id="@+id/barPlaytime"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight="2" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPlaylist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="20" />
+        android:layout_height="0dp"
+        android:layout_weight="83" />
 
 </LinearLayout>
