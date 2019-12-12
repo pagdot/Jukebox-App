@@ -50,10 +50,11 @@ class MainHandler(private var _MainHandler: MainActivity) {
         val handler = Handler(Looper.getMainLooper())
         handler.post(object : Runnable {
             override fun run() {
-                sendToast("\u130B8");
                 RefreshTracks();
-                val fragment = fragmentManager.findFragmentById(R.layout.fragment_playlist) as PlaylistFragment
-                fragment.playlistContentChanged()
+                if(_MainHandler.playh.PlaylistChanged() != null){
+                    //val fragment = fragmentManager.findFragmentById(R.layout.fragment_playlist) as PlaylistFragment
+                    //fragment.playlistContentChanged()
+                }
                 handler.postDelayed(this, 5000);
             }
         })

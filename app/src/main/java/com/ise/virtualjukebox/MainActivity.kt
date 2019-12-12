@@ -47,17 +47,6 @@ class MainActivity : AppCompatActivity()  {
         val test = mainl.ConnectToServer("test", "pagdot.tk")
         val handler = Handler(Looper.getMainLooper())
 
-       /* handler.post(object : Runnable {
-            override fun run() {
-                mainl.sendToast("\u130B8");
-                mainl.RefreshTracks();
-
-                val intent = Intent();
-                intent.action = "com.example."
-
-                handler.postDelayed(this, 5000);
-            }
-        })*/
         mainl.BackProcess()
     }
     override fun onDestroy(){
