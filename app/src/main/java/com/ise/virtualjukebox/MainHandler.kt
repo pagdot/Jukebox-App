@@ -106,18 +106,23 @@ class MainHandler(private var _MainHandler: MainActivity) {
             }
         }
     }
-    fun ConnectToServer(Name:String, ServIP : String) : Retval{
+    suspend fun ConnectToServer(Name:String, ServIP : String) : Retval{
         val NetCore : JukeboxApi = JukeboxApi(ServIP);
-        val rval : Retval = Retval();
-        NetCore.getSessionID(Name, object : JukeboxApi.JukeboxApiCallback {
-            override fun onSuccess() {
-                rval.Success = true;
-                rval.Net = NetCore;
-            }
-            override fun onFailure(errorClass: apiError, exception: Exception?) {
-                rval.Success = false;
-            }
-        })
+        val rval = suspendCoroutine<Retval> { cont ->
+            NetCore.getSessionID(Name, object : JukeboxApi.JukeboxApiCallback {
+                override fun onSuccess() {
+                    val rval = Retval()
+                    rval.Success = true
+                    rval.Net = NetCore
+                    cont.resume(rval)
+                }
+                override fun onFailure(errorClass: apiError, exception: Exception?) {
+                    val rval = Retval()
+                    rval.Success = false;
+                    cont.resume(rval)
+                }
+            })
+        }
 
         return rval;
     }
