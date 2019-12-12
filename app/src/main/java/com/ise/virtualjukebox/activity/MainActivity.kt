@@ -92,6 +92,8 @@ class MainActivity : AppCompatActivity() {
     var playh : PlayHandler = PlayHandler(mainl);
     var searchh : SearchHandler = SearchHandler(mainl, 10);
 
+    var activeScreen : Screens = Screens.Login
+
     val Store = "JukeBox"
 
     fun sendToast(ToBeSent: String){
@@ -121,11 +123,14 @@ class MainActivity : AppCompatActivity() {
         val handler = Handler(Looper.getMainLooper())
         handler.post(object : Runnable {
             override fun run() {
-                mainl.RefreshTracks();/*
-                if(playh.PlaylistChanged() != null){
-                    val fragment = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
-                    fragment.playlistContentChanged()
-                }*/
+                if(activeScreen == Screens.Playlist) {
+                    mainl.RefreshTracks();
+                    if(playh.PlaylistChanged() != null){
+                        val fragment = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
+                        fragment.playlistContentChanged()
+                    }
+                }
+
                 handler.postDelayed(this, 5000);
             }
         })
@@ -169,18 +174,22 @@ class MainActivity : AppCompatActivity() {
         mainl.BackProcess();
         when (screenName) {
             Screens.Login -> {
+                activeScreen = Screens.Login
                 // Replace whatever is in the fragment_container view with this fragment
                 fragmentTransaction.replace(R.id.fragmentContainer, LoginFragment.newInstance(), Screens.Login.toString())
             }
             Screens.Playlist -> {
+                activeScreen = Screens.Playlist
                 // Replace whatever is in the fragment_container view with this fragment
                 fragmentTransaction.replace(R.id.fragmentContainer, PlaylistFragment.newInstance(), Screens.Playlist.toString())
             }
             Screens.Search -> {
+                activeScreen = Screens.Search
                 // Replace whatever is in the fragment_container view with this fragment
                 fragmentTransaction.replace(R.id.fragmentContainer, SearchFragment.newInstance(), Screens.Search.toString())
             }
             Screens.Settings -> {
+                activeScreen = Screens.Settings
                 // Replace whatever is in the fragment_container view with this fragment
                 fragmentTransaction.replace(R.id.fragmentContainer, SettingsFragment.newInstance(), Screens.Settings.toString())
             }

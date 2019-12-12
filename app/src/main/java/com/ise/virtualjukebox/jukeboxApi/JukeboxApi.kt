@@ -56,11 +56,11 @@ class JukeboxApi(hostName : String) {
             override fun onFailure(response: Response?, exception: IOException?) {
                 val errorClass = apiError(null, null)
                 if(exception == null) {
-                    Log.e("getSessionID code fail", "Body: ${response?.body?.string()}")
                     val jsonDataString = response?.body?.string()
                     val jsonDataObject = JSONObject(jsonDataString.toString())
                     errorClass.code = jsonDataObject["status"].toString()
                     errorClass.message = jsonDataObject["error"].toString()
+                    Log.e("addTrackToQ code fail", "Code: ${errorClass.code}; Message: ${errorClass.message}")
                 }
                 else
                     Log.e("getSessionID exception", "${exception.message}")
@@ -87,11 +87,11 @@ class JukeboxApi(hostName : String) {
             override fun onFailure(response: Response?, exception: IOException?) {
                 val errorClass = apiError(null, null)
                 if(exception == null) {
-                    Log.e("getTracks code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
                     val jsonDataString = response?.body?.string()
                     val jsonDataObject = JSONObject(jsonDataString.toString())
                     errorClass.code = jsonDataObject["status"].toString()
                     errorClass.message = jsonDataObject["error"].toString()
+                    Log.e("addTrackToQ code fail", "Code: ${errorClass.code}; Message: ${errorClass.message}")
                 }
                 else
                     Log.e("getTracks exception", "${exception.message}")
@@ -118,11 +118,11 @@ class JukeboxApi(hostName : String) {
             override fun onFailure(response: Response?, exception: IOException?) {
                 val errorClass = apiError(null, null)
                 if(exception == null) {
-                    Log.e("getCurQueues code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
                     val jsonDataString = response?.body?.string()
                     val jsonDataObject = JSONObject(jsonDataString.toString())
                     errorClass.code = jsonDataObject["status"].toString()
                     errorClass.message = jsonDataObject["error"].toString()
+                    Log.e("addTrackToQ code fail", "Code: ${errorClass.code}; Message: ${errorClass.message}")
                 }
                 else
                     Log.e("getCurQueues exception", "${exception.message}")
@@ -143,11 +143,11 @@ class JukeboxApi(hostName : String) {
             override fun onFailure(response: Response?, exception: IOException?) {
                 val errorClass = apiError(null, null)
                 if(exception == null) {
-                    Log.e("addTrackToQ code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
                     val jsonDataString = response?.body?.string()
                     val jsonDataObject = JSONObject(jsonDataString.toString())
                     errorClass.code = jsonDataObject["status"].toString()
                     errorClass.message = jsonDataObject["error"].toString()
+                    Log.e("addTrackToQ code fail", "Code: ${errorClass.code}; Message: ${errorClass.message}")
                 }
                 else
                     Log.e("addTrackToQ exception", "${exception.message}")
@@ -168,11 +168,11 @@ class JukeboxApi(hostName : String) {
             override fun onFailure(response: Response?, exception: IOException?) {
                 val errorClass = apiError(null, null)
                 if(exception == null) {
-                    Log.e("voteTrack code fail", "Code: ${response?.code}; Message: ${response?.message.toString()}")
                     val jsonDataString = response?.body?.string()
                     val jsonDataObject = JSONObject(jsonDataString.toString())
                     errorClass.code = jsonDataObject["status"].toString()
                     errorClass.message = jsonDataObject["error"].toString()
+                    Log.e("addTrackToQ code fail", "Code: ${errorClass.code}; Message: ${errorClass.message}")
                 }
                 else
                     Log.e("voteTrack exception", "${exception.message}")

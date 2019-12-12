@@ -51,26 +51,26 @@ class PlaylistFragment() : Fragment() {
 
             // reset progress bar
             barPlaytime.progress = currentSong.playingFor
+
+            // song was paused and is resumed now
+            if(currentSong.playing && !isPlaying)
+            {
+                // continue porgressing progress bar
+                // todo simulate progress of bar
+                // https://stackoverflow.com/questions/30841419/pause-and-resume-circle-progress-bar-in-android/30843307#30843307
+                barPlaytime.progress = currentSong.playingFor
+                isPlaying = currentSong.playing
+            }
+            // song was playing and is paused now
+            else if(!currentSong.playing && isPlaying)
+            {
+                // stop progressing progress bar
+                barPlaytime.progress = currentSong.playingFor
+                isPlaying = currentSong.playing
+            }
         }
 
         // update playlist content
         rvPlaylist.adapter = RecyclerAdapterPlaylist((activity as MainActivity).playh)
-
-        // song was paused and is resumed now
-        if(currentSong!!.playing && !isPlaying)
-        {
-            // continue porgressing progress bar
-            // todo simulate progress of bar
-            // https://stackoverflow.com/questions/30841419/pause-and-resume-circle-progress-bar-in-android/30843307#30843307
-            barPlaytime.progress = currentSong.playingFor
-            isPlaying = currentSong.playing
-        }
-        // song was playing and is paused now
-        else if(!currentSong.playing && isPlaying)
-        {
-            // stop progressing progress bar
-            barPlaytime.progress = currentSong.playingFor
-            isPlaying = currentSong.playing
-        }
     }
 }
