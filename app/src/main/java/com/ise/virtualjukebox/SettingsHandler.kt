@@ -3,7 +3,7 @@ package com.ise.virtualjukebox
 import java.io.IOException
 
 class SettingsHandler(MainInstance : MainHandler) {
-    private var mainHandler: MainHandler = MainInstance
+    private var _mainHandler: MainHandler = MainInstance
 
     interface SettingsHandlerCallback {
         /**
@@ -17,19 +17,19 @@ class SettingsHandler(MainInstance : MainHandler) {
     }
 
     fun connect(ServerIP: String) : Boolean{
-        mainHandler.DisconnectAllServer()
-        return mainHandler.ConnectToExistingServer(ServerIP)
+        _mainHandler.disconnectAllServer()
+        return _mainHandler.connectToExistingServer(ServerIP)
     }
     fun fetchServerList() : MutableList<MainHandler.ServerPair>?{
-        return mainHandler.ServList
+        return _mainHandler.serverList
     }
     fun AddServer(Name: String, ServerIP: String, CB:SettingsHandlerCallback) : MutableList<MainHandler.ServerPair>?{
-        mainHandler.DisconnectAllServer()
-        if(mainHandler.CreateNewServer(Name, ServerIP)) {
-            mainHandler.sendToast("Succeeded to Add Server")
+        _mainHandler.disconnectAllServer()
+        if(_mainHandler.createNewServer(Name, ServerIP)) {
+            _mainHandler.sendToast("Succeeded to Add Server")
             CB.onSuccess()
         }else{
-            mainHandler.sendToast("Failed to Add Server")
+            _mainHandler.sendToast("Failed to Add Server")
             CB.onFailure("Failed to Add Server", null)
         }
         return fetchServerList()

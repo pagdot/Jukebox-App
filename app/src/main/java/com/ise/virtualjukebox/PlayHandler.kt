@@ -7,7 +7,7 @@ class PlayHandler {
 
     private var _MainHandler: MainHandler;
     private var _PreviousState : MutableList<VoteTrack>? = null;
-    private var _CurrentTrack : PlayingTrack? = PlayingTrack();
+    private var _currentTrack : PlayingTrack? = PlayingTrack();
 
 
     constructor(MainInstance : MainHandler){
@@ -32,41 +32,41 @@ class PlayHandler {
 
     fun PlaylistChanged() : MutableList<VoteTrack>?{
         if(_PreviousState != null){
-            var buffer = _MainHandler.GetTracks();
+            var buffer = _MainHandler.getTracks();
             if(buffer == _PreviousState){
                 return null;
             }else{
                 return buffer;
             }
         }
-        return _MainHandler.GetTracks();
+        return _MainHandler.getTracks();
     }
     private fun compareCurrentSong(TrackA: PlayingTrack?, TrackB: PlayingTrack?) : Boolean{
         return TrackA?.trackId == TrackB?.trackId;
     }
     fun CurrentSongChanged() : PlayingTrack?{
-        var current = _MainHandler.CurrentTrack();
-        if(!compareCurrentSong(current, _CurrentTrack)){
+        var current = _MainHandler.currentTrack();
+        if(!compareCurrentSong(current, _currentTrack)){
             return current;
         }
-        _CurrentTrack = current;
+        _currentTrack = current;
         return null;
     }
     fun SongPaused() : Boolean?{
-        var retval = _MainHandler.CurrentTrack();
+        var retval = _MainHandler.currentTrack();
         if(retval == null){
             return false
         }
         return retval.playing;
     }
     fun SongResumed() : Boolean?{
-        var retval = _MainHandler.CurrentTrack();
+        var retval = _MainHandler.currentTrack();
         if(retval == null){
             return false
         }
         return retval.playing;
     }
     fun Vote(Song : VoteTrack) : Boolean{
-        return _MainHandler.VoteOnTrack(Song);
+        return _MainHandler.voteOnTrack(Song);
     }
 }

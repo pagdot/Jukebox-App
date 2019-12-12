@@ -1,4 +1,5 @@
 package com.ise.virtualjukebox
+
 import android.os.Handler
 import android.os.Looper
 import com.ise.virtualjukebox.activity.MainActivity
@@ -9,43 +10,44 @@ import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.apiError
 import java.util.concurrent.CountDownLatch
 
-class MainHandler(private var _MainHandler: MainActivity) {
-    private var fname = "ICC"
+class MainHandler(private var _mainHandler: MainActivity) {
+    private var _fName = "ICC"
     class ServerPair{
-        var Net: JukeboxApi? = null
-        var Name: String? = null
-        var IP : String? = null
-        var IsInit : Boolean = false
+        var net: JukeboxApi? = null
+        var name: String? = null
+        var ip : String? = null
+        var isInit : Boolean = false
     }
-    class Retval{
-        var Net: JukeboxApi? = null
-        var Success : Boolean = false
+    class RetVal{
+        var net: JukeboxApi? = null
+        var success : Boolean = false
     }
-    var ServList : MutableList<ServerPair> = mutableListOf<ServerPair>()
-    var TrackList : MutableList<VoteTrack>? = null//mutableListOf<VoteTrack>()
-    var CurrTrack : PlayingTrack? = null
+    var serverList : MutableList<ServerPair> = mutableListOf<ServerPair>()
+    var trackList : MutableList<VoteTrack>? = null
+    var currTrack : PlayingTrack? = null
 
-    private var Core : ServerPair? = null
+    private var core : ServerPair? = null
 
-    fun CreateNewServerWithoutConnect(ServIP:String, Name:String) : Boolean{
-        _MainHandler.sendToast("Created")
-        var Pair = ServerPair()
-        Pair.Name = Name
-        Pair.IP = ServIP
-        Pair.Net = JukeboxApi(ServIP)
-        Pair.IsInit = false
-        if(ServList.find { it.IP == Pair.IP } == null) {
-            ServList.add(Pair)
+    private fun createNewServerWithoutConnect(serverIp : String, name : String) : Boolean{
+        _mainHandler.sendToast("Created")
+        val pair = ServerPair()
+        pair.name = name
+        pair.ip = serverIp
+        pair.net = JukeboxApi(serverIp)
+        pair.isInit = false
+        if(serverList.find { it.ip == pair.ip } == null) {
+            serverList.add(pair)
             return true
         }
         return false
     }
-    fun BackProcess(){
+
+    fun backProcess(){
         val handler = Handler(Looper.getMainLooper())
         handler.post(object : Runnable {
             override fun run() {
-                RefreshTracks()
-                if(_MainHandler.playh.PlaylistChanged() != null){
+                refreshTracks()
+                if(_mainHandler.playh.PlaylistChanged() != null){
                     //val fragment = fragmentManager.findFragmentById(R.layout.fragment_playlist) as PlaylistFragment
                     //fragment.playlistContentChanged()
                 }
@@ -54,103 +56,109 @@ class MainHandler(private var _MainHandler: MainActivity) {
         })
     }
 
+    fun createNewServer(name : String, serverIp : String) : Boolean{
+        val rVal : RetVal = connectToServer(name, serverIp)
+        if(rVal.success){
+            val pair = ServerPair()
 
-    fun CreateNewServer(Name:String, ServIP:String) : Boolean{
-        val rval : Retval = ConnectToServer(Name, ServIP)
-        if(rval.Success){
-                val Pair = ServerPair()
-
-                Pair.Name = Name
-                Pair.IP = ServIP
-                Pair.Net = rval.Net
-                Pair.IsInit = true
-                if(ServList.find { it.IP == Pair.IP } == null) {
-                    ServList.add(Pair)
-                    Core?.Net?.disconnectClient()
-                    Core = Pair
-                }else{
-                    ServList.find { it.IP == Pair.IP }?.Name = Name;
-                    ServList.find { it.IP == Pair.IP }?.IP = ServIP;
-                    ServList.find { it.IP == Pair.IP }?.Net = rval.Net;
-                    ServList.find { it.IP == Pair.IP }?.IsInit = true;
-                }
+            pair.name = name
+            pair.ip = serverIp
+            pair.net = rVal.net
+            pair.isInit = true
+            if(serverList.find { it.ip == pair.ip } == null) {
+                serverList.add(pair)
+                core?.net?.disconnectClient()
+                core = pair
+            }else{
+                serverList.find { it.ip == pair.ip }?.name = name
+                serverList.find { it.ip == pair.ip }?.ip = serverIp
+                serverList.find { it.ip == pair.ip }?.net = rVal.net
+                serverList.find { it.ip == pair.ip }?.isInit = true
+            }
         }
-        return rval.Success;
+        return rVal.success
     }
-    fun StoreServerList(){
-        if(ServList != null){
-            _MainHandler.storePrefs(ServList.size.toString(), fname, "size")
+
+    fun storeServerList(){
+        if(serverList.size != 0){
+            _mainHandler.storePrefs(serverList.size.toString(), _fName, "size")
             var it = 0
-            for(item in ServList){
-                if(item != null && item.Name != null && item.IP != null){
-                    _MainHandler.storePrefs(item.Name.toString(), fname, "Name" + it.toString())
-                    _MainHandler.storePrefs(item.IP.toString(), fname, "IP" + it.toString())
+            for(item in serverList){
+                if(/*item != null &&*/ item.name != null && item.ip != null){
+                    _mainHandler.storePrefs(item.name.toString(), _fName, "name$it")
+                    _mainHandler.storePrefs(item.ip.toString(), _fName, "ip$it")
                 }
                 it++
             }
         }
     }
-    fun ReadServerList(){
-        ServList.clear();
-        val size =_MainHandler.loadPrefs(fname, "size")?.toInt()
+
+    fun readServerList(){
+        serverList.clear()
+        val size =_mainHandler.loadPrefs(_fName, "size")?.toInt()
         if(size != null){
             for(i in 0 until size step 1){
-                val Name  = _MainHandler.loadPrefs(fname, "Name"+i.toString())
-                val IP =  _MainHandler.loadPrefs(fname, "IP"+i.toString())
-                if(Name != null && IP != null){
-                    CreateNewServerWithoutConnect(IP, Name)
+                val name  = _mainHandler.loadPrefs(_fName, "name$i")
+                val ip =  _mainHandler.loadPrefs(_fName, "ip$i")
+                if(name != null && ip != null){
+                    createNewServerWithoutConnect(ip, name)
                 }
             }
         }
     }
-    fun ConnectToServer(Name:String, ServIP : String) : Retval{
-        val NetCore : JukeboxApi = JukeboxApi(ServIP)
-        val rval : Retval = Retval()
+
+    private fun connectToServer(name:String, serverIp : String) : RetVal{
+        val netCore  = JukeboxApi(serverIp)
+        val rVal  = RetVal()
         val countDownLatch = CountDownLatch(1)
-        NetCore.getSessionID(Name, object : JukeboxApi.JukeboxApiCallback {
+        netCore.getSessionID(name, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
-                rval.Success = true
-                rval.Net = NetCore
+                rVal.success = true
+                rVal.net = netCore
                 countDownLatch.countDown()
             }
             override fun onFailure(errorClass: apiError, exception: Exception?) {
-                rval.Success = false
+                rVal.success = false
                 countDownLatch.countDown()
             }
         })
         countDownLatch.await()
-        return rval;
+        return rVal
     }
-    fun ConnectToExistingServer(ServIP: String) : Boolean{
-        val found = ServList.find { it.IP ==  ServIP}
+
+    fun connectToExistingServer(serverIp: String) : Boolean{
+        val found = serverList.find { it.ip ==  serverIp}
         if(found == null){
             return false
         }
-        return this.CreateNewServer(found.Name!!, found.IP!!)
+        return this.createNewServer(found.name!!, found.ip!!)
     }
-    fun DisconnectAllServer(){
-        for(item in ServList){
-            if(item.IsInit){
-                DisconnectFromServer(item.IP!!)
+
+    fun disconnectAllServer(){
+        for(item in serverList){
+            if(item.isInit){
+                disconnectFromServer(item.ip!!)
             }
         }
     }
-    fun DisconnectFromServer(ServIP: String){
-        var found = ServList.find { it.IP == ServIP }
-        if(found != null && found.IsInit){
-            found.Net?.disconnectClient()
-            found.IsInit = false
-            found.Net?.searchTracks
-        };
+
+    private fun disconnectFromServer(ServerIp: String){
+        val found = serverList.find { it.ip == ServerIp }
+        if(found != null && found.isInit){
+            found.net?.disconnectClient()
+            found.isInit = false
+            found.net?.searchTracks
+        }
     }
-    fun SearchTrack(Input: String, ListSize : Int) :  MutableList<Track>?{
-        val found = Core
+
+    fun searchTrack(input: String, listSize : Int) :  MutableList<Track>?{
+        val found = core
         var list : MutableList<Track>? = null
         val countDownLatch = CountDownLatch(1)
         if(found != null) {
-            found.Net?.getTracks(Input, ListSize, object : JukeboxApi.JukeboxApiCallback {
+            found.net?.getTracks(input, listSize, object : JukeboxApi.JukeboxApiCallback {
                 override fun onSuccess() {
-                    list = found.Net?.searchTracks
+                    list = found.net?.searchTracks
                     countDownLatch.countDown()
                 }
 
@@ -162,12 +170,12 @@ class MainHandler(private var _MainHandler: MainActivity) {
         }
 
         countDownLatch.await()
-        return list;
+        return list
     }
     private fun convertToVoteTrack(list : MutableList<Track>?) : MutableList<VoteTrack>?{
-        val newlist : MutableList<VoteTrack>? = mutableListOf<VoteTrack>()
+        val newList : MutableList<VoteTrack>? = mutableListOf<VoteTrack>()
         if(list == null){
-            return newlist
+            return newList
         }
         for(item in list){
             val buf = VoteTrack()
@@ -179,83 +187,83 @@ class MainHandler(private var _MainHandler: MainActivity) {
             buf.iconUri = item.iconUri
             buf.addedBy = item.addedBy
             buf.votes = -1
-            newlist?.add(buf)
+            newList?.add(buf)
         }
-        return newlist
+        return newList
     }
-    fun RefreshTracks(){
-        val found = Core
+    fun refreshTracks(){
+        val found = core
         if(found != null) {
             val countDownLatch = CountDownLatch(1)
-            TrackList?.clear()
-            found.Net?.getCurrentQueues(object : JukeboxApi.JukeboxApiCallback {
+            trackList?.clear()
+            found.net?.getCurrentQueues(object : JukeboxApi.JukeboxApiCallback {
                 override fun onSuccess() {
-                    if(found.Net?.queues?.adminQueue != null){
-                        TrackList = convertToVoteTrack(found.Net?.queues?.adminQueue)
+                    if(found.net?.queues?.adminQueue != null){
+                        trackList = convertToVoteTrack(found.net?.queues?.adminQueue)
                     }
-                    if(found.Net?.queues?.normalQueue != null){
-                        TrackList?.addAll(found.Net?.queues!!.normalQueue)
+                    if(found.net?.queues?.normalQueue != null){
+                        trackList?.addAll(found.net?.queues!!.normalQueue)
                     }
-                    CurrTrack = found.Net?.queues?.current
+                    currTrack = found.net?.queues?.current
                     countDownLatch.countDown()
                 }
                 override fun onFailure(errorClass: apiError, exception: Exception?) {
-                    TrackList = null
-                    CurrTrack = null
+                    trackList = null
+                    currTrack = null
                     countDownLatch.countDown()
                 }
             })
             countDownLatch.await()
         }
     }
-    fun GetTracks() :  MutableList<VoteTrack>?{
-        return TrackList
+    fun getTracks() :  MutableList<VoteTrack>?{
+        return trackList
     }
 
-    fun VoteOnTrack(Song:Track):Boolean{
-        val found = Core
-        var retval = false
+    fun voteOnTrack(song : Track) : Boolean{
+        val found = core
+        var retVal = false
 
         val countDownLatch = CountDownLatch(1)
-        found?.Net?.voteTrack(Song.trackId, 1, object : JukeboxApi.JukeboxApiCallback {
+        found?.net?.voteTrack(song.trackId, 1, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
-                retval = true
+                retVal = true
                 countDownLatch.countDown()
             }
 
             override fun onFailure(errorClass: apiError, exception: Exception?) {
-                retval = false
+                retVal = false
                 countDownLatch.countDown()
             }
         })
 
         countDownLatch.await()
-        return retval
+        return retVal
     }
-    fun AddOnTrack(Song:Track):Boolean{
-        val found = Core
-        var retval = false
+    fun addOnTrack(song : Track): Boolean{
+        val found = core
+        var retVal = false
 
         val countDownLatch = CountDownLatch(1)
-        found?.Net?.addTrackToQueue(Song.trackId,  object : JukeboxApi.JukeboxApiCallback {
+        found?.net?.addTrackToQueue(song.trackId,  object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
-                retval = true
+                retVal = true
                 countDownLatch.countDown()
             }
 
             override fun onFailure(errorClass: apiError, exception: Exception?) {
-                retval = false
+                retVal = false
                 countDownLatch.countDown()
             }
         })
 
         countDownLatch.await()
-        return retval
+        return retVal
     }
-    fun CurrentTrack() : PlayingTrack? {
-        return CurrTrack
+    fun currentTrack() : PlayingTrack? {
+        return currTrack
     }
     fun sendToast(ToBeSent: String){
-        _MainHandler.sendToast(ToBeSent)
+        _mainHandler.sendToast(ToBeSent)
     }
 }

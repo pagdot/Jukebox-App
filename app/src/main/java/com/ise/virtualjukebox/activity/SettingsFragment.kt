@@ -28,7 +28,7 @@ class SettingsFragment : Fragment() {
         //TODO: create real function to add new server list
         rvServer.layoutManager = LinearLayoutManager(context)
 
-        val serverList = (activity as MainActivity).mainl.ServList
+        val serverList = (activity as MainActivity).mainl.serverList
 
         rvServer.adapter = RecyclerAdapterSettings(serverList, (activity as MainActivity).settingsh)
     }
