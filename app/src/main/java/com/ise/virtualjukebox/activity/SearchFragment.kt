@@ -19,12 +19,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
@@ -38,7 +33,7 @@ class SearchFragment : Fragment() {
         rvSearch.adapter = RecyclerAdapterSearch(ArrayList<Track>(), hSearch)
 
         btnSearchSearch.setOnClickListener{
-            val searchResults = hSearch.SearchSong(txeSearch.text.toString())
+            val searchResults = hSearch.searchSong(txeSearch.text.toString())
             if(searchResults != null){
                 rvSearch.adapter = RecyclerAdapterSearch(searchResults, hSearch)
             }

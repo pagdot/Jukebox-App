@@ -1,25 +1,22 @@
 package com.ise.virtualjukebox
+
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 
-class SearchHandler {
-    private var _MainHandler: MainHandler;
-    private val _llength : Int;
+class SearchHandler(MainInstance : MainHandler, searchListLength : Int) {
+    private var mainHandler: MainHandler = MainInstance
+    private val listLength : Int = searchListLength
 
-    constructor(MainInstance : MainHandler, listleght : Int){
-        _MainHandler = MainInstance;
-        _llength = listleght;
+    fun searchSong(Song:String) : MutableList<Track>? {
+        return mainHandler.SearchTrack(Song, listLength)
     }
-    fun SearchSong(Song:String) : MutableList<Track>? {
-        return _MainHandler.SearchTrack(Song, _llength);
-    }
-    fun AddToPlaylist( Song: Track) : MutableList<VoteTrack>?   {
+    fun addToPlaylist( Song: Track) : MutableList<VoteTrack>?   {
 
-        if(!_MainHandler.AddOnTrack(Song)){
-            _MainHandler.sendToast("Added To Playlist");
+        if(!mainHandler.AddOnTrack(Song)){
+            mainHandler.sendToast("Added To Playlist")
         }else{
-            _MainHandler.sendToast("Adding To Playlist Failed");
+            mainHandler.sendToast("Adding To Playlist Failed")
         }
-        return _MainHandler.GetTracks();
+        return mainHandler.GetTracks()
     }
 }
