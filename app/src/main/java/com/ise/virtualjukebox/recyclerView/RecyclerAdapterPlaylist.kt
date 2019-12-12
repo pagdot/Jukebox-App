@@ -3,10 +3,7 @@ package com.ise.virtualjukebox.recyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.ise.virtualjukebox.PlayHandler
 import com.ise.virtualjukebox.R
@@ -64,7 +61,7 @@ override fun getItemCount() = data.size
         val txvArtist   : TextView  = view.findViewById(R.id.txvArtist)
         val txvUsername : TextView  = view.findViewById(R.id.txvUsername)
         val txvVotes    : TextView  = view.findViewById(R.id.txvVotes)
-        val btnUpvote   : Button    = view.findViewById(R.id.btnUpvote)
-        val btnDownvote : Button    = view.findViewById(R.id.btnDownvote)
+        val btnUpvote   : ImageButton = view.findViewById(R.id.btnUpvote)
+        val btnDownvote : ImageButton    = view.findViewById(R.id.btnDownvote)
     }
 }
