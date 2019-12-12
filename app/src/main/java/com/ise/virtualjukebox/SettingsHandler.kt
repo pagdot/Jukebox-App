@@ -1,15 +1,9 @@
 package com.ise.virtualjukebox
 
-import android.app.Activity
 import java.io.IOException
 
-class SettingsHandler {
-    private var _MainHandler: MainHandler;
-
-    constructor(MainInstance : MainHandler){
-        _MainHandler = MainInstance;
-    }
-
+class SettingsHandler(MainInstance : MainHandler) {
+    private var mainHandler: MainHandler = MainInstance
 
     interface SettingsHandlerCallback {
         /**
@@ -22,22 +16,22 @@ class SettingsHandler {
         fun onSuccess()
     }
 
-    fun Connect(ServerIP: String) : Boolean{
-        _MainHandler.DisconnectAllServer();
-        return _MainHandler.ConnectToExistingServer(ServerIP);
+    fun connect(ServerIP: String) : Boolean{
+        mainHandler.DisconnectAllServer()
+        return mainHandler.ConnectToExistingServer(ServerIP)
     }
-    fun FetchServerList() : MutableList<MainHandler.ServerPair>?{
-        return _MainHandler.ServList;
+    fun fetchServerList() : MutableList<MainHandler.ServerPair>?{
+        return mainHandler.ServList
     }
     fun AddServer(Name: String, ServerIP: String, CB:SettingsHandlerCallback) : MutableList<MainHandler.ServerPair>?{
-        _MainHandler.DisconnectAllServer();
-        if(_MainHandler.CreateNewServer(Name, ServerIP)) {
-            _MainHandler.sendToast("Succeeded to Add Server")
-            CB.onSuccess();
+        mainHandler.DisconnectAllServer()
+        if(mainHandler.CreateNewServer(Name, ServerIP)) {
+            mainHandler.sendToast("Succeeded to Add Server")
+            CB.onSuccess()
         }else{
-            _MainHandler.sendToast("Failed to Add Server")
-            CB.onFailure("Failed to Add Server", null);
+            mainHandler.sendToast("Failed to Add Server")
+            CB.onFailure("Failed to Add Server", null)
         }
-        return FetchServerList();
+        return fetchServerList()
     }
 }

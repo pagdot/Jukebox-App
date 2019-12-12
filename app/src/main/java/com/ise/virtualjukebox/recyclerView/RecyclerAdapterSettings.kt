@@ -24,7 +24,7 @@ class RecyclerAdapterSettings(private val data: MutableList<MainHandler.ServerPa
         holder.serverIP.text = data[position].IP
         holder.btnConnect.setOnClickListener{
 
-            if(handler.Connect(data[position].IP.toString())) {
+            if(handler.connect(data[position].IP.toString())) {
                 Toast.makeText(it!!.context, "Connection successfully created.", Toast.LENGTH_SHORT).show()
             }
             else
