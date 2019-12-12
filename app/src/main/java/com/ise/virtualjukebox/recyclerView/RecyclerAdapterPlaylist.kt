@@ -10,10 +10,10 @@ import com.ise.virtualjukebox.R
 import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 
-
-class RecyclerAdapterPlaylist(private val data: List<VoteTrack>, private val hPlay : PlayHandler) :
-
+class RecyclerAdapterPlaylist(private val hPlay : PlayHandler) :
     RecyclerView.Adapter<RecyclerAdapterPlaylist.ViewHolderVoteTrack>() {
+
+    private var playlist = mutableListOf<VoteTrack>()
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapterPlaylist.ViewHolderVoteTrack {
@@ -21,18 +21,18 @@ class RecyclerAdapterPlaylist(private val data: List<VoteTrack>, private val hPl
         return ViewHolderVoteTrack(view) // Create your ViewHolder here
     }
 
-
     override fun onBindViewHolder(holder: ViewHolderVoteTrack, position: Int) {
+        playlist = hPlay.PlaylistChanged()!!
+
         // set your data
-        holder.txvTitle.text        = data.get(position).title
-        holder.txvArtist.text       = data.get(position).artist
-        holder.txvUsername.text     = data.get(position).addedBy
-        holder.txvVotes.text        = data.get(position).votes.toString()
+        holder.txvTitle.text        = playlist.get(position).title
+        holder.txvArtist.text       = playlist.get(position).artist
+        holder.txvUsername.text     = playlist.get(position).addedBy
+        holder.txvVotes.text        = playlist.get(position).votes.toString()
 
         // do some more stuff like listening to clicks (use holder.itemView)
         holder.btnUpvote.setOnClickListener{
-            //api.voteTrack(data.get(position).trackId, api)
-
+            hPlay.Vote(playlist.get(position))
             val text = "Song Upvoted"
             val duration = Toast.LENGTH_SHORT
             val toast = Toast.makeText(it!!.context, text, duration)
@@ -40,19 +40,15 @@ class RecyclerAdapterPlaylist(private val data: List<VoteTrack>, private val hPl
         }
 
         holder.btnDownvote.setOnClickListener{
-            //api.voteTrack(data.get(position).trackId, api)
-            //hPlay.Vote()
-
-            val text = "Song Downvoted"
+            val text = "Song Downvote not implemented!"
             val duration = Toast.LENGTH_SHORT
             val toast = Toast.makeText(it!!.context, text, duration)
             toast.show()
         }
 }
 
-
 // return the size of your data
-override fun getItemCount() = data.size
+override fun getItemCount() = playlist.size
 
 
 // provide a reference to the views of the item layout

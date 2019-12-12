@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ise.virtualjukebox.PlayHandler
 import com.ise.virtualjukebox.R
-import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 import com.ise.virtualjukebox.recyclerView.RecyclerAdapterPlaylist
 import kotlinx.android.synthetic.main.fragment_playlist.*
+import com.bumptech.glide.Glide
 
 
-class PlaylistFragment() : Fragment(){
+class PlaylistFragment() : Fragment() {
+    private var isPlaying : Boolean = false
 
     companion object {
         fun newInstance(): PlaylistFragment {
@@ -33,53 +33,44 @@ class PlaylistFragment() : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // configure recyclerview
         rvPlaylist.layoutManager = LinearLayoutManager(context)
-
-        //TODO: Aufruf getTrack
-        val playlist = ArrayList<VoteTrack>()
-        val track1 = VoteTrack()
-        val track2 = VoteTrack()
-        val track3 = VoteTrack()
-        track1.title = "title 1"
-        track1.artist = "artist 1"
-
-        track2.title = "title 2"
-        track2.artist = "artist 2"
-
-        track3.title = "title 3"
-        track3.artist = "artist 3"
-
-        playlist.add(track1)
-        playlist.add(track2)
-        playlist.add(track3)
-
-        rvPlaylist.adapter = RecyclerAdapterPlaylist(playlist, (activity as MainActivity).playh)
-
-        //btnUpvote.setOnClickListener {
-        //    //(activity as MainActivityFragment).playh.Vote()
-        //}
-//
-        //btnDownvote.setOnClickListener{
-        //    //(activity as MainActivityFragment).playh.Vote()
-        //}
-
-        // todo set list contents
+        rvPlaylist.adapter = RecyclerAdapterPlaylist((activity as MainActivity).playh)
     }
 
-    //private var listener: PlaylistContentChangedListener? = null
-//
-//
-    //override fun onAttach(activity: Activity?) {
-    //    super.onAttach(activity)
-    //    try {
-    //        listener = activity as PlaylistContentChangedListener?
-    //    } catch (castException: ClassCastException) {
-    //        /** The activity does not implement the listener.  */
-    //    }
-//
-    //}
-//
     fun playlistContentChanged() {
-        // todo update playlist content
+        val currentSong     = (activity as MainActivity).playh.CurrentSongChanged()
+        if(currentSong != null) // current song changed
+        {
+            // set played song content
+            txvTitle.text       = currentSong.title
+            txvArtist.text      = currentSong.artist
+            txvVotes.text       = "0" // TODO votes not available in PlayingTrack
+            txvUsername.text    = currentSong.addedBy
+            Glide.with(this).load(currentSong.iconUri).into(imgCover) // load album cover image with Glide
+
+            // reset progress bar
+            barPlaytime.progress = currentSong.playingFor
+        }
+
+        // update playlist content
+        rvPlaylist.adapter = RecyclerAdapterPlaylist((activity as MainActivity).playh)
+
+        // song was paused and is resumed now
+        if(currentSong!!.playing && !isPlaying)
+        {
+            // continue porgressing progress bar
+            // todo simulate progress of bar
+            // https://stackoverflow.com/questions/30841419/pause-and-resume-circle-progress-bar-in-android/30843307#30843307
+            barPlaytime.progress = currentSong.playingFor
+            isPlaying = currentSong.playing
+        }
+        // song was playing and is paused now
+        else if(!currentSong.playing && isPlaying)
+        {
+            // stop progressing progress bar
+            barPlaytime.progress = currentSong.playingFor
+            isPlaying = currentSong.playing
+        }
     }
 }
