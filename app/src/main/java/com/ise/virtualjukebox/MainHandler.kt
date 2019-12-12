@@ -45,7 +45,7 @@ class MainHandler(private var _MainHandler: MainActivity){
         return false;
     }
     fun CreateNewServer(Name:String, ServIP:String) : Boolean{
-        val rval : Retval = ConnectToServer(ServIP, Name);
+        val rval : Retval = ConnectToServer(Name, ServIP);
         if(rval.Success){
                 val Pair : ServerPair = ServerPair();
                 Pair.Name = Name;

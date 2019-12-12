@@ -1,6 +1,5 @@
 package com.ise.virtualjukebox
 
-import android.app.Activity
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.PlayingTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 
@@ -70,5 +69,4 @@ class PlayHandler {
     fun Vote(Song : VoteTrack) : Boolean{
         return _MainHandler.VoteOnTrack(Song);
     }
-
 }

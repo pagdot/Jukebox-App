@@ -8,12 +8,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.ise.virtualjukebox.PlayHandler
 import com.ise.virtualjukebox.R
 import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 
 
-class RecyclerAdapterPlaylist(private val data: List<VoteTrack>) :
+class RecyclerAdapterPlaylist(private val data: List<VoteTrack>, private val hPlay : PlayHandler) :
 
     RecyclerView.Adapter<RecyclerAdapterPlaylist.ViewHolderVoteTrack>() {
 
@@ -43,6 +44,7 @@ class RecyclerAdapterPlaylist(private val data: List<VoteTrack>) :
 
         holder.btnDownvote.setOnClickListener{
             //api.voteTrack(data.get(position).trackId, api)
+            //hPlay.Vote()
 
             val text = "Song Downvoted"
             val duration = Toast.LENGTH_SHORT

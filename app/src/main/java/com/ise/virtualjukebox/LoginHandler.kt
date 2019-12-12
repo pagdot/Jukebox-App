@@ -21,7 +21,7 @@ class LoginHandler {
     private var iptypevar : IP_Type = IP_Type.None;
 
     private fun notifyMainClass() : Boolean{
-        return _MainHandler.CreateNewServer(_IP, _Name);
+        return _MainHandler.CreateNewServer(_Name, _IP);
     }
 
     private fun checkIfIP4() : IP_Type{
