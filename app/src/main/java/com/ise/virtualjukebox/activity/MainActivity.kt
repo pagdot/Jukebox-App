@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity() {
             }
             Screens.Settings -> {
                 // Replace whatever is in the fragment_container view with this fragment
-                //transaction.replace(R.id.fragmentContainer, SettingsFragment())
+                fragmentTransaction.replace(R.id.fragmentContainer, SettingsFragment.newInstance())
             }
             else -> {
                 // Replace whatever is in the fragment_container view with this fragment

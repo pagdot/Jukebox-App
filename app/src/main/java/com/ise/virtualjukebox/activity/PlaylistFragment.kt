@@ -22,15 +22,6 @@ class PlaylistFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        btnUpvote.setOnClickListener {
-            //(activity as MainActivityFragment).playh.Vote()
-        }
-
-        btnDownvote.setOnClickListener{
-            //(activity as MainActivityFragment).playh.Vote()
-        }
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_playlist, container, false)
     }
@@ -39,6 +30,15 @@ class PlaylistFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
 
         // todo set list contents
+        /*
+        btnUpvote.setOnClickListener {
+            //(activity as MainActivityFragment).playh.Vote()
+        }
+
+        btnDownvote.setOnClickListener{
+            //(activity as MainActivityFragment).playh.Vote()
+        }
+         */
     }
 
     //private var listener: PlaylistContentChangedListener? = null

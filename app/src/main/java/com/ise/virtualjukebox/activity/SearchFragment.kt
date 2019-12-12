@@ -58,37 +58,4 @@ class SearchFragment : Fragment() {
             rvSearch.adapter = RecyclerAdapterSearch(res, hSearch::AddToPlaylist)
         }
     }
-
-    /*
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        rvSearch.layoutManager = LinearLayoutManager(activity)
-        btnSearch.setOnClickListener{
-            val res = ArrayList<Track>()
-            val track1 = Track()
-            val track2 = Track()
-            val track3 = Track()
-            track1.title = "title 1"
-            track1.artist = "artist 1"
-
-            track2.title = "title 2"
-            track2.artist = "artist 2"
-
-            track3.title = "title 3"
-            track3.artist = "artist 3"
-
-            res.add(track1)
-            res.add(track2)
-            res.add(track3)
-
-            rvSearch.adapter = RecyclerAdapterSearch(res)
-        }
-
-        return inflater.inflate(R.layout.activity_search, container, false)
-    }
-     */
 }
