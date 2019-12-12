@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity() {
 
         val fragmentTransaction = fragmentManager.beginTransaction()
         //val transaction = supportFragmentManager.beginTransaction()
-        mainl.BackProcess();
+        //mainl.BackProcess();
         when (screenName) {
             Screens.Login -> {
                 activeScreen = Screens.Login
