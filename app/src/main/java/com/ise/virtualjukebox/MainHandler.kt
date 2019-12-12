@@ -14,6 +14,7 @@ import com.ise.virtualjukebox.jukeboxApi.dataStructure.PlayingTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.apiError
+import kotlin.coroutines.suspendCoroutine
 
 
 class MainHandler(private var _MainHandler: MainActivity) {
@@ -109,16 +110,21 @@ class MainHandler(private var _MainHandler: MainActivity) {
     fun ConnectToServer(Name:String, ServIP : String) : Retval{
         val NetCore : JukeboxApi = JukeboxApi(ServIP);
         val rval : Retval = Retval();
+        var block = false;
+
+
         NetCore.getSessionID(Name, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
                 rval.Success = true;
                 rval.Net = NetCore;
+                block = true;
             }
             override fun onFailure(errorClass: apiError, exception: Exception?) {
                 rval.Success = false;
+                block = true;
             }
         })
-
+        while(!block);
         return rval;
     }
     fun ConnectToExistingServer(ServIP: String) : Boolean{
@@ -127,15 +133,19 @@ class MainHandler(private var _MainHandler: MainActivity) {
             return false;
         }
         var rval = false;
+        var block = false;
         found.Net?.getSessionID(found.Name!!, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
                 rval = true;
                 found.IsInit = true;
+                block = true;
             }
             override fun onFailure(errorClass: apiError, exception: Exception?) {
                 rval = false;
+                block = true;
             }
         })
+        while(!block);
         return rval;
     }
     fun DisconnectAllServer(){
@@ -157,17 +167,21 @@ class MainHandler(private var _MainHandler: MainActivity) {
     fun SearchTrack(Input: String, ListSize : Int) :  MutableList<Track>?{
         val found = Core
         var list : MutableList<Track>? = null;
+        var block = false;
         if(found != null) {
             found.Net?.getTracks(Input, ListSize, object : JukeboxApi.JukeboxApiCallback {
                 override fun onSuccess() {
                     list = found.Net?.searchTracks;
+                    block = true;
                 }
 
                 override fun onFailure(errorClass: apiError, exception: Exception?) {
                     list = null;
+                    block = true;
                 }
             })
         }
+        while(!block);
         return list;
     }
     private fun convertToVoteTrack(list : MutableList<Track>?) : MutableList<VoteTrack>?{
@@ -208,6 +222,7 @@ class MainHandler(private var _MainHandler: MainActivity) {
                     CurrTrack = null;
                 }
             })
+
         }
     }
     fun GetTracks() :  MutableList<VoteTrack>?{
@@ -217,29 +232,37 @@ class MainHandler(private var _MainHandler: MainActivity) {
     fun VoteOnTrack(Song:Track):Boolean{
         val found = Core;
         var retval = false;
+        var block = false;
         found?.Net?.voteTrack(Song.trackId, 1, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
                 retval = true;
+                block = true;
             }
 
             override fun onFailure(errorClass: apiError, exception: Exception?) {
                 retval = false;
+                block = true;
             }
         })
+        while(!block);
         return retval;
     }
     fun AddOnTrack(Song:Track):Boolean{
         val found = Core;
         var retval = false;
+        var block = false;
         found?.Net?.addTrackToQueue(Song.trackId,  object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
                 retval = true;
+                block = true;
             }
 
             override fun onFailure(errorClass: apiError, exception: Exception?) {
                 retval = false;
+                block = true;
             }
         })
+        while(!block);
         return retval;
     }
     fun CurrentTrack() : PlayingTrack? {
