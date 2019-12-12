@@ -32,21 +32,24 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         btnConnect.setOnClickListener {
-            // set username
-            (activity as MainActivity).loginh.setUserName(txeUsername.text.toString())
+            if(!(activity as MainActivity).loginh.setUserName(txeUsername.text.toString())) {
+                Toast.makeText(it!!.context, "Username can not be empty.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            // set serverIP
-            if((activity as MainActivity).loginh.setServerIP(txeServerIP.text.toString())) {
+            if(!(activity as MainActivity).loginh.setServerIP(txeServerIP.text.toString())) {
+                Toast.makeText(it!!.context, "Server IP address can not be empty.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if ((activity as MainActivity).loginh.createConnection()) {
                 Toast.makeText(it!!.context, "Connection successfully created.", Toast.LENGTH_SHORT).show()
-            }
-            else
-            {
+            } else {
                 Toast.makeText(it!!.context, "Connection failed to create.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
-            // switch fragment
             (activity as MainActivity).switchFragment(Screens.Playlist)
         }
-
     }
 }

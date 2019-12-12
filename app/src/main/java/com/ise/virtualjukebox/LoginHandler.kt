@@ -1,34 +1,34 @@
 package com.ise.virtualjukebox
-import com.ise.virtualjukebox.MainHandler;
-
 
 class LoginHandler {
-    private var _MainHandler: MainHandler;
+    private var _MainHandler: MainHandler
 
     constructor(MainInstance : MainHandler){
-        _MainHandler = MainInstance;
-    }
-    enum class IP_Type {
-        IP4, IP6, None
+        _MainHandler = MainInstance
     }
 
-    private var _IP:String = "";
-    private var _Name:String = "";
-
+    private var _IP:String = ""
+    private var _Name:String = ""
 
     private fun notifyMainClass() : Boolean{
-        return _MainHandler.CreateNewServer(_Name, _IP);
+        return _MainHandler.CreateNewServer(_Name, _IP)
     }
 
-
-    public fun setServerIP(IP:String) : Boolean{
-        _IP = IP;
-        if(_Name.length == 0){
-            return false;
+    fun setServerIP(IP:String) : Boolean{
+        if(IP.isEmpty()){
+            return false
         }
-        return notifyMainClass();
+        _IP = IP
+        return true
     }
-    public fun setUserName(Name:String){
-        _Name = Name;
+    fun setUserName(Name:String) : Boolean{
+        if(Name.isEmpty())
+            return false
+        _Name = Name
+        return true
+    }
+
+    fun createConnection() : Boolean {
+        return notifyMainClass()
     }
 }
