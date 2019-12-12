@@ -38,6 +38,7 @@ class SearchFragment : Fragment() {
 
         btnSearchSearch.setOnClickListener{
             //TODO: Aufruf getTrack
+            /*
             val res = ArrayList<Track>()
             val track1 = Track()
             val track2 = Track()
@@ -54,8 +55,11 @@ class SearchFragment : Fragment() {
             res.add(track1)
             res.add(track2)
             res.add(track3)
-
-            rvSearch.adapter = RecyclerAdapterSearch(res, hSearch::AddToPlaylist)
+             */
+            val searchResults = hSearch.SearchSong(txeSearch.text.toString())
+            if(searchResults != null){
+                rvSearch.adapter = RecyclerAdapterSearch(searchResults, hSearch)
+            }
         }
     }
 }

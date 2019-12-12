@@ -114,14 +114,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_layout)
 
-        //mainl.ReadServerList()
+        mainl.ReadServerList()
 
-        //switchFragment(Screens.Search)
+        switchFragment(Screens.Login)
 
+        /*
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragmentContainer, LoginFragment.newInstance())
         fragmentTransaction.commit()
-
+         */
         btnPlaylist.setOnClickListener{
             switchFragment(Screens.Playlist)
         }
@@ -155,17 +156,14 @@ class MainActivity : AppCompatActivity() {
             Screens.Login -> {
                 // Replace whatever is in the fragment_container view with this fragment
                 fragmentTransaction.replace(R.id.fragmentContainer, LoginFragment.newInstance())
-                Toast.makeText(this, "login", Toast.LENGTH_SHORT).show()
             }
             Screens.Playlist -> {
                 // Replace whatever is in the fragment_container view with this fragment
                 fragmentTransaction.replace(R.id.fragmentContainer, PlaylistFragment.newInstance())
-                Toast.makeText(this, "playlist", Toast.LENGTH_SHORT).show()
             }
             Screens.Search -> {
                 // Replace whatever is in the fragment_container view with this fragment
                 fragmentTransaction.replace(R.id.fragmentContainer, SearchFragment.newInstance())
-                Toast.makeText(this, "search", Toast.LENGTH_SHORT).show()
             }
             Screens.Settings -> {
                 // Replace whatever is in the fragment_container view with this fragment

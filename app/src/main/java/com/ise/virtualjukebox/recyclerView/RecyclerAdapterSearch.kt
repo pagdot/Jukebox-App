@@ -7,15 +7,13 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ise.virtualjukebox.R
+import com.ise.virtualjukebox.SearchHandler
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 import kotlin.reflect.KFunction1
 
 //class RecyclerAdapter(private val data: List<RecyclerItem>) :
-class RecyclerAdapterSearch(private val data: MutableList<Track>, private val cbSearch: KFunction1<@ParameterName(
-    name = "Song"
-) Track, MutableList<VoteTrack>?>
-) :
+class RecyclerAdapterSearch(private val data: MutableList<Track>, private val handler: SearchHandler) :
     RecyclerView.Adapter<RecyclerAdapterSearch.ViewHolderTrack>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTrack {
@@ -28,7 +26,7 @@ class RecyclerAdapterSearch(private val data: MutableList<Track>, private val cb
 
         holder.btnAdd.setOnClickListener{
             //TODO: return ignored
-            //cbSearch.invoke(data[position])
+            handler.AddToPlaylist(data[position])
         }
     }
 

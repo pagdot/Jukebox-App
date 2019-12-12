@@ -8,9 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ise.virtualjukebox.MainHandler
 import com.ise.virtualjukebox.R
+import com.ise.virtualjukebox.SettingsHandler
 
 
-class RecyclerAdapterSettings(private val data: MutableList<MainHandler.ServerPair>) :
+class RecyclerAdapterSettings(private val data: MutableList<MainHandler.ServerPair>, private val handler: SettingsHandler) :
 
     RecyclerView.Adapter<RecyclerAdapterSettings.ViewHolderServer>() {
 
@@ -22,7 +23,7 @@ class RecyclerAdapterSettings(private val data: MutableList<MainHandler.ServerPa
         holder.serverIP.text = data[position].IP
         holder.btnConnect.setOnClickListener{
             //TODO: add callback
-            //cbConnect.invoke(data[position].IP)
+            handler.Connect(data[position].IP.toString())
         }
     }
 

@@ -33,10 +33,10 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //TODO: create real function to add new server list
-        //val hSettings = (activity as MainActivity).searchh
-
         rvServer.layoutManager = LinearLayoutManager(context)
 
+        val serverList = (activity as MainActivity).mainl.ServList
+        /*
         val server1 = MainHandler.ServerPair()
         val server2 = MainHandler.ServerPair()
         val server3 = MainHandler.ServerPair()
@@ -54,7 +54,7 @@ class SettingsFragment : Fragment() {
         serverList.add(server1)
         serverList.add(server2)
         serverList.add(server3)
-
-        rvServer.adapter = RecyclerAdapterSettings(serverList)
+         */
+        rvServer.adapter = RecyclerAdapterSettings(serverList, (activity as MainActivity).settingsh)
     }
 }
