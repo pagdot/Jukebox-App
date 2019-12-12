@@ -121,11 +121,11 @@ class MainActivity : AppCompatActivity() {
         val handler = Handler(Looper.getMainLooper())
         handler.post(object : Runnable {
             override fun run() {
-                mainl.RefreshTracks();
+                mainl.RefreshTracks();/*
                 if(playh.PlaylistChanged() != null){
                     val fragment = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
                     fragment.playlistContentChanged()
-                }
+                }*/
                 handler.postDelayed(this, 5000);
             }
         })

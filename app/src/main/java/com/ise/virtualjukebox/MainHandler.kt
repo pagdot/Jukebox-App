@@ -1,21 +1,13 @@
 package com.ise.virtualjukebox
-import android.os.Environment
-import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
-import java.io.File
-import java.io.IOException
-import android.content.SharedPreferences;
-import android.content.Context;
-import android.content.ContextWrapper
-import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import com.ise.virtualjukebox.activity.MainActivity
-import com.ise.virtualjukebox.activity.PlaylistFragment
+import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.PlayingTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.apiError
-import kotlin.coroutines.suspendCoroutine
+import java.util.concurrent.CountDownLatch
 
 
 class MainHandler(private var _MainHandler: MainActivity) {
@@ -111,21 +103,19 @@ class MainHandler(private var _MainHandler: MainActivity) {
     fun ConnectToServer(Name:String, ServIP : String) : Retval{
         val NetCore : JukeboxApi = JukeboxApi(ServIP);
         val rval : Retval = Retval();
-        var block = false;
-
-
+        val countDownLatch = CountDownLatch(1)
         NetCore.getSessionID(Name, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
                 rval.Success = true;
                 rval.Net = NetCore;
-                block = true;
+                countDownLatch.countDown()
             }
             override fun onFailure(errorClass: apiError, exception: Exception?) {
                 rval.Success = false;
-                block = true;
+                countDownLatch.countDown()
             }
         })
-        while(!block);
+        countDownLatch.await()
         return rval;
     }
     fun ConnectToExistingServer(ServIP: String) : Boolean{
@@ -134,19 +124,21 @@ class MainHandler(private var _MainHandler: MainActivity) {
             return false;
         }
         var rval = false;
-        var block = false;
+
+        val countDownLatch = CountDownLatch(1)
         found.Net?.getSessionID(found.Name!!, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
                 rval = true;
                 found.IsInit = true;
-                block = true;
+                countDownLatch.countDown()
             }
             override fun onFailure(errorClass: apiError, exception: Exception?) {
                 rval = false;
-                block = true;
+                countDownLatch.countDown()
             }
         })
-        while(!block);
+
+        countDownLatch.await()
         return rval;
     }
     fun DisconnectAllServer(){
@@ -168,21 +160,22 @@ class MainHandler(private var _MainHandler: MainActivity) {
     fun SearchTrack(Input: String, ListSize : Int) :  MutableList<Track>?{
         val found = Core
         var list : MutableList<Track>? = null;
-        var block = false;
+        val countDownLatch = CountDownLatch(1)
         if(found != null) {
             found.Net?.getTracks(Input, ListSize, object : JukeboxApi.JukeboxApiCallback {
                 override fun onSuccess() {
                     list = found.Net?.searchTracks;
-                    block = true;
+                    countDownLatch.countDown()
                 }
 
                 override fun onFailure(errorClass: apiError, exception: Exception?) {
                     list = null;
-                    block = true;
+                    countDownLatch.countDown()
                 }
             })
         }
-        while(!block);
+
+        countDownLatch.await()
         return list;
     }
     private fun convertToVoteTrack(list : MutableList<Track>?) : MutableList<VoteTrack>?{
@@ -206,12 +199,11 @@ class MainHandler(private var _MainHandler: MainActivity) {
     }
     fun RefreshTracks(){
         val found = Core;
-        var block = false;
         if(found != null) {
+            val countDownLatch = CountDownLatch(1)
             TrackList?.clear();
             found.Net?.getCurrentQueues(object : JukeboxApi.JukeboxApiCallback {
                 override fun onSuccess() {
-                    block = true;
                     if(found.Net?.queues?.adminQueue != null){
                         TrackList = convertToVoteTrack(found.Net?.queues?.adminQueue);
                     }
@@ -219,15 +211,15 @@ class MainHandler(private var _MainHandler: MainActivity) {
                         TrackList?.addAll(found.Net?.queues!!.normalQueue);
                     }
                     CurrTrack = found.Net?.queues?.current;
+                    countDownLatch.countDown()
                 }
                 override fun onFailure(errorClass: apiError, exception: Exception?) {
-                    block = true;
                     TrackList = null;
                     CurrTrack = null;
+                    countDownLatch.countDown()
                 }
             })
-            while(!block);
-
+            countDownLatch.await()
         }
     }
     fun GetTracks() :  MutableList<VoteTrack>?{
@@ -237,37 +229,41 @@ class MainHandler(private var _MainHandler: MainActivity) {
     fun VoteOnTrack(Song:Track):Boolean{
         val found = Core;
         var retval = false;
-        var block = false;
+
+        val countDownLatch = CountDownLatch(1)
         found?.Net?.voteTrack(Song.trackId, 1, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
                 retval = true;
-                block = true;
+                countDownLatch.countDown()
             }
 
             override fun onFailure(errorClass: apiError, exception: Exception?) {
                 retval = false;
-                block = true;
+                countDownLatch.countDown()
             }
         })
-        while(!block);
+
+        countDownLatch.await()
         return retval;
     }
     fun AddOnTrack(Song:Track):Boolean{
         val found = Core;
         var retval = false;
-        var block = false;
+
+        val countDownLatch = CountDownLatch(1)
         found?.Net?.addTrackToQueue(Song.trackId,  object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
                 retval = true;
-                block = true;
+                countDownLatch.countDown()
             }
 
             override fun onFailure(errorClass: apiError, exception: Exception?) {
                 retval = false;
-                block = true;
+                countDownLatch.countDown()
             }
         })
-        while(!block);
+
+        countDownLatch.await()
         return retval;
     }
     fun CurrentTrack() : PlayingTrack? {
