@@ -25,7 +25,7 @@ class RecyclerAdapterSearch(private val data: MutableList<Track>, private val ha
         holder.artist.text = data[position].artist
 
         holder.btnAdd.setOnClickListener{
-            //TODO: return ignored
+            //TODO: return ignored (from my side not needed to implement this)
             handler.addToPlaylist(data[position])
         }
     }

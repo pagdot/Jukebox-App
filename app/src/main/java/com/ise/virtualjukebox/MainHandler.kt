@@ -12,16 +12,24 @@ import java.util.concurrent.CountDownLatch
 
 class MainHandler(private var _mainHandler: MainActivity) {
     private var _fName = "ICC"
+
     class ServerPair{
         var net: JukeboxApi? = null
         var name: String? = null
         var ip : String? = null
         var isInit : Boolean = false
     }
+
     class RetVal{
         var net: JukeboxApi? = null
         var success : Boolean = false
     }
+
+    class PublicRetClass {
+        var success : Boolean = false
+        var errorMessage : String = ""
+    }
+
     var serverList : MutableList<ServerPair> = mutableListOf<ServerPair>()
     var trackList : MutableList<VoteTrack>? = null
     var currTrack : PlayingTrack? = null
@@ -240,25 +248,26 @@ class MainHandler(private var _mainHandler: MainActivity) {
         countDownLatch.await()
         return retVal
     }
-    fun addOnTrack(song : Track): Boolean{
+    fun addOnTrack(song : Track): PublicRetClass{
         val found = core
-        var retVal = false
+        var retClass = PublicRetClass()
 
         val countDownLatch = CountDownLatch(1)
-        found?.net?.addTrackToQueue(song.trackId,  object : JukeboxApi.JukeboxApiCallback {
+        found?.net?.addTrackToQueue(song.trackId, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
-                retVal = true
+                retClass.success = true
                 countDownLatch.countDown()
             }
 
             override fun onFailure(errorClass: apiError, exception: Exception?) {
-                retVal = false
+                retClass.success = false
+                retClass.errorMessage = errorClass.message.toString()
                 countDownLatch.countDown()
             }
         })
 
         countDownLatch.await()
-        return retVal
+        return retClass
     }
     fun currentTrack() : PlayingTrack? {
         return currTrack
