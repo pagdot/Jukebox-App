@@ -116,21 +116,18 @@ class JsonParser {
             val jsonObj = jsonDataObject.getJSONObject("currently_playing")
             tmpQueues.current = parsePlayingTrackFromJsonObject(jsonObj)
         } catch (e : JSONException) {
-            throw e
         }
 
         try {
             val jsonDataArray = jsonDataObject.getJSONArray("admin_queue")
             tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray))
         } catch (e : JSONException) {
-            throw e
         }
 
         try {
             val jsonDataArray = jsonDataObject.getJSONArray("normal_queue")
             tmpQueues.normalQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
         } catch (e : JSONException) {
-            throw e
         }
 
         return tmpQueues
