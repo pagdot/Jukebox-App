@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             override fun run() {
                 if(activeScreen == Screens.Playlist) {
                     mainl.refreshTracks()
-                    if(playh.PlaylistChanged() != null){
+                    if(playh.playlistChanged() != null){
                         val fragment = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
                         fragment.playlistContentChanged()
                     }

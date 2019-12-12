@@ -11,8 +11,7 @@ import com.ise.virtualjukebox.recyclerView.RecyclerAdapterPlaylist
 import kotlinx.android.synthetic.main.fragment_playlist.*
 import com.bumptech.glide.Glide
 
-
-class PlaylistFragment() : Fragment() {
+class PlaylistFragment : Fragment() {
     private var isPlaying : Boolean = false
 
     companion object {
@@ -21,28 +20,22 @@ class PlaylistFragment() : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_playlist, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // configure recyclerview
         rvPlaylist.layoutManager = LinearLayoutManager(context)
         rvPlaylist.adapter = RecyclerAdapterPlaylist((activity as MainActivity).playh)
     }
 
     fun playlistContentChanged() {
-        val currentSong     = (activity as MainActivity).playh.CurrentSongChanged()
+        val currentSong     = (activity as MainActivity).playh.currentSongChanged()
         if(currentSong != null) // current song changed
         {
-            // set played song content
+            // set played song context
             txvTitle.text       = currentSong.title
             txvArtist.text      = currentSong.artist
             txvVotes.text       = "0" // TODO votes not available in PlayingTrack

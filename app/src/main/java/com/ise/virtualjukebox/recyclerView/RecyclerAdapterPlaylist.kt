@@ -22,7 +22,7 @@ class RecyclerAdapterPlaylist(private val hPlay : PlayHandler) :
     }
 
     override fun onBindViewHolder(holder: ViewHolderVoteTrack, position: Int) {
-        playlist = hPlay.PlaylistChanged()!!
+        playlist = hPlay.playlistChanged()!!
 
         // set your data
         holder.txvTitle.text        = playlist.get(position).title
@@ -32,7 +32,7 @@ class RecyclerAdapterPlaylist(private val hPlay : PlayHandler) :
 
         // do some more stuff like listening to clicks (use holder.itemView)
         holder.btnUpvote.setOnClickListener{
-            hPlay.Vote(playlist.get(position))
+            hPlay.vote(playlist.get(position))
             val text = "Song Upvoted"
             val duration = Toast.LENGTH_SHORT
             val toast = Toast.makeText(it!!.context, text, duration)

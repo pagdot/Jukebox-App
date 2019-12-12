@@ -8,7 +8,7 @@ class SettingsHandler(MainInstance : MainHandler) {
     interface SettingsHandlerCallback {
         /**
          *
-         * @param statusCode - contains the rest status code if the response was not OK (200). exception is then null
+         * @param status - contains the rest status code if the response was not OK (200). exception is then null
          * @param exception - contains the exception. statusCode is then null
          */
         fun onFailure(status : String?, exception : IOException?)

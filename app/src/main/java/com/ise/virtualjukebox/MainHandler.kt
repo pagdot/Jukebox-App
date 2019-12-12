@@ -47,7 +47,7 @@ class MainHandler(private var _mainHandler: MainActivity) {
         handler.post(object : Runnable {
             override fun run() {
                 refreshTracks()
-                if(_mainHandler.playh.PlaylistChanged() != null){
+                if(_mainHandler.playh.playlistChanged() != null){
                     //val fragment = fragmentManager.findFragmentById(R.layout.fragment_playlist) as PlaylistFragment
                     //fragment.playlistContentChanged()
                 }
