@@ -77,4 +77,7 @@ class PlayHandler(mainInstance : MainHandler) {
     fun unvote(Song : VoteTrack) : Boolean{
         return _mainHandler.voteOnTrack(Song,0)
     }
+    fun refresh(){
+        _mainHandler.refreshTracks();
+    }
 }
