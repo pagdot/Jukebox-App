@@ -21,7 +21,11 @@ class MainActivity : AppCompatActivity() {
     var activeScreen : Screens = Screens.Login
     var screenChange :Boolean = true
 
+    val handler = Handler(Looper.getMainLooper())
+
     val Store = "JukeBox"
+
+    var testvar = true;
 
     fun sendToast(ToBeSent: String){
         Toast.makeText(this, ToBeSent, Toast.LENGTH_SHORT).show()
@@ -41,6 +45,24 @@ class MainActivity : AppCompatActivity() {
 
     private val fragmentManager = supportFragmentManager
 
+    fun test(){
+        if(testvar){
+            handler.post(object : Runnable {
+                override fun run() {
+                    mainl.refreshTracks()
+                    val fragment = fragmentManager.findFragmentByTag(Screens.Playlist.toString())
+                    if(fragment != null && fragment.isVisible){
+                        val fragment_cast = fragment as PlaylistFragment
+                        fragment_cast.currentTrackChanged()
+                        fragment_cast.playlistContentChanged()
+                        handler.postDelayed(this, 1000)
+                    }
+                }
+            })
+            testvar = false;
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,38 +70,14 @@ class MainActivity : AppCompatActivity() {
 
         mainl.readServerList()
 
-        val handler = Handler(Looper.getMainLooper())
-        handler.post(object : Runnable {
-            override fun run() {
-                mainl.refreshTracks()
-                if(activeScreen == Screens.Playlist) {
-                    if(screenChange) {
-                        val fragment = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
-                        fragment.currentTrackChanged()
-                        fragment.playlistContentChanged()
-                        screenChange = false
-                    }
-                    else {
-                        if (playh.playlistChanged() != null) {
-                            val fragment =
-                                fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
-                            fragment.playlistContentChanged()
-                        }
-                        if (playh.currentSongChanged() != null) {
-                            val fragment =
-                                fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
-                            fragment.currentTrackChanged()
-                        }
-                    }
-                }
-                handler.postDelayed(this, 1000)
-            }
-        })
+
+
 
         switchFragment(Screens.Login)
 
         btnPlaylist.setOnClickListener{
             switchFragment(Screens.Playlist)
+
         }
 
         btnSearch.setOnClickListener{
@@ -92,6 +90,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
+        handler.removeCallbacksAndMessages(null);
         mainl.storeServerList();
         super.onStop()
     }

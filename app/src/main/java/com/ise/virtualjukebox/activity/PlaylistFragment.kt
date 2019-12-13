@@ -10,7 +10,7 @@ import com.ise.virtualjukebox.R
 import com.ise.virtualjukebox.recyclerView.RecyclerAdapterPlaylist
 import kotlinx.android.synthetic.main.fragment_playlist.*
 import com.bumptech.glide.Glide
-
+import kotlinx.android.synthetic.main.fragment_login.*
 
 
 class PlaylistFragment : Fragment() {
@@ -25,6 +25,7 @@ class PlaylistFragment : Fragment() {
     }
 
     fun run() {
+        (activity as MainActivity).test()
         Thread(Runnable {
             while (!fragmentDestroyed)
             {

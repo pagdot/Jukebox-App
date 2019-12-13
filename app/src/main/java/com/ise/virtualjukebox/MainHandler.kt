@@ -157,6 +157,7 @@ class MainHandler(private var _mainHandler: MainActivity) {
         if(found.net != null && found.name != null){
             var  rval =_connectToServerSubHandler(found.net, found.name!!);
             if(rval.success){
+                core?.net?.disconnectClient()
                 core = ServerPair();
                 core?.net = rval.net
                 core?.isInit = true;
