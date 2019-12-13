@@ -49,14 +49,34 @@ class MainActivity : AppCompatActivity() {
         if(testvar){
             handler.post(object : Runnable {
                 override fun run() {
-                    mainl.refreshTracks()
-                    val fragment = fragmentManager.findFragmentByTag(Screens.Playlist.toString())
-                    if(fragment != null && fragment.isVisible){
-                        val fragment_cast = fragment as PlaylistFragment
-                        fragment_cast.currentTrackChanged()
-                        fragment_cast.playlistContentChanged()
-                        handler.postDelayed(this, 1000)
+                    if(activeScreen == Screens.Playlist) {
+                        var fragmentPlaylist : PlaylistFragment? = null
+                        while (true) {
+                            fragmentPlaylist = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as? PlaylistFragment
+                            if(fragmentPlaylist == null) {
+                                fragmentManager.beginTransaction().replace(R.id.fragmentContainer, PlaylistFragment.newInstance(), Screens.Playlist.toString()).commit()
+
+                            }
+                            else {
+                                break
+                            }
+                        }
+                        mainl.refreshTracks()
+                        if(screenChange) {
+                            fragmentPlaylist?.currentTrackChanged()
+                            fragmentPlaylist?.playlistContentChanged()
+                            screenChange = false
+                        }
+                        else {
+                            if (playh.playlistChanged() != null) {
+                                fragmentPlaylist?.playlistContentChanged()
+                            }
+                            if (playh.currentSongChanged() != null) {
+                                fragmentPlaylist?.currentTrackChanged()
+                            }
+                        }
                     }
+                    handler.postDelayed(this, 1000)
                 }
             })
             testvar = false;
