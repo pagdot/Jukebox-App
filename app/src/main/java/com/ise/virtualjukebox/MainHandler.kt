@@ -237,12 +237,12 @@ class MainHandler(private var _mainHandler: MainActivity) {
         return trackList
     }
 
-    fun voteOnTrack(song : Track) : Boolean{
+    fun voteOnTrack(song : Track, UpDown : Int) : Boolean{
         val found = core
         var retVal = false
 
         val countDownLatch = CountDownLatch(1)
-        found?.net?.voteTrack(song.trackId, 1, object : JukeboxApi.JukeboxApiCallback {
+        found?.net?.voteTrack(song.trackId, UpDown, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
                 retVal = true
                 countDownLatch.countDown()

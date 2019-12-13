@@ -26,16 +26,24 @@ class PlayHandler(mainInstance : MainHandler) {
         }
         return retVal
     }
-
-    fun playlistChanged() : MutableList<VoteTrack>?{
-        if(_previousState != null){
-            val buffer = _mainHandler.getTracks()
-            if(buffer == _previousState){
-                return null
+    fun copyList(ListToCpy : MutableList<VoteTrack>?) : MutableList<VoteTrack>?{
+        var newList = mutableListOf<VoteTrack>();
+        if(ListToCpy != null){
+            for(item in ListToCpy){
+                newList.add(item);
             }
-            return buffer
+            return newList;
         }
-        return _mainHandler.getTracks()
+        return null;
+    }
+    fun playlistChanged() : MutableList<VoteTrack>?{
+        val buffer = _mainHandler.getTracks()
+        if(_previousState == null || !compareValues(_previousState, buffer)){
+            _previousState?.clear();
+            _previousState = copyList(buffer);
+            return buffer;
+        }
+        return null;
     }
     private fun compareCurrentSong(TrackA: PlayingTrack?, TrackB: PlayingTrack?) : Boolean{
         return TrackA?.trackId == TrackB?.trackId
@@ -64,6 +72,12 @@ class PlayHandler(mainInstance : MainHandler) {
     }
 
     fun vote(Song : VoteTrack) : Boolean{
-        return _mainHandler.voteOnTrack(Song)
+        return _mainHandler.voteOnTrack(Song,1)
+    }
+    fun unvote(Song : VoteTrack) : Boolean{
+        return _mainHandler.voteOnTrack(Song,0)
+    }
+    fun refresh(){
+        _mainHandler.refreshTracks();
     }
 }
