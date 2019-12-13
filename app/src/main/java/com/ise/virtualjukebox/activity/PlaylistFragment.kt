@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 class PlaylistFragment : Fragment() {
     private var isPlaying : Boolean = false
     private var pStatus : Int = 0
+    private var fragmentDestroyed : Boolean = false
 
     companion object {
         fun newInstance(): PlaylistFragment {
@@ -25,11 +26,11 @@ class PlaylistFragment : Fragment() {
 
     fun run() {
         Thread(Runnable {
-            while (true)
+            while (!fragmentDestroyed)
             {
                 if (isPlaying) {
                     pStatus += 1
-                    barPlaytime.progress = pStatus
+                    barPlaytime!!.progress = pStatus
                 }
                 // sleep for 100 ms
                 try {
@@ -68,8 +69,9 @@ class PlaylistFragment : Fragment() {
             Glide.with(this).load(currentSong.iconUri).into(imgCover) // load album cover image with Glide
 
             // reset progress bar
-            barPlaytime.progress = currentSong.playingFor
+            barPlaytime.max = currentSong.duration
             pStatus = currentSong.playingFor*10 // progress bar = 1800 ms, playingFor = x sec
+            barPlaytime.progress = pStatus
             // todo set progressbar.max to length of song (currently not available in song info)
             isPlaying = currentSong.playing
             //isPlaying = true // for testing purposes
@@ -80,5 +82,12 @@ class PlaylistFragment : Fragment() {
         if(playlist != null){
             rvPlaylist.adapter = RecyclerAdapterPlaylist(playlist, (activity as MainActivity).playh)
         }
+    }
+
+
+    override fun onDetach ()
+    {
+        fragmentDestroyed = true
+        super.onDetach()
     }
 }
