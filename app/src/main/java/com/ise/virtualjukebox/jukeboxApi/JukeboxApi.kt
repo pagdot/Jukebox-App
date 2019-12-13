@@ -69,8 +69,7 @@ class JukeboxApi(hostName : String) {
             }
         })
     }
-
-   fun getTracks(searchPattern : String, maxEntries : Int, cb : JukeboxApiCallback) {
+    fun getTracks(searchPattern : String, maxEntries : Int, cb : JukeboxApiCallback) {
         api.getTracks(searchPattern, maxEntries, object : RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
                 searchTracks.clear()
@@ -100,7 +99,6 @@ class JukeboxApi(hostName : String) {
             }
         })
     }
-
     fun getCurrentQueues(cb : JukeboxApiCallback)  {
         api.getCurrentQueues(object : RestClient.HttpCallback {
             override fun onSuccess(response: Response) {

@@ -14,6 +14,12 @@ class PlayHandler(mainInstance : MainHandler) {
         return TrackA.trackId == TrackB.trackId
     }
 
+    private fun compareItemWithVote(TrackA: VoteTrack, TrackB: VoteTrack): Boolean {
+        if(TrackA.trackId != TrackB.trackId || TrackA.votes != TrackB.votes || TrackA.hasVoted != TrackB.hasVoted)
+            return false
+        return true
+    }
+
     private fun compareValues(
         ListA: MutableList<VoteTrack>?,
         ListB: MutableList<VoteTrack>?
@@ -23,7 +29,7 @@ class PlayHandler(mainInstance : MainHandler) {
             return false
         }
         ListA.forEachIndexed { i, value ->
-            if (!compareItemWithoutVote(ListB[i], value)) {
+            if (!compareItemWithVote(ListB[i], value)) {
                 retVal = false
             }
         }
