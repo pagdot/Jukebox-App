@@ -65,7 +65,6 @@ class MainActivity : AppCompatActivity() {
 
         btnPlaylist.setOnClickListener{
             switchFragment(Screens.Playlist)
-            val fragment = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
         }
 
         btnSearch.setOnClickListener{
