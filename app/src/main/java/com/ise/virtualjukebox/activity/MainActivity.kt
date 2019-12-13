@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
 
     private val fragmentManager = supportFragmentManager
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_layout)
@@ -49,26 +48,33 @@ class MainActivity : AppCompatActivity() {
         mainl.readServerList()
 
         val handler = Handler(Looper.getMainLooper())
+
         handler.post(object : Runnable {
             override fun run() {
                 if(activeScreen == Screens.Playlist) {
+                    var fragmentPlaylist : PlaylistFragment? = null
+                    while (true) {
+                        fragmentPlaylist = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as? PlaylistFragment
+                        if(fragmentPlaylist == null) {
+                            fragmentManager.beginTransaction().replace(R.id.fragmentContainer, PlaylistFragment.newInstance(), Screens.Playlist.toString()).commit()
+
+                        }
+                        else {
+                            break
+                        }
+                    }
                     mainl.refreshTracks()
                     if(screenChange) {
-                        val fragment = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
-                        fragment.currentTrackChanged()
-                        fragment.playlistContentChanged()
+                        fragmentPlaylist?.currentTrackChanged()
+                        fragmentPlaylist?.playlistContentChanged()
                         screenChange = false
                     }
                     else {
                         if (playh.playlistChanged() != null) {
-                            val fragment =
-                                fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
-                            fragment.playlistContentChanged()
+                            fragmentPlaylist?.playlistContentChanged()
                         }
                         if (playh.currentSongChanged() != null) {
-                            val fragment =
-                                fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
-                            fragment.currentTrackChanged()
+                            fragmentPlaylist?.currentTrackChanged()
                         }
                     }
                 }
