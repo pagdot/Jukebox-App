@@ -50,7 +50,7 @@ class PlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         rvPlaylist.layoutManager = LinearLayoutManager(context)
-        val playlist = (activity as MainActivity).playh.playlistChanged()
+        val playlist = (activity as MainActivity).playh.getPlaylist()
         if(playlist != null){
             rvPlaylist.adapter = RecyclerAdapterPlaylist(playlist, (activity as MainActivity).playh)
         }
@@ -58,7 +58,15 @@ class PlaylistFragment : Fragment() {
     }
 
     fun playlistContentChanged() {
-        val currentSong     = (activity as MainActivity).playh.currentSongChanged()
+        rvPlaylist.layoutManager = LinearLayoutManager(context)
+        val playlister = (activity as MainActivity).playh.getPlaylist()
+        if(playlister != null) {
+            rvPlaylist.adapter = RecyclerAdapterPlaylist(playlister, (activity as MainActivity).playh)
+        }
+    }
+
+    fun currentTrackChanged() {
+        val currentSong     = (activity as MainActivity).playh.getCurrentTrack()
         if(currentSong != null) // current song changed
         {
             // set played song context
@@ -69,7 +77,7 @@ class PlaylistFragment : Fragment() {
             Glide.with(this).load(currentSong.iconUri).into(imgCover) // load album cover image with Glide
 
             // reset progress bar
-            barPlaytime.max = currentSong.duration
+            barPlaytime.max = currentSong.duration*10
             pStatus = currentSong.playingFor*10 // progress bar = 1800 ms, playingFor = x sec
             barPlaytime.progress = pStatus
             // todo set progressbar.max to length of song (currently not available in song info)

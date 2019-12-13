@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     var searchh : SearchHandler = SearchHandler(mainl, 10)
 
     var activeScreen : Screens = Screens.Login
+    var screenChange :Boolean = true
 
     val Store = "JukeBox"
 
@@ -52,9 +53,23 @@ class MainActivity : AppCompatActivity() {
             override fun run() {
                 if(activeScreen == Screens.Playlist) {
                     mainl.refreshTracks()
-                    if(playh.playlistChanged() != null){
+                    if(screenChange) {
                         val fragment = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
+                        fragment.currentTrackChanged()
                         fragment.playlistContentChanged()
+                        screenChange = false
+                    }
+                    else {
+                        if (playh.playlistChanged() != null) {
+                            val fragment =
+                                fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
+                            fragment.playlistContentChanged()
+                        }
+                        if (playh.currentSongChanged() != null) {
+                            val fragment =
+                                fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
+                            fragment.currentTrackChanged()
+                        }
                     }
                 }
                 handler.postDelayed(this, 1000)
@@ -78,6 +93,7 @@ class MainActivity : AppCompatActivity() {
 
     // Display different fragment on screen
     fun switchFragment(screenName: Screens) {
+        screenChange = true
         val fragmentTransaction = fragmentManager.beginTransaction()
         when (screenName) {
             Screens.Login -> {

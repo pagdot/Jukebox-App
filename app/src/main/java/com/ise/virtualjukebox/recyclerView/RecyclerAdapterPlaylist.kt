@@ -37,7 +37,8 @@ class RecyclerAdapterPlaylist(private val playlist: MutableList<VoteTrack>, priv
         }
 
         holder.btnDownvote.setOnClickListener{
-            val text = "Song Downvote not implemented!"
+            hPlay.unvote(playlist.get(position))
+            val text = "Song Upvote revoked!"
             val duration = Toast.LENGTH_SHORT
             val toast = Toast.makeText(it!!.context, text, duration)
             toast.show()
