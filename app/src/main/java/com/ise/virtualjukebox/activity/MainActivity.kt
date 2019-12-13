@@ -51,8 +51,8 @@ class MainActivity : AppCompatActivity() {
         val handler = Handler(Looper.getMainLooper())
         handler.post(object : Runnable {
             override fun run() {
+                mainl.refreshTracks()
                 if(activeScreen == Screens.Playlist) {
-                    mainl.refreshTracks()
                     if(screenChange) {
                         val fragment = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
                         fragment.currentTrackChanged()
@@ -89,6 +89,11 @@ class MainActivity : AppCompatActivity() {
         btnSettings.setOnClickListener{
             switchFragment(Screens.Settings)
         }
+    }
+
+    override fun onStop() {
+        mainl.storeServerList();
+        super.onStop()
     }
 
     // Display different fragment on screen
