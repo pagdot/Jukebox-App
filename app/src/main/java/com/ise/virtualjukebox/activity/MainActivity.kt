@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                         fragment.playlistContentChanged()
                     }
                 }
-                handler.postDelayed(this, 5000)
+                handler.postDelayed(this, 1000)
             }
         })
 
