@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
         btnPlaylist.setOnClickListener{
             switchFragment(Screens.Playlist)
-
+            test()
         }
 
         btnSearch.setOnClickListener{
