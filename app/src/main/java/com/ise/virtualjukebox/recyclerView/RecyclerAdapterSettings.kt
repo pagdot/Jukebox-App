@@ -23,13 +23,12 @@ class RecyclerAdapterSettings(private val data: MutableList<MainHandler.ServerPa
     override fun onBindViewHolder(holder: ViewHolderServer, position: Int) {
         holder.serverIP.text = data[position].ip
         holder.btnConnect.setOnClickListener{
-
-            if(handler.connect(data[position].ip.toString())) {
+            val tmpRetClass = handler.connect(data[position].ip.toString())
+            if(tmpRetClass.success) {
                 Toast.makeText(it!!.context, "Connection successfully created.", Toast.LENGTH_SHORT).show()
             }
-            else
-            {
-                Toast.makeText(it!!.context, "Connection failed to create.", Toast.LENGTH_SHORT).show()
+            else {
+                Toast.makeText(it!!.context, "Connection failed to create (${tmpRetClass.errorMessage}).", Toast.LENGTH_SHORT).show()
             }
         }
     }

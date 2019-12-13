@@ -16,7 +16,7 @@ class SettingsHandler(MainInstance : MainHandler) {
         fun onSuccess()
     }
 
-    fun connect(ServerIP: String) : Boolean{
+    fun connect(ServerIP: String) : MainHandler.PublicRetClass{
         _mainHandler.disconnectAllServer()
         return _mainHandler.connectToExistingServer(ServerIP)
     }
@@ -25,12 +25,13 @@ class SettingsHandler(MainInstance : MainHandler) {
     }
     fun AddServer(Name: String, ServerIP: String, CB:SettingsHandlerCallback) : MutableList<MainHandler.ServerPair>?{
         _mainHandler.disconnectAllServer()
-        if(_mainHandler.createNewServer(Name, ServerIP)) {
-            _mainHandler.sendToast("Succeeded to Add Server")
+        var tmpRetClass = _mainHandler.createNewServer(Name, ServerIP)
+        if(tmpRetClass.success) {
+            _mainHandler.sendToast("Successfully added Server.")
             CB.onSuccess()
         }else{
-            _mainHandler.sendToast("Failed to Add Server")
-            CB.onFailure("Failed to Add Server", null)
+            _mainHandler.sendToast("Failed to add Server (${tmpRetClass.errorMessage}).")
+            CB.onFailure("Failed to add Server (${tmpRetClass.errorMessage}).", null)
         }
         return fetchServerList()
     }

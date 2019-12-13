@@ -23,6 +23,7 @@ class MainHandler(private var _mainHandler: MainActivity) {
     class RetVal{
         var net: JukeboxApi? = null
         var success : Boolean = false
+        var errorMessage : String = ""
     }
 
     class PublicRetClass {
@@ -64,7 +65,7 @@ class MainHandler(private var _mainHandler: MainActivity) {
         })
     }
 
-    fun createNewServer(name : String, serverIp : String) : Boolean{
+    fun createNewServer(name : String, serverIp : String) : PublicRetClass{
         val rVal : RetVal = connectToServer(name, serverIp)
         if(rVal.success){
             val pair = ServerPair()
@@ -84,7 +85,10 @@ class MainHandler(private var _mainHandler: MainActivity) {
                 serverList.find { it.ip == pair.ip }?.isInit = true
             }
         }
-        return rVal.success
+        val tmpRetClass = PublicRetClass()
+        tmpRetClass.success = rVal.success
+        tmpRetClass.errorMessage = rVal.errorMessage
+        return tmpRetClass
     }
 
     fun storeServerList(){
@@ -127,6 +131,10 @@ class MainHandler(private var _mainHandler: MainActivity) {
             }
             override fun onFailure(errorClass: apiError, exception: Exception?) {
                 rVal.success = false
+                if(exception == null)
+                    rVal.errorMessage = errorClass.message.toString()
+                else
+                    rVal.errorMessage = exception.message.toString()
                 countDownLatch.countDown()
             }
         })
@@ -134,10 +142,11 @@ class MainHandler(private var _mainHandler: MainActivity) {
         return rVal
     }
 
-    fun connectToExistingServer(serverIp: String) : Boolean{
+    fun connectToExistingServer(serverIp: String) : PublicRetClass{
+        val tmpRetClass = PublicRetClass()
         val found = serverList.find { it.ip ==  serverIp}
         if(found == null){
-            return false
+            return tmpRetClass
         }
         return this.createNewServer(found.name!!, found.ip!!)
     }
@@ -261,7 +270,10 @@ class MainHandler(private var _mainHandler: MainActivity) {
 
             override fun onFailure(errorClass: apiError, exception: Exception?) {
                 retClass.success = false
-                retClass.errorMessage = errorClass.message.toString()
+                if(exception == null)
+                    retClass.errorMessage = errorClass.message.toString()
+                else
+                    retClass.errorMessage = exception.message.toString()
                 countDownLatch.countDown()
             }
         })

@@ -35,10 +35,11 @@ class LoginFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            if ((activity as MainActivity).loginh.createConnection()) {
+            val tmpRetClass = (activity as MainActivity).loginh.createConnection()
+            if (tmpRetClass.success) {
                 Toast.makeText(it!!.context, "Connection successfully created.", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(it!!.context, "Connection failed to create.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(it!!.context, "Connection failed to create (${tmpRetClass.errorMessage}).", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 

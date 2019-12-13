@@ -6,7 +6,7 @@ class LoginHandler(MainInstance : MainHandler) {
     private var _ip:String = ""
     private var _name:String = ""
 
-    private fun notifyMainClass() : Boolean{
+    private fun notifyMainClass() : MainHandler.PublicRetClass{
         return _mainHandler.createNewServer(_name, _ip)
     }
 
@@ -24,7 +24,7 @@ class LoginHandler(MainInstance : MainHandler) {
         return true
     }
 
-    fun createConnection() : Boolean {
+    fun createConnection() : MainHandler.PublicRetClass {
         return notifyMainClass()
     }
 }

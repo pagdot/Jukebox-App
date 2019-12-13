@@ -5,10 +5,11 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import android.util.Log
 import okhttp3.*
+import java.util.concurrent.TimeUnit
 
 open class RestClient {
 
-    private var client = OkHttpClient()
+    private var client = OkHttpClient.Builder().connectTimeout(3, TimeUnit.SECONDS).build()
 
     interface HttpCallback {
 
