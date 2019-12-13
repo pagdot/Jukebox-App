@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.ise.virtualjukebox.*
 import kotlinx.android.synthetic.main.fragment_layout.*
 
+
 class MainActivity : AppCompatActivity() {
 
     var mainl : MainHandler = MainHandler(this)
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     private val fragmentManager = supportFragmentManager
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_layout)
@@ -63,6 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         btnPlaylist.setOnClickListener{
             switchFragment(Screens.Playlist)
+            val fragment = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
         }
 
         btnSearch.setOnClickListener{

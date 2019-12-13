@@ -10,10 +10,9 @@ import com.ise.virtualjukebox.R
 import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 
-class RecyclerAdapterPlaylist(private val hPlay : PlayHandler) :
-    RecyclerView.Adapter<RecyclerAdapterPlaylist.ViewHolderVoteTrack>() {
+class RecyclerAdapterPlaylist(private val playlist: MutableList<VoteTrack>, private val hPlay : PlayHandler) :
 
-    private var playlist = mutableListOf<VoteTrack>()
+    RecyclerView.Adapter<RecyclerAdapterPlaylist.ViewHolderVoteTrack>() {
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapterPlaylist.ViewHolderVoteTrack {
@@ -22,8 +21,6 @@ class RecyclerAdapterPlaylist(private val hPlay : PlayHandler) :
     }
 
     override fun onBindViewHolder(holder: ViewHolderVoteTrack, position: Int) {
-        playlist = hPlay.playlistChanged()!!
-
         // set your data
         holder.txvTitle.text        = playlist.get(position).title
         holder.txvArtist.text       = playlist.get(position).artist
@@ -49,7 +46,6 @@ class RecyclerAdapterPlaylist(private val hPlay : PlayHandler) :
 
 // return the size of your data
 override fun getItemCount() = playlist.size
-
 
 // provide a reference to the views of the item layout
     class ViewHolderVoteTrack(view: View) : RecyclerView.ViewHolder(view) {
