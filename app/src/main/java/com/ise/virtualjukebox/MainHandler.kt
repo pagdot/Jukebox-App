@@ -149,27 +149,12 @@ class MainHandler(private var _mainHandler: MainActivity) {
     }
 
     fun connectToExistingServer(serverIp: String) : PublicRetClass{
-        var tmpRetClass = PublicRetClass()
+        val tmpRetClass = PublicRetClass()
         val found = serverList.find { it.ip ==  serverIp}
         if(found == null ){
             return tmpRetClass
         }
-        if(found.net != null && found.name != null){
-            var  rval =_connectToServerSubHandler(found.net, found.name!!);
-            if(rval.success){
-                core?.net?.disconnectClient()
-                core = ServerPair();
-                core?.net = rval.net
-                core?.isInit = true;
-                core?.ip = found.ip
-                core?.name = found.name
-
-                serverList.find { it.ip ==  serverIp}?.isInit = true;
-            }
-            tmpRetClass.success = rval.success;
-            tmpRetClass.errorMessage = rval.errorMessage;
-        }
-        return tmpRetClass;
+        return createNewServer(found.name!!, found.ip!!)
     }
 
     fun disconnectAllServer(){
