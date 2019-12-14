@@ -13,9 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ise.virtualjukebox.MainHandler
 import com.ise.virtualjukebox.R
 import com.ise.virtualjukebox.SettingsHandler
+import com.ise.virtualjukebox.activity.SettingsFragment
 
 
-class RecyclerAdapterSettings(private val data: MutableList<MainHandler.ServerPair>, private val handler: SettingsHandler) :
+class RecyclerAdapterSettings(private val data: MutableList<MainHandler.ServerPair>, private val handler: SettingsHandler, private val listener : SettingsFragment.OnClickListener) :
 
     RecyclerView.Adapter<RecyclerAdapterSettings.ViewHolderServer>() {
 
@@ -42,6 +43,7 @@ class RecyclerAdapterSettings(private val data: MutableList<MainHandler.ServerPa
             val tmpRetClass = handler.connect(data[position].ip.toString())
             if(tmpRetClass.success) {
                 Toast.makeText(it!!.context, "Connection successfully created.", Toast.LENGTH_SHORT).show()
+                listener.onConnectClick()
             }
             else {
                 Toast.makeText(it!!.context, "Connection failed to create (${tmpRetClass.errorMessage}).", Toast.LENGTH_SHORT).show()

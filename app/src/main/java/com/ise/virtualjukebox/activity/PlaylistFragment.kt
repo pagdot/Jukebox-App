@@ -18,7 +18,7 @@ class PlaylistFragment : Fragment() {
     private var pStatus : Int = 0
     private var fragmentDestroyed : Boolean = false
 
-    public interface OnClickListener {
+    interface OnClickListener {
         fun onVoteClick()
     }
 

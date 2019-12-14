@@ -12,14 +12,20 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : Fragment() {
 
+    interface OnClickListener {
+        fun onConnectClick()
+    }
+
     companion object {
         fun newInstance(): SettingsFragment {
             return SettingsFragment()
         }
     }
 
-    fun run() {
-        (activity as MainActivity).test()
+    fun serverChanged() {
+        serverListChanged()
+        (activity as MainActivity).mainl.refreshTracks()
+        (activity as MainActivity).playh.updatePreviousPlaylist()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -33,13 +39,19 @@ class SettingsFragment : Fragment() {
         rvServer.layoutManager = LinearLayoutManager(context)
 
         val serverList = (activity as MainActivity).mainl.getActualServerList()
-        rvServer.adapter = RecyclerAdapterSettings(serverList, (activity as MainActivity).settingsh)
-
-        run()
+        rvServer.adapter = RecyclerAdapterSettings(serverList, (activity as MainActivity).settingsh, object: OnClickListener {
+            override fun onConnectClick() {
+                serverChanged()
+            }
+        })
     }
 
-    fun serverListChanged() {
+    private fun serverListChanged() {
         val serverList = (activity as MainActivity).mainl.serverList
-        rvServer.adapter = RecyclerAdapterSettings(serverList, (activity as MainActivity).settingsh)
+        rvServer.adapter = RecyclerAdapterSettings(serverList, (activity as MainActivity).settingsh, object: OnClickListener {
+            override fun onConnectClick() {
+                serverChanged()
+            }
+        })
     }
 }

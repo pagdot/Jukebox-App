@@ -60,15 +60,6 @@ class MainActivity : AppCompatActivity() {
                             fragmentPlaylist.currentTrackChanged()
                         }
                     }
-                    else if(activeScreen == Screens.Settings) {
-                        val fragmentSettings = fragmentManager.findFragmentByTag(Screens.Settings.toString()) as SettingsFragment
-                        if(settingsh.checkIfServerListChanged() != null) {
-                            fragmentSettings.serverListChanged()
-                            mainl.refreshTracks()
-                            playh.updatePreviousPlaylist()
-                        }
-                        sleepTime = 300
-                    }
                     handler.postDelayed(this, sleepTime)
                 }
             })

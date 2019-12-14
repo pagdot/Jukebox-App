@@ -7,10 +7,10 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.ise.virtualjukebox.PlayHandler
 import com.ise.virtualjukebox.R
-import com.ise.virtualjukebox.jukeboxApi.JukeboxApi
+import com.ise.virtualjukebox.activity.PlaylistFragment
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 
-class RecyclerAdapterPlaylist(private val playlist: MutableList<VoteTrack>, private val hPlay : PlayHandler) :
+class RecyclerAdapterPlaylist(private val playlist: MutableList<VoteTrack>, private val hPlay : PlayHandler, private val listener : PlaylistFragment.OnClickListener) :
 
     RecyclerView.Adapter<RecyclerAdapterPlaylist.ViewHolderVoteTrack>() {
 
@@ -30,18 +30,20 @@ class RecyclerAdapterPlaylist(private val playlist: MutableList<VoteTrack>, priv
         // do some more stuff like listening to clicks (use holder.itemView)
         holder.btnUpvote.setOnClickListener{
             hPlay.vote(playlist.get(position))
-            val text = "Song Upvoted"
+            val text = "Song Upvoted."
             val duration = Toast.LENGTH_SHORT
             val toast = Toast.makeText(it!!.context, text, duration)
             toast.show()
+            listener.onVoteClick()
         }
 
         holder.btnDownvote.setOnClickListener{
             hPlay.unvote(playlist.get(position))
-            val text = "Song Upvote revoked!"
+            val text = "Song Upvote revoked!."
             val duration = Toast.LENGTH_SHORT
             val toast = Toast.makeText(it!!.context, text, duration)
             toast.show()
+            listener.onVoteClick()
         }
 }
 
