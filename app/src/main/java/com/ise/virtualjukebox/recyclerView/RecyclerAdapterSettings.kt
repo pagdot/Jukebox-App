@@ -27,9 +27,15 @@ class RecyclerAdapterSettings(private val data: MutableList<MainHandler.ServerPa
         holder.serverIP.text = data[position].ip
         if(data[position].isInit) {
             holder.connectStatus.setColorFilter(Color.parseColor("#00ff00"), PorterDuff.Mode.SRC)
+            holder.btnConnect.isEnabled = false
+            holder.btnConnect.isClickable = false
+            holder.btnConnect.alpha = 0.5f
         }
         else {
             holder.connectStatus.clearColorFilter()
+            holder.btnConnect.isEnabled = true
+            holder.btnConnect.isClickable = true
+            holder.btnConnect.alpha = 1f
         }
 
         holder.btnConnect.setOnClickListener{
