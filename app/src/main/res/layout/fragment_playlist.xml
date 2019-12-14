@@ -51,7 +51,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 android:gravity="center_vertical"
-                android:text="@string/votes"
                 android:textAlignment="center"
                 android:textSize="18sp" />
 

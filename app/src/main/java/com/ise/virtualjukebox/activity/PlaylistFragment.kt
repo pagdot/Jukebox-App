@@ -60,9 +60,9 @@ class PlaylistFragment : Fragment() {
 
     fun playlistContentChanged() {
         rvPlaylist.layoutManager = LinearLayoutManager(context)
-        val playlister = (activity as MainActivity).playh.getPlaylist()
-        if(playlister != null) {
-            rvPlaylist.adapter = RecyclerAdapterPlaylist(playlister, (activity as MainActivity).playh)
+        val playlist = (activity as MainActivity).playh.getPlaylist()
+        if(playlist != null) {
+            rvPlaylist.adapter = RecyclerAdapterPlaylist(playlist, (activity as MainActivity).playh)
         }
     }
 
@@ -73,7 +73,6 @@ class PlaylistFragment : Fragment() {
             // set played song context
             txvTitle.text       = currentSong.title
             txvArtist.text      = currentSong.artist
-            txvVotes.text       = "0" // TODO votes not available in PlayingTrack
             txvUsername.text    = currentSong.addedBy
             Glide.with(this).load(currentSong.iconUri).into(imgCover) // load album cover image with Glide
 
