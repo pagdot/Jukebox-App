@@ -45,7 +45,7 @@ class JsonParser {
                     tmpTrack.trackId = jsonObj["track_id"].toString()
                     tmpTrack.title = jsonObj["title"].toString()
                     tmpTrack.album = jsonObj["album"].toString()
-                    tmpTrack.artist = jsonObj["artist"].toString().dropLast(3)
+                    tmpTrack.artist = jsonObj["artist"].toString()
                     tmpTrack.duration = jsonObj["duration"].toString().toInt()
                     tmpTrack.iconUri = jsonObj["icon_uri"].toString()
                     tmpTrack.addedBy = ""
