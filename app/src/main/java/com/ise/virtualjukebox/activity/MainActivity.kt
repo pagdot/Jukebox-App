@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                     handler.postDelayed(this, sleepTime)
                 }
             })
-            testvar = false;
+            testvar = false
         }
     }
 

@@ -18,6 +18,10 @@ class PlaylistFragment : Fragment() {
     private var pStatus : Int = 0
     private var fragmentDestroyed : Boolean = false
 
+    public interface OnClickListener {
+        fun onVoteClick()
+    }
+
     companion object {
         fun newInstance(): PlaylistFragment {
             return PlaylistFragment()
@@ -43,6 +47,12 @@ class PlaylistFragment : Fragment() {
         }).start()
     }
 
+    fun voteChanged() {
+        (activity as MainActivity).mainl.refreshTracks()
+        (activity as MainActivity).playh.updatePreviousPlaylist()
+        playlistContentChanged()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_playlist, container, false)
     }
@@ -53,7 +63,11 @@ class PlaylistFragment : Fragment() {
         rvPlaylist.layoutManager = LinearLayoutManager(context)
         val playlist = (activity as MainActivity).playh.getPlaylist()
         if(playlist != null){
-            rvPlaylist.adapter = RecyclerAdapterPlaylist(playlist, (activity as MainActivity).playh)
+            rvPlaylist.adapter = RecyclerAdapterPlaylist(playlist, (activity as MainActivity).playh, object: OnClickListener {
+                override fun onVoteClick() {
+                    voteChanged()
+                }
+            })
         }
 
         val currentSong     = (activity as MainActivity).playh.getCurrentTrack()
@@ -69,7 +83,6 @@ class PlaylistFragment : Fragment() {
             barPlaytime.max = currentSong.duration*10
             pStatus = currentSong.playingFor*10 // progress bar = 1800 ms, playingFor = x sec
             barPlaytime.progress = pStatus
-            // todo set progressbar.max to length of song (currently not available in song info)
             isPlaying = currentSong.playing
             //isPlaying = true // for testing purposes
         }
@@ -80,7 +93,11 @@ class PlaylistFragment : Fragment() {
         rvPlaylist.layoutManager = LinearLayoutManager(context)
         val playlist = (activity as MainActivity).playh.getPlaylist()
         if(playlist != null) {
-            rvPlaylist.adapter = RecyclerAdapterPlaylist(playlist, (activity as MainActivity).playh)
+            rvPlaylist.adapter = RecyclerAdapterPlaylist(playlist, (activity as MainActivity).playh, object: OnClickListener {
+                override fun onVoteClick() {
+                    voteChanged()
+                }
+            })
         }
     }
 
