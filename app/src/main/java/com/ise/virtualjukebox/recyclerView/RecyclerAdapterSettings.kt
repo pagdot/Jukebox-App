@@ -1,9 +1,12 @@
 package com.ise.virtualjukebox.recyclerView
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +25,13 @@ class RecyclerAdapterSettings(private val data: MutableList<MainHandler.ServerPa
 
     override fun onBindViewHolder(holder: ViewHolderServer, position: Int) {
         holder.serverIP.text = data[position].ip
+        if(data[position].isInit) {
+            holder.connectStatus.setColorFilter(Color.parseColor("#00ff00"), PorterDuff.Mode.SRC)
+        }
+        else {
+            holder.connectStatus.clearColorFilter()
+        }
+
         holder.btnConnect.setOnClickListener{
             val tmpRetClass = handler.connect(data[position].ip.toString())
             if(tmpRetClass.success) {
@@ -38,6 +48,7 @@ class RecyclerAdapterSettings(private val data: MutableList<MainHandler.ServerPa
 
     class ViewHolderServer(view: View) : RecyclerView.ViewHolder(view) {
         val serverIP : TextView = view.findViewById(R.id.txvServerIP)
+        val connectStatus : ImageView = view.findViewById(R.id.imvConnectStatus)
         val btnConnect : Button = view.findViewById(R.id.btnConnect)
     }
 }
