@@ -174,6 +174,19 @@ class MainHandler(private var _mainHandler: MainActivity) {
         }
     }
 
+    fun getActualServerList() :  MutableList<ServerPair>{
+        val tmp = mutableListOf<ServerPair>()
+        serverList.forEachIndexed { i, value ->
+            var tmpServerPair = ServerPair()
+            tmpServerPair.ip = value.ip
+            tmpServerPair.isInit = value.isInit
+            tmpServerPair.name = value.name
+            tmpServerPair.net = value.net
+            tmp.add(tmpServerPair)
+        }
+        return tmp
+    }
+
     fun searchTrack(input: String, listSize : Int) :  MutableList<Track>?{
         val found = core
         var list : MutableList<Track>? = null

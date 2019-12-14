@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         if(testvar){
             handler.post(object : Runnable {
                 override fun run() {
+                    var sleepTime : Long = 1000
                     if(activeScreen == Screens.Playlist) {
                         val fragmentPlaylist = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
                         mainl.refreshTracks()
@@ -59,7 +60,16 @@ class MainActivity : AppCompatActivity() {
                             fragmentPlaylist.currentTrackChanged()
                         }
                     }
-                    handler.postDelayed(this, 1000)
+                    else if(activeScreen == Screens.Settings) {
+                        val fragmentSettings = fragmentManager.findFragmentByTag(Screens.Settings.toString()) as SettingsFragment
+                        if(settingsh.checkIfServerListChanged() != null) {
+                            fragmentSettings.serverListChanged()
+                            mainl.refreshTracks()
+                            playh.updatePreviousPlaylist()
+                        }
+                        sleepTime = 300
+                    }
+                    handler.postDelayed(this, sleepTime)
                 }
             })
             testvar = false;

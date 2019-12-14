@@ -18,6 +18,10 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    fun run() {
+        (activity as MainActivity).test()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
@@ -28,8 +32,14 @@ class SettingsFragment : Fragment() {
         //TODO: create real function to add new server list
         rvServer.layoutManager = LinearLayoutManager(context)
 
-        val serverList = (activity as MainActivity).mainl.serverList
+        val serverList = (activity as MainActivity).mainl.getActualServerList()
+        rvServer.adapter = RecyclerAdapterSettings(serverList, (activity as MainActivity).settingsh)
 
+        run()
+    }
+
+    fun serverListChanged() {
+        val serverList = (activity as MainActivity).mainl.serverList
         rvServer.adapter = RecyclerAdapterSettings(serverList, (activity as MainActivity).settingsh)
     }
 }

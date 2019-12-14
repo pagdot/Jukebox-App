@@ -50,11 +50,11 @@ class PlayHandler(mainInstance : MainHandler) {
     fun playlistChanged(): MutableList<VoteTrack>? {
         val buffer = _mainHandler.getTracks()
         if (_previousState == null || !compareValues(_previousState, buffer)) {
-            _previousState?.clear();
-            _previousState = copyList(buffer);
-            return buffer;
+            _previousState?.clear()
+            _previousState = copyList(buffer)
+            return buffer
         }
-        return null;
+        return null
     }
 
     private fun compareCurrentSong(TrackA: PlayingTrack?, TrackB: PlayingTrack?): Boolean {
@@ -104,6 +104,11 @@ class PlayHandler(mainInstance : MainHandler) {
 
     fun refresh() {
         _mainHandler.refreshTracks();
+    }
+
+    fun updatePreviousPlaylist() {
+        _previousState?.clear()
+        _previousState = copyList(_mainHandler.trackList)
     }
 
     fun getPlaylist(): MutableList<VoteTrack>? {
