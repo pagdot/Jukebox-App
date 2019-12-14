@@ -50,30 +50,13 @@ class MainActivity : AppCompatActivity() {
             handler.post(object : Runnable {
                 override fun run() {
                     if(activeScreen == Screens.Playlist) {
-                        var fragmentPlaylist : PlaylistFragment? = null
-                        while (true) {
-                            fragmentPlaylist = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as? PlaylistFragment
-                            if(fragmentPlaylist == null) {
-                                fragmentManager.beginTransaction().replace(R.id.fragmentContainer, PlaylistFragment.newInstance(), Screens.Playlist.toString()).commit()
-
-                            }
-                            else {
-                                break
-                            }
-                        }
+                        val fragmentPlaylist = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
                         mainl.refreshTracks()
-                        if(screenChange) {
-                            fragmentPlaylist?.currentTrackChanged()
-                            fragmentPlaylist?.playlistContentChanged()
-                            screenChange = false
+                        if (playh.playlistChanged() != null) {
+                            fragmentPlaylist.playlistContentChanged()
                         }
-                        else {
-                            if (playh.playlistChanged() != null) {
-                                fragmentPlaylist?.playlistContentChanged()
-                            }
-                            if (playh.currentSongChanged() != null) {
-                                fragmentPlaylist?.currentTrackChanged()
-                            }
+                        if (playh.currentSongChanged() != null) {
+                            fragmentPlaylist.currentTrackChanged()
                         }
                     }
                     handler.postDelayed(this, 1000)
@@ -81,7 +64,6 @@ class MainActivity : AppCompatActivity() {
             })
             testvar = false;
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,7 +79,6 @@ class MainActivity : AppCompatActivity() {
 
         btnPlaylist.setOnClickListener{
             switchFragment(Screens.Playlist)
-            test()
         }
 
         btnSearch.setOnClickListener{

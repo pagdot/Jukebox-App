@@ -55,6 +55,24 @@ class PlaylistFragment : Fragment() {
         if(playlist != null){
             rvPlaylist.adapter = RecyclerAdapterPlaylist(playlist, (activity as MainActivity).playh)
         }
+
+        val currentSong     = (activity as MainActivity).playh.getCurrentTrack()
+        if(currentSong != null) // current song changed
+        {
+            // set played song context
+            txvTitle.text       = currentSong.title
+            txvArtist.text      = currentSong.artist
+            txvUsername.text    = currentSong.addedBy
+            Glide.with(this).load(currentSong.iconUri).into(imgCover) // load album cover image with Glide
+
+            // reset progress bar
+            barPlaytime.max = currentSong.duration*10
+            pStatus = currentSong.playingFor*10 // progress bar = 1800 ms, playingFor = x sec
+            barPlaytime.progress = pStatus
+            // todo set progressbar.max to length of song (currently not available in song info)
+            isPlaying = currentSong.playing
+            //isPlaying = true // for testing purposes
+        }
         run()
     }
 
@@ -83,12 +101,6 @@ class PlaylistFragment : Fragment() {
             // todo set progressbar.max to length of song (currently not available in song info)
             isPlaying = currentSong.playing
             //isPlaying = true // for testing purposes
-        }
-
-        // update playlist content
-        val playlist = (activity as MainActivity).playh.playlistChanged()
-        if(playlist != null){
-            rvPlaylist.adapter = RecyclerAdapterPlaylist(playlist, (activity as MainActivity).playh)
         }
     }
 

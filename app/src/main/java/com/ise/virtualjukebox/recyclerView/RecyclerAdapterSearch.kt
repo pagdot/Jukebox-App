@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ise.virtualjukebox.R
 import com.ise.virtualjukebox.SearchHandler
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
-import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
-import kotlin.reflect.KFunction1
 
 //class RecyclerAdapter(private val data: List<RecyclerItem>) :
 class RecyclerAdapterSearch(private val data: MutableList<Track>, private val handler: SearchHandler) :
@@ -25,7 +23,6 @@ class RecyclerAdapterSearch(private val data: MutableList<Track>, private val ha
         holder.artist.text = data[position].artist
 
         holder.btnAdd.setOnClickListener{
-            //TODO: return ignored (from my side not needed to implement this)
             handler.addToPlaylist(data[position])
         }
     }
