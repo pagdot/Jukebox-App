@@ -8,10 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ise.virtualjukebox.R
 import com.ise.virtualjukebox.SearchHandler
+import com.ise.virtualjukebox.activity.SearchFragment
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 
 //class RecyclerAdapter(private val data: List<RecyclerItem>) :
-class RecyclerAdapterSearch(private val data: MutableList<Track>, private val handler: SearchHandler) :
+class RecyclerAdapterSearch(private val data: MutableList<Track>, private val handler: SearchHandler, private val listener : SearchFragment.OnClickListener) :
     RecyclerView.Adapter<RecyclerAdapterSearch.ViewHolderTrack>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTrack {
