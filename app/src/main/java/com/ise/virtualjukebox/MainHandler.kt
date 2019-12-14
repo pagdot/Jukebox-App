@@ -83,6 +83,7 @@ class MainHandler(private var _mainHandler: MainActivity) {
                 serverList.find { it.ip == pair.ip }?.ip = serverIp
                 serverList.find { it.ip == pair.ip }?.net = rVal.net
                 serverList.find { it.ip == pair.ip }?.isInit = true
+                core = pair;
             }
         }
         val tmpRetClass = PublicRetClass()
@@ -119,36 +120,56 @@ class MainHandler(private var _mainHandler: MainActivity) {
         }
     }
 
-    private fun connectToServer(name:String, serverIp : String) : RetVal{
-        val netCore  = JukeboxApi(serverIp)
-        val rVal  = RetVal()
+    private fun _connectToServerSubHandler(Net : JukeboxApi? , Name : String) : RetVal{
         val countDownLatch = CountDownLatch(1)
-        netCore.getSessionID(name, object : JukeboxApi.JukeboxApiCallback {
+        var retval = RetVal()
+        Net?.getSessionID(Name, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
-                rVal.success = true
-                rVal.net = netCore
+                retval.net = Net
+                retval.errorMessage = ""
+                retval.success = true
                 countDownLatch.countDown()
             }
             override fun onFailure(errorClass: apiError, exception: Exception?) {
-                rVal.success = false
+                retval.success = false
                 if(exception == null)
-                    rVal.errorMessage = errorClass.message.toString()
+                    retval.errorMessage = errorClass.message.toString()
                 else
-                    rVal.errorMessage = exception.message.toString()
+                    retval.errorMessage = exception.message.toString()
                 countDownLatch.countDown()
             }
         })
         countDownLatch.await()
-        return rVal
+        return retval;
+    }
+
+    private fun connectToServer(name:String, serverIp : String) : RetVal{
+        val netCore  = JukeboxApi(serverIp)
+        return _connectToServerSubHandler(netCore, name);
     }
 
     fun connectToExistingServer(serverIp: String) : PublicRetClass{
-        val tmpRetClass = PublicRetClass()
+        var tmpRetClass = PublicRetClass()
         val found = serverList.find { it.ip ==  serverIp}
-        if(found == null){
+        if(found == null ){
             return tmpRetClass
         }
-        return this.createNewServer(found.name!!, found.ip!!)
+        if(found.net != null && found.name != null){
+            var  rval =_connectToServerSubHandler(found.net, found.name!!);
+            if(rval.success){
+                core?.net?.disconnectClient()
+                core = ServerPair();
+                core?.net = rval.net
+                core?.isInit = true;
+                core?.ip = found.ip
+                core?.name = found.name
+
+                serverList.find { it.ip ==  serverIp}?.isInit = true;
+            }
+            tmpRetClass.success = rval.success;
+            tmpRetClass.errorMessage = rval.errorMessage;
+        }
+        return tmpRetClass;
     }
 
     fun disconnectAllServer(){
