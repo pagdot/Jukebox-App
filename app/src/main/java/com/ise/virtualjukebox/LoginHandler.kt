@@ -7,7 +7,8 @@ class LoginHandler(MainInstance : MainHandler) {
     private var _name:String = ""
 
     private fun notifyMainClass() : MainHandler.PublicRetClass{
-        return _mainHandler.createNewServer(_name, _ip)
+        var varr= _mainHandler.createNewServer(_name, _ip)
+        return varr
     }
 
     fun setServerIP(IP:String) : Boolean{
