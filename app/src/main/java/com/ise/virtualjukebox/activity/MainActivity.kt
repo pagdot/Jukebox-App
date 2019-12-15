@@ -46,12 +46,13 @@ class MainActivity : AppCompatActivity() {
     private val fragmentManager = supportFragmentManager
 
     fun test() {
+        screenChange = false
         if (testvar) {
             testvar = false
             handler.post(object : Runnable {
                 override fun run() {
                     var sleepTime: Long = 1000
-                    if (activeScreen == Screens.Playlist) {
+                    if (activeScreen == Screens.Playlist && !screenChange) {
                         val fragmentPlaylist =
                             fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
                         mainl.refreshTracks()
@@ -61,6 +62,9 @@ class MainActivity : AppCompatActivity() {
                         if (playh.currentSongChanged() != null) {
                             fragmentPlaylist.currentTrackChanged()
                         }
+                    }
+                    else {
+                        screenChange = false
                     }
                     handler.postDelayed(this, sleepTime)
                 }
