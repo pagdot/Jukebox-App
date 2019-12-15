@@ -28,8 +28,8 @@ class PlaylistFragment : Fragment() {
         }
     }
 
-    fun run(onResume : Boolean) {
-        (activity as MainActivity).test(onResume)
+    fun run() {
+        (activity as MainActivity).test()
         Thread(Runnable {
             while (!fragmentDestroyed)
             {
@@ -55,38 +55,6 @@ class PlaylistFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_playlist, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        rvPlaylist.layoutManager = LinearLayoutManager(context)
-        val playlist = (activity as MainActivity).playh.getPlaylist()
-        if(playlist != null){
-            rvPlaylist.adapter = RecyclerAdapterPlaylist(playlist, (activity as MainActivity).playh, object: OnClickListener {
-                override fun onVoteClick() {
-                    voteChanged()
-                }
-            })
-        }
-
-        val currentSong     = (activity as MainActivity).playh.getCurrentTrack()
-        if(currentSong != null) // current song changed
-        {
-            // set played song context
-            txvTitle.text       = currentSong.title
-            txvArtist.text      = currentSong.artist
-            txvUsername.text    = currentSong.addedBy
-            Glide.with(this).load(currentSong.iconUri).into(imgCover) // load album cover image with Glide
-
-            // reset progress bar
-            barPlaytime.max = currentSong.duration*10
-            pStatus = currentSong.playingFor*10 // progress bar = 1800 ms, playingFor = x sec
-            barPlaytime.progress = pStatus
-            isPlaying = currentSong.playing
-            //isPlaying = true // for testing purposes
-        }
-        run(false)
     }
 
     override fun onResume() {
@@ -118,7 +86,7 @@ class PlaylistFragment : Fragment() {
             isPlaying = currentSong.playing
             //isPlaying = true // for testing purposes
         }
-        run(true)
+        run()
     }
 
     fun playlistContentChanged() {

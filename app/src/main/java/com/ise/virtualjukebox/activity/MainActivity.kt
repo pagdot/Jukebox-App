@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     val Store = "JukeBox"
 
-    var testvar = true;
+    var testvar = true
 
     fun sendToast(ToBeSent: String){
         Toast.makeText(this, ToBeSent, Toast.LENGTH_SHORT).show()
@@ -45,8 +45,9 @@ class MainActivity : AppCompatActivity() {
 
     private val fragmentManager = supportFragmentManager
 
-    fun test(onResume : Boolean) {
-        if (testvar || onResume) {
+    fun test() {
+        if (testvar) {
+            testvar = false
             handler.post(object : Runnable {
                 override fun run() {
                     var sleepTime: Long = 1000
@@ -64,7 +65,6 @@ class MainActivity : AppCompatActivity() {
                     handler.postDelayed(this, sleepTime)
                 }
             })
-            testvar = false
         }
     }
 
@@ -92,9 +92,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        testvar = true
+    }
+
     override fun onStop() {
-        handler.removeCallbacksAndMessages(null);
-        mainl.storeServerList();
+        handler.removeCallbacksAndMessages(null)
+        mainl.storeServerList()
         super.onStop()
     }
 
