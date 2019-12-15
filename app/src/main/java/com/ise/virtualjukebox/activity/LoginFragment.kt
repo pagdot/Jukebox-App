@@ -25,6 +25,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         btnConnect.setOnClickListener {
+            (activity as MainActivity).mainl.disconnectAllServer()
             if(!(activity as MainActivity).loginh.setUserName(txeUsername.text.toString())) {
                 Toast.makeText(it!!.context, "Username can not be empty.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener

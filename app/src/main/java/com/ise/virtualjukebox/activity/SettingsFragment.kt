@@ -35,7 +35,6 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO: create real function to add new server list
         rvServer.layoutManager = LinearLayoutManager(context)
 
         val serverList = (activity as MainActivity).mainl.getActualServerList()
@@ -44,10 +43,14 @@ class SettingsFragment : Fragment() {
                 serverChanged()
             }
         })
+
+        btnAddServer.setOnClickListener{
+            (activity as MainActivity).switchFragment(Screens.Login)
+        }
     }
 
     private fun serverListChanged() {
-        val serverList = (activity as MainActivity).mainl.serverList
+        val serverList = (activity as MainActivity).mainl.getActualServerList()
         rvServer.adapter = RecyclerAdapterSettings(serverList, (activity as MainActivity).settingsh, object: OnClickListener {
             override fun onConnectClick() {
                 serverChanged()

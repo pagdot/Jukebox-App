@@ -12,4 +12,5 @@
     <string name="add">add</string>
     <string name="imgLogoDescr">Virtual Jukebox logo</string>
     <string name="imgAlbumcoverDescr">Virtual Jukebox logo</string>
+    <string name="addServer">Add Server</string>
 </resources>
