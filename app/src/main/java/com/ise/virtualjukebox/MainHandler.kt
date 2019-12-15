@@ -38,6 +38,9 @@ class MainHandler(private var _mainHandler: MainActivity) {
     private var core : ServerPair? = null
 
     private fun createNewServerWithoutConnect(serverIp : String, name : String) : Boolean{
+        if(!checkIfValid(serverIp)){
+            return false;
+        }
         _mainHandler.sendToast("Created")
         val pair = ServerPair()
         pair.name = name
@@ -66,6 +69,12 @@ class MainHandler(private var _mainHandler: MainActivity) {
     }
 
     fun createNewServer(name : String, serverIp : String) : PublicRetClass{
+        val tmpRetClass = PublicRetClass()
+        if(!checkIfValid(serverIp)){
+            tmpRetClass.errorMessage = "Invalid Address"
+            tmpRetClass.success = false;
+            return tmpRetClass;
+        }
         val rVal : RetVal = connectToServer(name, serverIp)
         if(rVal.success){
             val pair = ServerPair()
@@ -86,10 +95,19 @@ class MainHandler(private var _mainHandler: MainActivity) {
                 core = pair;
             }
         }
-        val tmpRetClass = PublicRetClass()
+
         tmpRetClass.success = rVal.success
         tmpRetClass.errorMessage = rVal.errorMessage
         return tmpRetClass
+    }
+
+    private fun checkIfValid(serverIp: String): Boolean {
+        val ip4 = "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\$".toRegex()
+        val ip6 = "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))".toRegex()
+        val adr = "^[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}(\\/\\S*)?\$".toRegex()
+
+
+       return (serverIp.matches(ip4) || serverIp.matches(ip6) || serverIp.matches(adr));
     }
 
     fun storeServerList(){
