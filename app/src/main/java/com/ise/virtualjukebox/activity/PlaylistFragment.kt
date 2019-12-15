@@ -49,7 +49,7 @@ class PlaylistFragment : Fragment() {
 
     fun voteChanged() {
         (activity as MainActivity).mainl.refreshTracks()
-        (activity as MainActivity).playh.updatePreviousPlaylist()
+        (activity as MainActivity).playh.updatePreviousPlaylistAndCurrentTrack()
         playlistContentChanged()
     }
 

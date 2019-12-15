@@ -25,7 +25,7 @@ class SearchFragment : Fragment() {
 
     fun trackAdded() {
         (activity as MainActivity).mainl.refreshTracks()
-        (activity as MainActivity).playh.updatePreviousPlaylist()
+        (activity as MainActivity).playh.updatePreviousPlaylistAndCurrentTrack()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

@@ -103,12 +103,13 @@ class PlayHandler(mainInstance : MainHandler) {
     }
 
     fun refresh() {
-        _mainHandler.refreshTracks();
+        _mainHandler.refreshTracks()
     }
 
-    fun updatePreviousPlaylist() {
+    fun updatePreviousPlaylistAndCurrentTrack() {
         _previousState?.clear()
         _previousState = copyList(_mainHandler.trackList)
+        _currentTrack = _mainHandler.currentTrack()
     }
 
     fun getPlaylist(): MutableList<VoteTrack>? {
