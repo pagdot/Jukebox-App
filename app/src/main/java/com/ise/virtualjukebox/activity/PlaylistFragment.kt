@@ -153,7 +153,6 @@ class PlaylistFragment : Fragment() {
         }
     }
 
-
     override fun onDetach ()
     {
         fragmentDestroyed = true
