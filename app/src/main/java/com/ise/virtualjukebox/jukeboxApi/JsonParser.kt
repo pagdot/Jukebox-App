@@ -17,7 +17,7 @@ class JsonParser {
             tmpPlayingTrack.trackId = jsonObj["track_id"].toString()
             tmpPlayingTrack.title = jsonObj["title"].toString()
             tmpPlayingTrack.album = jsonObj["album"].toString()
-            tmpPlayingTrack.artist = jsonObj["artist"].toString()
+            tmpPlayingTrack.artist = jsonObj["artist"].toString().dropLast(3)
             tmpPlayingTrack.duration = jsonObj["duration"].toString().toInt()
             tmpPlayingTrack.iconUri = jsonObj["icon_uri"].toString()
             tmpPlayingTrack.addedBy = jsonObj["added_by"].toString()
@@ -33,7 +33,7 @@ class JsonParser {
         return tmpPlayingTrack
     }
 
-    private fun parseTrackListFromJsonArray(jsonDataArray : JSONArray) : MutableList<Track>{
+    private fun parseTrackListFromJsonArray(jsonDataArray : JSONArray, searchRequest : Boolean) : MutableList<Track>{
         val tmpList : MutableList<Track> = mutableListOf(Track())
         tmpList.clear()
 
@@ -49,7 +49,8 @@ class JsonParser {
                     tmpTrack.duration = jsonObj["duration"].toString().toInt()
                     tmpTrack.iconUri = jsonObj["icon_uri"].toString()
                     tmpTrack.addedBy = ""
-
+                    if(!searchRequest)
+                        tmpTrack.artist = jsonObj["artist"].toString().dropLast(3)
                     if(jsonObj.has("added_by")) {
                         tmpTrack.addedBy = jsonObj["added_by"].toString()
                     }
@@ -77,7 +78,7 @@ class JsonParser {
                     tmpVoteTrack.trackId = jsonObj["track_id"].toString()
                     tmpVoteTrack.title = jsonObj["title"].toString()
                     tmpVoteTrack.album = jsonObj["album"].toString()
-                    tmpVoteTrack.artist = jsonObj["artist"].toString()
+                    tmpVoteTrack.artist = jsonObj["artist"].toString().dropLast(3)
                     tmpVoteTrack.duration = jsonObj["duration"].toString().toInt()
                     tmpVoteTrack.iconUri = jsonObj["icon_uri"].toString()
                     tmpVoteTrack.addedBy = jsonObj["added_by"].toString()
@@ -116,21 +117,18 @@ class JsonParser {
             val jsonObj = jsonDataObject.getJSONObject("currently_playing")
             tmpQueues.current = parsePlayingTrackFromJsonObject(jsonObj)
         } catch (e : JSONException) {
-            throw e
         }
 
         try {
             val jsonDataArray = jsonDataObject.getJSONArray("admin_queue")
-            tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray))
+            tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray, false))
         } catch (e : JSONException) {
-            throw e
         }
 
         try {
             val jsonDataArray = jsonDataObject.getJSONArray("normal_queue")
             tmpQueues.normalQueue.addAll(parseVoteTrackListFromJsonArray(jsonDataArray))
         } catch (e : JSONException) {
-            throw e
         }
 
         return tmpQueues
@@ -155,7 +153,7 @@ class JsonParser {
         }
 
         try {
-            tmpList.addAll(parseTrackListFromJsonArray(jsonDataArray))
+            tmpList.addAll(parseTrackListFromJsonArray(jsonDataArray, true))
         } catch (e : JSONException) {
             throw e
         }
