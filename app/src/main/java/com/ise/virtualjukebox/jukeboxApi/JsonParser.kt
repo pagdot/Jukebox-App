@@ -33,7 +33,7 @@ class JsonParser {
         return tmpPlayingTrack
     }
 
-    private fun parseTrackListFromJsonArray(jsonDataArray : JSONArray) : MutableList<Track>{
+    private fun parseTrackListFromJsonArray(jsonDataArray : JSONArray, searchRequest : Boolean) : MutableList<Track>{
         val tmpList : MutableList<Track> = mutableListOf(Track())
         tmpList.clear()
 
@@ -49,7 +49,8 @@ class JsonParser {
                     tmpTrack.duration = jsonObj["duration"].toString().toInt()
                     tmpTrack.iconUri = jsonObj["icon_uri"].toString()
                     tmpTrack.addedBy = ""
-
+                    if(!searchRequest)
+                        tmpTrack.artist = jsonObj["artist"].toString().dropLast(3)
                     if(jsonObj.has("added_by")) {
                         tmpTrack.addedBy = jsonObj["added_by"].toString()
                     }
@@ -120,7 +121,7 @@ class JsonParser {
 
         try {
             val jsonDataArray = jsonDataObject.getJSONArray("admin_queue")
-            tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray))
+            tmpQueues.adminQueue.addAll(parseTrackListFromJsonArray(jsonDataArray, false))
         } catch (e : JSONException) {
         }
 
@@ -152,7 +153,7 @@ class JsonParser {
         }
 
         try {
-            tmpList.addAll(parseTrackListFromJsonArray(jsonDataArray))
+            tmpList.addAll(parseTrackListFromJsonArray(jsonDataArray, true))
         } catch (e : JSONException) {
             throw e
         }
