@@ -28,8 +28,8 @@ class PlaylistFragment : Fragment() {
         }
     }
 
-    fun run() {
-        (activity as MainActivity).test()
+    fun run(onResume : Boolean) {
+        (activity as MainActivity).test(onResume)
         Thread(Runnable {
             while (!fragmentDestroyed)
             {
@@ -86,7 +86,7 @@ class PlaylistFragment : Fragment() {
             isPlaying = currentSong.playing
             //isPlaying = true // for testing purposes
         }
-        run()
+        run(false)
     }
 
     override fun onResume() {
@@ -118,7 +118,7 @@ class PlaylistFragment : Fragment() {
             isPlaying = currentSong.playing
             //isPlaying = true // for testing purposes
         }
-        run()
+        run(true)
     }
 
     fun playlistContentChanged() {

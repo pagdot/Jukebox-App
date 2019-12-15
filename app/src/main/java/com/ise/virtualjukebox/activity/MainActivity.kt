@@ -45,23 +45,27 @@ class MainActivity : AppCompatActivity() {
 
     private val fragmentManager = supportFragmentManager
 
-    fun test(){
-        handler.post(object : Runnable {
-            override fun run() {
-                var sleepTime : Long = 1000
-                if(activeScreen == Screens.Playlist) {
-                    val fragmentPlaylist = fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
-                    mainl.refreshTracks()
-                    if (playh.playlistChanged() != null) {
-                        fragmentPlaylist.playlistContentChanged()
+    fun test(onResume : Boolean) {
+        if (testvar || onResume) {
+            handler.post(object : Runnable {
+                override fun run() {
+                    var sleepTime: Long = 1000
+                    if (activeScreen == Screens.Playlist) {
+                        val fragmentPlaylist =
+                            fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
+                        mainl.refreshTracks()
+                        if (playh.playlistChanged() != null) {
+                            fragmentPlaylist.playlistContentChanged()
+                        }
+                        if (playh.currentSongChanged() != null) {
+                            fragmentPlaylist.currentTrackChanged()
+                        }
                     }
-                    if (playh.currentSongChanged() != null) {
-                        fragmentPlaylist.currentTrackChanged()
-                    }
+                    handler.postDelayed(this, sleepTime)
                 }
-                handler.postDelayed(this, sleepTime)
-            }
-        })
+            })
+            testvar = false
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

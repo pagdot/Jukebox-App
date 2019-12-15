@@ -16,6 +16,7 @@ class JukeboxApi(hostName : String) {
     private var jsonParser = JsonParser()
     var queues = Queues()
     var searchTracks : MutableList<Track> = mutableListOf(Track())
+    var getQueuesBlcoked = false
 
     init {
         searchTracks.clear()
@@ -100,34 +101,42 @@ class JukeboxApi(hostName : String) {
         })
     }
     fun getCurrentQueues(cb : JukeboxApiCallback)  {
-        api.getCurrentQueues(object : RestClient.HttpCallback {
-            override fun onSuccess(response: Response) {
+        if(getQueuesBlcoked) {
+            cb.onFailure(apiError(null, null), null)
+        }
+        else {
+            getQueuesBlcoked = true
+            api.getCurrentQueues(object : RestClient.HttpCallback {
+                override fun onSuccess(response: Response) {
 
-                try {
-                    val jsonDataString = response.body?.string()
-                    queues = jsonParser.parseQueuesFromResponse(jsonDataString)
-                } catch (e : Exception) {
-                    cb.onFailure(apiError(null, null), e)
+                    try {
+                        val jsonDataString = response.body?.string()
+                        queues = jsonParser.parseQueuesFromResponse(jsonDataString)
+                    } catch (e : Exception) {
+                        cb.onFailure(apiError(null, null), e)
+                    }
+
+                    getQueuesBlcoked = false
+                    cb.onSuccess()
                 }
 
-                cb.onSuccess()
-            }
+                override fun onFailure(response: Response?, exception: IOException?) {
+                    val errorClass = apiError(null, null)
+                    if(exception == null) {
+                        val jsonDataString = response?.body?.string()
+                        val jsonDataObject = JSONObject(jsonDataString.toString())
+                        errorClass.code = jsonDataObject["status"].toString()
+                        errorClass.message = jsonDataObject["error"].toString()
+                        Log.e("addTrackToQ code fail", "Code: ${errorClass.code}; Message: ${errorClass.message}")
+                    }
+                    else
+                        Log.e("getCurQueues exception", "${exception.message}")
 
-            override fun onFailure(response: Response?, exception: IOException?) {
-                val errorClass = apiError(null, null)
-                if(exception == null) {
-                    val jsonDataString = response?.body?.string()
-                    val jsonDataObject = JSONObject(jsonDataString.toString())
-                    errorClass.code = jsonDataObject["status"].toString()
-                    errorClass.message = jsonDataObject["error"].toString()
-                    Log.e("addTrackToQ code fail", "Code: ${errorClass.code}; Message: ${errorClass.message}")
+                    getQueuesBlcoked = false
+                    cb.onFailure(errorClass, exception)
                 }
-                else
-                    Log.e("getCurQueues exception", "${exception.message}")
-
-                cb.onFailure(errorClass, exception)
-            }
-        })
+            })
+        }
     }
 
     fun addTrackToQueue(trackID : String, cb : JukeboxApiCallback) {
