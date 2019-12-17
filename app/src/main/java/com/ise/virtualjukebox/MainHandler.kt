@@ -226,9 +226,8 @@ class MainHandler(private var _mainHandler: MainActivity) {
                     countDownLatch.countDown()
                 }
             })
+            countDownLatch.await()
         }
-
-        countDownLatch.await()
         return list
     }
     private fun convertToVoteTrack(list : MutableList<Track>?) : MutableList<VoteTrack>?{
