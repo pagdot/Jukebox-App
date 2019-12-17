@@ -25,23 +25,33 @@ class RecyclerAdapterPlaylist(private val playlist: MutableList<VoteTrack>, priv
         holder.txvTitle.text        = playlist.get(position).title
         holder.txvArtist.text       = playlist.get(position).artist
         holder.txvUsername.text     = playlist.get(position).addedBy
-        holder.txvVotes.text        = playlist.get(position).votes.toString()
+        holder.txvVotes.text        = ""
 
-        if(playlist.get(position).hasVoted == 0) {
-            holder.btnUpvote.isEnabled = true
-            holder.btnUpvote.isClickable = true
-            holder.btnUpvote.alpha = 1f
-            holder.btnDownvote.isEnabled = false
-            holder.btnDownvote.isClickable = false
-            holder.btnDownvote.alpha = 0.5f
+        if(playlist.get(position).votes < 0) {
+            holder.btnUpvote.visibility = View.INVISIBLE
+            holder.btnDownvote.visibility = View.INVISIBLE
         }
         else {
-            holder.btnDownvote.isEnabled = true
-            holder.btnDownvote.isClickable = true
-            holder.btnDownvote.alpha = 1f
-            holder.btnUpvote.isEnabled = false
-            holder.btnUpvote.isClickable = false
-            holder.btnUpvote.alpha = 0.5f
+            holder.btnUpvote.visibility = View.VISIBLE
+            holder.btnDownvote.visibility = View.VISIBLE
+            holder.txvVotes.text        = playlist.get(position).votes.toString()
+
+            if(playlist.get(position).hasVoted == 0) {
+                holder.btnUpvote.isEnabled = true
+                holder.btnUpvote.isClickable = true
+                holder.btnUpvote.alpha = 1f
+                holder.btnDownvote.isEnabled = false
+                holder.btnDownvote.isClickable = false
+                holder.btnDownvote.alpha = 0.5f
+            }
+            else {
+                holder.btnDownvote.isEnabled = true
+                holder.btnDownvote.isClickable = true
+                holder.btnDownvote.alpha = 1f
+                holder.btnUpvote.isEnabled = false
+                holder.btnUpvote.isClickable = false
+                holder.btnUpvote.alpha = 0.5f
+            }
         }
 
         // do some more stuff like listening to clicks (use holder.itemView)
