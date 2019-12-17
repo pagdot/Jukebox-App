@@ -27,8 +27,32 @@ class RecyclerAdapterPlaylist(private val playlist: MutableList<VoteTrack>, priv
         holder.txvUsername.text     = playlist.get(position).addedBy
         holder.txvVotes.text        = playlist.get(position).votes.toString()
 
+        if(playlist.get(position).hasVoted == 0) {
+            holder.btnUpvote.isEnabled = true
+            holder.btnUpvote.isClickable = true
+            holder.btnUpvote.alpha = 1f
+            holder.btnDownvote.isEnabled = false
+            holder.btnDownvote.isClickable = false
+            holder.btnDownvote.alpha = 0.5f
+        }
+        else {
+            holder.btnDownvote.isEnabled = true
+            holder.btnDownvote.isClickable = true
+            holder.btnDownvote.alpha = 1f
+            holder.btnUpvote.isEnabled = false
+            holder.btnUpvote.isClickable = false
+            holder.btnUpvote.alpha = 0.5f
+        }
+
         // do some more stuff like listening to clicks (use holder.itemView)
         holder.btnUpvote.setOnClickListener{
+            holder.btnDownvote.isEnabled = true
+            holder.btnDownvote.isClickable = true
+            holder.btnDownvote.alpha = 1f
+            holder.btnUpvote.isEnabled = false
+            holder.btnUpvote.isClickable = false
+            holder.btnUpvote.alpha = 0.5f
+
             hPlay.vote(playlist.get(position))
             val text = "Song Upvoted."
             val duration = Toast.LENGTH_SHORT
@@ -38,6 +62,13 @@ class RecyclerAdapterPlaylist(private val playlist: MutableList<VoteTrack>, priv
         }
 
         holder.btnDownvote.setOnClickListener{
+            holder.btnUpvote.isEnabled = true
+            holder.btnUpvote.isClickable = true
+            holder.btnUpvote.alpha = 1f
+            holder.btnDownvote.isEnabled = false
+            holder.btnDownvote.isClickable = false
+            holder.btnDownvote.alpha = 0.5f
+
             hPlay.unvote(playlist.get(position))
             val text = "Song Upvote revoked!."
             val duration = Toast.LENGTH_SHORT
