@@ -37,9 +37,11 @@ class MainHandler(private var _mainHandler: MainActivity) {
 
     private var core : ServerPair? = null
 
+    var anyServerConnection = false
+
     private fun createNewServerWithoutConnect(serverIp : String, name : String) : Boolean{
         if(!checkIfValid(serverIp)){
-            return false;
+            return false
         }
         _mainHandler.sendToast("Created")
         val pair = ServerPair()
@@ -72,8 +74,8 @@ class MainHandler(private var _mainHandler: MainActivity) {
         val tmpRetClass = PublicRetClass()
         if(!checkIfValid(serverIp)){
             tmpRetClass.errorMessage = "Invalid Address"
-            tmpRetClass.success = false;
-            return tmpRetClass;
+            tmpRetClass.success = false
+            return tmpRetClass
         }
         val rVal : RetVal = connectToServer(name, serverIp)
         if(rVal.success){
@@ -92,8 +94,9 @@ class MainHandler(private var _mainHandler: MainActivity) {
                 serverList.find { it.ip == pair.ip }?.ip = serverIp
                 serverList.find { it.ip == pair.ip }?.net = rVal.net
                 serverList.find { it.ip == pair.ip }?.isInit = true
-                core = pair;
+                core = pair
             }
+            anyServerConnection = true
         }
 
         tmpRetClass.success = rVal.success
@@ -140,30 +143,30 @@ class MainHandler(private var _mainHandler: MainActivity) {
 
     private fun _connectToServerSubHandler(Net : JukeboxApi? , Name : String) : RetVal{
         val countDownLatch = CountDownLatch(1)
-        var retval = RetVal()
+        val retVal = RetVal()
         Net?.getSessionID(Name, object : JukeboxApi.JukeboxApiCallback {
             override fun onSuccess() {
-                retval.net = Net
-                retval.errorMessage = ""
-                retval.success = true
+                retVal.net = Net
+                retVal.errorMessage = ""
+                retVal.success = true
                 countDownLatch.countDown()
             }
             override fun onFailure(errorClass: apiError, exception: Exception?) {
-                retval.success = false
+                retVal.success = false
                 if(exception == null)
-                    retval.errorMessage = errorClass.message.toString()
+                    retVal.errorMessage = errorClass.message.toString()
                 else
-                    retval.errorMessage = exception.message.toString()
+                    retVal.errorMessage = exception.message.toString()
                 countDownLatch.countDown()
             }
         })
         countDownLatch.await()
-        return retval;
+        return retVal
     }
 
     private fun connectToServer(name:String, serverIp : String) : RetVal{
         val netCore  = JukeboxApi(serverIp)
-        return _connectToServerSubHandler(netCore, name);
+        return _connectToServerSubHandler(netCore, name)
     }
 
     fun connectToExistingServer(serverIp: String) : PublicRetClass{
@@ -181,6 +184,8 @@ class MainHandler(private var _mainHandler: MainActivity) {
                 disconnectFromServer(item.ip!!)
             }
         }
+        core = null
+        anyServerConnection = false
     }
 
     private fun disconnectFromServer(ServerIp: String){
@@ -245,8 +250,10 @@ class MainHandler(private var _mainHandler: MainActivity) {
         }
         return newList
     }
-    fun refreshTracks(){
+    fun refreshTracks() : PublicRetClass{
         val found = core
+        val retClass = PublicRetClass()
+
         if(found != null) {
             val countDownLatch = CountDownLatch(1)
             trackList?.clear()
@@ -259,9 +266,17 @@ class MainHandler(private var _mainHandler: MainActivity) {
                         trackList?.addAll(found.net?.queues!!.normalQueue)
                     }
                     currTrack = found.net?.queues?.current
+                    retClass.success = true
                     countDownLatch.countDown()
                 }
                 override fun onFailure(errorClass: apiError, exception: Exception?) {
+                    retClass.success = false
+                    if(exception != null) {
+                        retClass.errorMessage = exception.message.toString()
+                    }
+                    else {
+                        retClass.errorMessage = errorClass.message.toString()
+                    }
                     trackList = null
                     currTrack = null
                     countDownLatch.countDown()
@@ -269,6 +284,7 @@ class MainHandler(private var _mainHandler: MainActivity) {
             })
             countDownLatch.await()
         }
+        return retClass
     }
     fun getTracks() :  MutableList<VoteTrack>?{
         return trackList
@@ -278,44 +294,46 @@ class MainHandler(private var _mainHandler: MainActivity) {
         val found = core
         var retVal = false
 
-        val countDownLatch = CountDownLatch(1)
-        found?.net?.voteTrack(song.trackId, UpDown, object : JukeboxApi.JukeboxApiCallback {
-            override fun onSuccess() {
-                retVal = true
-                countDownLatch.countDown()
-            }
+        if(found != null) {
+            val countDownLatch = CountDownLatch(1)
+            found.net?.voteTrack(song.trackId, UpDown, object : JukeboxApi.JukeboxApiCallback {
+                override fun onSuccess() {
+                    retVal = true
+                    countDownLatch.countDown()
+                }
 
-            override fun onFailure(errorClass: apiError, exception: Exception?) {
-                retVal = false
-                countDownLatch.countDown()
-            }
-        })
-
-        countDownLatch.await()
+                override fun onFailure(errorClass: apiError, exception: Exception?) {
+                    retVal = false
+                    countDownLatch.countDown()
+                }
+            })
+            countDownLatch.await()
+        }
         return retVal
     }
     fun addOnTrack(song : Track): PublicRetClass{
         val found = core
-        var retClass = PublicRetClass()
+        val retClass = PublicRetClass()
 
-        val countDownLatch = CountDownLatch(1)
-        found?.net?.addTrackToQueue(song.trackId, object : JukeboxApi.JukeboxApiCallback {
-            override fun onSuccess() {
-                retClass.success = true
-                countDownLatch.countDown()
-            }
+        if(found != null) {
+            val countDownLatch = CountDownLatch(1)
+            found.net?.addTrackToQueue(song.trackId, object : JukeboxApi.JukeboxApiCallback {
+                override fun onSuccess() {
+                    retClass.success = true
+                    countDownLatch.countDown()
+                }
 
-            override fun onFailure(errorClass: apiError, exception: Exception?) {
-                retClass.success = false
-                if(exception == null)
-                    retClass.errorMessage = errorClass.message.toString()
-                else
-                    retClass.errorMessage = exception.message.toString()
-                countDownLatch.countDown()
-            }
-        })
-
-        countDownLatch.await()
+                override fun onFailure(errorClass: apiError, exception: Exception?) {
+                    retClass.success = false
+                    if (exception == null)
+                        retClass.errorMessage = errorClass.message.toString()
+                    else
+                        retClass.errorMessage = exception.message.toString()
+                    countDownLatch.countDown()
+                }
+            })
+            countDownLatch.await()
+        }
         return retClass
     }
     fun currentTrack() : PlayingTrack? {

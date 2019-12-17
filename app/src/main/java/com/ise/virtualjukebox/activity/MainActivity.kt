@@ -52,10 +52,14 @@ class MainActivity : AppCompatActivity() {
             handler.post(object : Runnable {
                 override fun run() {
                     var sleepTime: Long = 1000
-                    if (activeScreen == Screens.Playlist && !screenChange) {
+                    if (activeScreen == Screens.Playlist && !screenChange && mainl.anyServerConnection) {
                         val fragmentPlaylist =
                             fragmentManager.findFragmentByTag(Screens.Playlist.toString()) as PlaylistFragment
-                        mainl.refreshTracks()
+                        val tmpRetClass = mainl.refreshTracks()
+                        if(!tmpRetClass.success) {
+                            mainl.sendToast("Sync Failed: $tmpRetClass.errorMessage")
+                            mainl.disconnectAllServer()
+                        }
                         if (playh.playlistChanged() != null) {
                             fragmentPlaylist.playlistContentChanged()
                         }
