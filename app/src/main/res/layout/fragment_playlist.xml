@@ -27,6 +27,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="0.7"
                 android:gravity="center_vertical"
+                android:maxLines="2"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -35,41 +36,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.3"
+                android:maxLines="1"
                 android:textSize="14sp" />
 
         </LinearLayout>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/txvUsername"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.3"
-            android:orientation="vertical"
-            android:weightSum="1">
-
-            <TextView
-                android:id="@+id/txvVotes"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.7"
-                android:gravity="center_vertical"
-                android:textAlignment="center"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/txvUsername"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.3"
-                android:textAlignment="center"
-                android:textSize="14sp" />
-        </LinearLayout>
+            android:layout_weight="0.2"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/imgCover"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_weight="0.2"
+            android:layout_weight="0.3"
             android:contentDescription="@string/imgAlbumcoverDescr"
             tools:srcCompat="@tools:sample/avatars[3]" />
 
