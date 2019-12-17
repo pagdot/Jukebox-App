@@ -24,8 +24,9 @@ class RecyclerAdapterSearch(private val data: MutableList<Track>, private val ha
         holder.artist.text = data[position].artist
 
         holder.btnAdd.setOnClickListener{
-            handler.addToPlaylist(data[position])
-            listener.onAddClick()
+            val tmpRetClass = handler.addToPlaylist(data[position])
+            if(tmpRetClass.success)
+                listener.onAddClick()
         }
     }
 

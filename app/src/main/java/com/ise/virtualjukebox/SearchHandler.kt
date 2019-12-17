@@ -10,7 +10,7 @@ class SearchHandler(MainInstance : MainHandler, searchListLength : Int) {
     fun searchSong(Song:String) : MutableList<Track>? {
         return _mainHandler.searchTrack(Song, _listLength)
     }
-    fun addToPlaylist( Song: Track) : MutableList<VoteTrack>?   {
+    fun addToPlaylist( Song: Track) : MainHandler.PublicRetClass   {
 
         val tmpRetClass = _mainHandler.addOnTrack(Song)
         if(tmpRetClass.success){
@@ -18,6 +18,6 @@ class SearchHandler(MainInstance : MainHandler, searchListLength : Int) {
         }else{
             _mainHandler.sendToast("Adding To Playlist Failed. (${tmpRetClass.errorMessage})")
         }
-        return _mainHandler.getTracks()
+        return tmpRetClass
     }
 }

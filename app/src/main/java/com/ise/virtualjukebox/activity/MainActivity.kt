@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     var loginh : LoginHandler = LoginHandler(mainl)
     var settingsh : SettingsHandler = SettingsHandler(mainl)
     var playh : PlayHandler = PlayHandler(mainl)
-    var searchh : SearchHandler = SearchHandler(mainl, 10)
+    var searchh : SearchHandler = SearchHandler(mainl, 50)
 
     var activeScreen : Screens = Screens.Login
     var screenChange :Boolean = true
