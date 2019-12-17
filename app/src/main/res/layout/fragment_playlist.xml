@@ -10,20 +10,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="50"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.7"
+            android:layout_weight="0.5"
             android:orientation="vertical"
-            android:paddingLeft="10dp">
+            android:paddingLeft="10dp"
+            android:weightSum="1">
 
             <TextView
                 android:id="@+id/txvTitle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
+                android:layout_height="0dp"
+                android:layout_weight="0.7"
                 android:gravity="center_vertical"
                 android:text="@string/title"
                 android:textSize="24sp"
@@ -32,24 +34,25 @@
             <TextView
                 android:id="@+id/txvArtist"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.7"
+                android:layout_height="0dp"
+                android:layout_weight="0.3"
                 android:text="@string/artist"
                 android:textSize="18sp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.1"
-            android:orientation="vertical">
+            android:layout_weight="0.2"
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <TextView
                 android:id="@+id/txvVotes"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
+                android:layout_height="0dp"
+                android:layout_weight="0.7"
                 android:gravity="center_vertical"
                 android:text="@string/votes"
                 android:textAlignment="center"
@@ -58,8 +61,8 @@
             <TextView
                 android:id="@+id/txvUsername"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.7"
+                android:layout_height="0dp"
+                android:layout_weight="0.3"
                 android:text="@string/username"
                 android:textAlignment="center"
                 android:textSize="18sp" />
@@ -67,9 +70,9 @@
 
         <ImageView
             android:id="@+id/imgCover"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.2"
+            android:layout_weight="0.3"
             android:contentDescription="@string/imgAlbumcoverDescr"
             tools:srcCompat="@tools:sample/avatars[3]" />
 
