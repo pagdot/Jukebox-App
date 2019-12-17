@@ -1,3 +1,11 @@
+/**
+ * Management Class to provide necessary functionality to the Playlist/Play Screen
+ * @author Tobias Egger
+ * @author Matthias Dittrich
+ * @version 1.0
+ */
+
+
 package com.ise.virtualjukebox
 
 import android.os.Handler
@@ -39,6 +47,12 @@ class MainHandler(private var _mainHandler: MainActivity) {
 
     var anyServerConnection = false
 
+    /**
+     * Creates an Object for a Server and adds it to the Server List
+     * @param serverIp Server IP
+     * @param name User Name
+     * @return true when server could be created, else false
+     */
     private fun createNewServerWithoutConnect(serverIp : String, name : String) : Boolean{
         if(!checkIfValid(serverIp)){
             return false
@@ -55,7 +69,9 @@ class MainHandler(private var _mainHandler: MainActivity) {
         }
         return false
     }
-
+    /**
+     * Dummy Backgroud Process, Deprecated
+     */
     fun backProcess(){
         val handler = Handler(Looper.getMainLooper())
         handler.post(object : Runnable {
@@ -69,7 +85,12 @@ class MainHandler(private var _mainHandler: MainActivity) {
             }
         })
     }
-
+    /**
+     * Creates an Object for a Server and Connects. Adds it to the server list. Sets active Server
+     * @param serverIp Server IP
+     * @param name User Name
+     * @return reports upon success
+     */
     fun createNewServer(name : String, serverIp : String) : PublicRetClass{
         val tmpRetClass = PublicRetClass()
         if(!checkIfValid(serverIp)){
@@ -103,7 +124,11 @@ class MainHandler(private var _mainHandler: MainActivity) {
         tmpRetClass.errorMessage = rVal.errorMessage
         return tmpRetClass
     }
-
+    /**
+     * Checks whether or not Address is Valid
+     * @param serverIp Server IP or server Address
+     * @return true when valid, else false
+     */
     private fun checkIfValid(serverIp: String): Boolean {
         val ip4 = "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\$".toRegex()
         val ip6 = "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))".toRegex()
@@ -113,6 +138,9 @@ class MainHandler(private var _mainHandler: MainActivity) {
        return (serverIp.matches(ip4) || serverIp.matches(ip6) || serverIp.matches(adr));
     }
 
+    /**
+     * Stores the Server List as Shared Preference
+     */
     fun storeServerList(){
         if(serverList.size != 0){
             _mainHandler.storePrefs(serverList.size.toString(), _fName, "size")
@@ -126,7 +154,10 @@ class MainHandler(private var _mainHandler: MainActivity) {
             }
         }
     }
-
+    /**
+     * Reads the Server List from a Shared Preference File. Adds the items to the ServerList.
+     * No item is active. No item is connected
+     */
     fun readServerList(){
         serverList.clear()
         val size =_mainHandler.loadPrefs(_fName, "size")?.toInt()
@@ -140,7 +171,12 @@ class MainHandler(private var _mainHandler: MainActivity) {
             }
         }
     }
-
+    /**
+     * Helper Function to connect to a server
+     * @param Net Server Object
+     * @param name User Name
+     * @return reports upon success
+     */
     private fun _connectToServerSubHandler(Net : JukeboxApi? , Name : String) : RetVal{
         val countDownLatch = CountDownLatch(1)
         val retVal = RetVal()
@@ -164,11 +200,22 @@ class MainHandler(private var _mainHandler: MainActivity) {
         return retVal
     }
 
+    /**
+     * Creates a Server and connects to it
+     * @param serverIp Server IP
+     * @param name User Name
+     * @return reports upon success
+     */
     private fun connectToServer(name:String, serverIp : String) : RetVal{
         val netCore  = JukeboxApi(serverIp)
         return _connectToServerSubHandler(netCore, name)
     }
 
+    /**
+     * Connects to a server already in the List. Creates a new object for the Server
+     * @param serverIp Server IP
+     * @return reports upon success
+     */
     fun connectToExistingServer(serverIp: String) : PublicRetClass{
         val tmpRetClass = PublicRetClass()
         val found = serverList.find { it.ip ==  serverIp}
@@ -178,6 +225,9 @@ class MainHandler(private var _mainHandler: MainActivity) {
         return createNewServer(found.name!!, found.ip!!)
     }
 
+    /**
+     * Disconnects every Server in the List
+     */
     fun disconnectAllServer(){
         for(item in serverList){
             if(item.isInit){
@@ -188,6 +238,10 @@ class MainHandler(private var _mainHandler: MainActivity) {
         anyServerConnection = false
     }
 
+    /**
+     * Disconnects a Server
+     * @param serverIp Server IP
+     */
     private fun disconnectFromServer(ServerIp: String){
         val found = serverList.find { it.ip == ServerIp }
         if(found != null && found.isInit){
@@ -196,7 +250,10 @@ class MainHandler(private var _mainHandler: MainActivity) {
             found.net?.searchTracks
         }
     }
-
+    /**
+     * Returns Server List
+     * @return Returns Server List
+     */
     fun getActualServerList() :  MutableList<ServerPair>{
         val tmp = mutableListOf<ServerPair>()
         serverList.forEachIndexed { i, value ->
@@ -210,6 +267,12 @@ class MainHandler(private var _mainHandler: MainActivity) {
         return tmp
     }
 
+    /**
+     * Searches a Song
+     * @param listSize Max Length of Result List
+     * @param name Song Name; Key
+     * @return null on Failure, Results on Success
+     */
     fun searchTrack(input: String, listSize : Int) :  MutableList<Track>?{
         val found = core
         var list : MutableList<Track>? = null
@@ -230,6 +293,11 @@ class MainHandler(private var _mainHandler: MainActivity) {
         }
         return list
     }
+    /**
+     * Converts a List of Tracks to VoteTracks
+     * @param list Track List
+     * @return returns an empty list on failure, return a converted list on success
+     */
     private fun convertToVoteTrack(list : MutableList<Track>?) : MutableList<VoteTrack>?{
         val newList : MutableList<VoteTrack>? = mutableListOf<VoteTrack>()
         if(list == null){
@@ -249,6 +317,9 @@ class MainHandler(private var _mainHandler: MainActivity) {
         }
         return newList
     }
+    /**
+     * Queries the Server for a possibly new Playlsit
+     */
     fun refreshTracks() : PublicRetClass{
         val found = core
         val retClass = PublicRetClass()
@@ -285,10 +356,20 @@ class MainHandler(private var _mainHandler: MainActivity) {
         }
         return retClass
     }
+    /**
+     * Returns the Playlist
+     * @return Returns the Playlist
+     */
     fun getTracks() :  MutableList<VoteTrack>?{
         return trackList
     }
 
+    /**
+     * Searches a Song
+     * @param song Item to Vote on
+     * @param UpDown 1 when upvote, 0 when downvote
+     * @return true on success, false on failure
+     */
     fun voteOnTrack(song : Track, UpDown : Int) : Boolean{
         val found = core
         var retVal = false
@@ -310,6 +391,11 @@ class MainHandler(private var _mainHandler: MainActivity) {
         }
         return retVal
     }
+    /**
+     * Searches a Song
+     * @param song The Track to add to the Server Playlist
+     * @return reports upon success
+     */
     fun addOnTrack(song : Track): PublicRetClass{
         val found = core
         val retClass = PublicRetClass()
@@ -335,9 +421,17 @@ class MainHandler(private var _mainHandler: MainActivity) {
         }
         return retClass
     }
+    /**
+     * Returns current Track
+     * @return Returns current Track
+     */
     fun currentTrack() : PlayingTrack? {
         return currTrack
     }
+    /**
+     * Displays a Toast
+     * @param ToBeSent String to be sent as a Toast
+     */
     fun sendToast(ToBeSent: String){
         _mainHandler.sendToast(ToBeSent)
     }

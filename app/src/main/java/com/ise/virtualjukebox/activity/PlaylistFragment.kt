@@ -29,7 +29,7 @@ class PlaylistFragment : Fragment() {
     }
 
     fun run() {
-        (activity as MainActivity).test()
+        (activity as MainActivity).spawnBackgroundThread()
         Thread(Runnable {
             while (!fragmentDestroyed)
             {

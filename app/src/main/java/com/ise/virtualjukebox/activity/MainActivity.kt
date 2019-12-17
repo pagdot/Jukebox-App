@@ -1,3 +1,9 @@
+/**
+ * The Main Activity of the App
+ * @author Tobias Egger
+ * @author Matthias Dittrich
+ * @version 1.0
+ */
 package com.ise.virtualjukebox.activity
 
 import android.content.Context
@@ -26,11 +32,20 @@ class MainActivity : AppCompatActivity() {
     val Store = "JukeBox"
 
     var testvar = true
-
+    /**
+     * Sends a Toast
+     * @param ToBeSent String to be displayed as Toast
+     */
     fun sendToast(ToBeSent: String){
         Toast.makeText(this, ToBeSent, Toast.LENGTH_SHORT).show()
     }
 
+    /**
+     * Store Settings as Shared Preferences
+     * @param Prefs The Preferences to be stored
+     * @param Name The Name of the Shared Preference File
+     * @param Store The Tag for the Preference within the File
+     */
     fun storePrefs(Prefs : String, Name: String, Store : String){
         val pref = getSharedPreferences(Name, Context.MODE_PRIVATE)
         val edit = pref.edit()
@@ -38,6 +53,12 @@ class MainActivity : AppCompatActivity() {
         edit.apply()
     }
 
+    /**
+     * Store a Settings as Shared Preferences
+     * @param Name The Name of the Shared Preference File
+     * @param Store The Tag for the Preference within the File
+     * @return Returns the Value read, if failed, returns null
+     */
     fun loadPrefs(Name: String, Store : String) : String?{
         val pref = getSharedPreferences(Name, Context.MODE_PRIVATE)
         return pref.getString(Store, null)
@@ -45,7 +66,10 @@ class MainActivity : AppCompatActivity() {
 
     private val fragmentManager = supportFragmentManager
 
-    fun test() {
+    /**
+     * Spawns a Background Thread that refreshes the Playlist every 1s
+     */
+    fun spawnBackgroundThread() {
         screenChange = false
         if (testvar) {
             testvar = false
@@ -109,6 +133,10 @@ class MainActivity : AppCompatActivity() {
         handler.removeCallbacksAndMessages(null)
         mainl.storeServerList()
         super.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     // Display different fragment on screen
