@@ -11,7 +11,13 @@ import com.ise.virtualjukebox.SearchHandler
 import com.ise.virtualjukebox.activity.SearchFragment
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 
-//class RecyclerAdapter(private val data: List<RecyclerItem>) :
+/**
+ * Recycler adapter for tracks of search
+ *
+ * @property data tracklist
+ * @property handler handler
+ * @property listener listener
+ */
 class RecyclerAdapterSearch(private val data: MutableList<Track>, private val handler: SearchHandler, private val listener : SearchFragment.OnClickListener) :
     RecyclerView.Adapter<RecyclerAdapterSearch.ViewHolderTrack>() {
 

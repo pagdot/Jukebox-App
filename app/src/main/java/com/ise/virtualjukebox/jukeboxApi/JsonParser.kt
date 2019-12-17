@@ -9,7 +9,17 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
+/**
+ * JSON parser for Jukebox API
+ *
+ */
 class JsonParser {
+    /**
+     * Parse current playing track
+     *
+     * @param jsonObj JSON object source
+     * @return current playing track
+     */
     private fun parsePlayingTrackFromJsonObject(jsonObj : JSONObject) : PlayingTrack {
         val tmpPlayingTrack = PlayingTrack()
 
@@ -33,6 +43,12 @@ class JsonParser {
         return tmpPlayingTrack
     }
 
+    /**
+     * Parse tracklist
+     *
+     * @param jsonDataArray JSON object source
+     * @return tracklist
+     */
     private fun parseTrackListFromJsonArray(jsonDataArray : JSONArray) : MutableList<Track>{
         val tmpList : MutableList<Track> = mutableListOf(Track())
         tmpList.clear()
@@ -64,6 +80,12 @@ class JsonParser {
         return tmpList
     }
 
+    /**
+     * parse tracklist with votes
+     *
+     * @param jsonDataArray JSON object source
+     * @return tracklist with votes
+     */
     private fun parseVoteTrackListFromJsonArray (jsonDataArray : JSONArray) :  MutableList<VoteTrack> {
         val tmpList : MutableList<VoteTrack> = mutableListOf(VoteTrack())
         tmpList.clear()
@@ -95,6 +117,12 @@ class JsonParser {
         return tmpList
     }
 
+    /**
+     * Parse all queues from JSON string
+     *
+     * @param jsonDataString JSON string
+     * @return Current queues
+     */
     fun parseQueuesFromResponse (jsonDataString : String?) : Queues {
         if(jsonDataString == null)
             throw Exception("JsonDataString is NULL")
@@ -132,6 +160,12 @@ class JsonParser {
         return tmpQueues
     }
 
+    /**
+     * Parse tracklist from search
+     *
+     * @param jsonDataString JSON string
+     * @return tracklist
+     */
     fun parseTrackListFromResponse (jsonDataString : String?) : MutableList<Track> {
         if(jsonDataString == null)
             throw Exception("JsonDataString is NULL")

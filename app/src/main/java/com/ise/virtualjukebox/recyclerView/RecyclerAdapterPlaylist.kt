@@ -10,6 +10,13 @@ import com.ise.virtualjukebox.R
 import com.ise.virtualjukebox.activity.PlaylistFragment
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 
+/**
+ * Recycler adapter for Playlist
+ *
+ * @property playlist playlist
+ * @property hPlay handler
+ * @property listener listener
+ */
 class RecyclerAdapterPlaylist(private val playlist: MutableList<VoteTrack>, private val hPlay : PlayHandler, private val listener : PlaylistFragment.OnClickListener) :
 
     RecyclerView.Adapter<RecyclerAdapterPlaylist.ViewHolderVoteTrack>() {

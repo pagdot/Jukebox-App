@@ -15,7 +15,10 @@ import android.widget.Toast
 import com.ise.virtualjukebox.*
 import kotlinx.android.synthetic.main.fragment_layout.*
 
-
+/**
+ * App main activity, contains all fragments and main routine
+ *
+ */
 class MainActivity : AppCompatActivity() {
 
     var mainl : MainHandler = MainHandler(this)
@@ -32,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     val Store = "JukeBox"
 
     var testvar = true
+
     /**
      * Sends a Toast
      * @param ToBeSent String to be displayed as Toast
@@ -96,6 +100,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * on activity creation load serverlist,
+     * switch to login fragment and
+     * set button-click-listeners
+     *
+     * @param savedInstanceState
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_layout)
@@ -120,21 +131,38 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * pause activity
+     *
+     */
     override fun onPause() {
         super.onPause()
         testvar = true
     }
 
+    /**
+     * stop activity
+     *
+     */
     override fun onStop() {
         handler.removeCallbacksAndMessages(null)
         mainl.storeServerList()
         super.onStop()
     }
 
+    /**
+     * destroy activity
+     *
+     */
     override fun onDestroy() {
         super.onDestroy()
     }
 
+    /**
+     * switch to a different fragment/screen
+     *
+     * @param screenName screen to switch to
+     */
     // Display different fragment on screen
     fun switchFragment(screenName: Screens) {
         screenChange = true

@@ -9,6 +9,13 @@ package com.ise.virtualjukebox
 
 import java.io.IOException
 
+/**
+ * Settings handler
+ *
+ * @constructor
+ *
+ * @param MainInstance main handler
+ */
 class SettingsHandler(MainInstance : MainHandler) {
     private var _mainHandler: MainHandler = MainInstance
 

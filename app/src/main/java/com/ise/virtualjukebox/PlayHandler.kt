@@ -11,6 +11,13 @@ import com.ise.virtualjukebox.jukeboxApi.dataStructure.PlayingTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 import kotlin.reflect.full.memberProperties
 
+/**
+ * Play handler
+ *
+ * @constructor
+ *
+ * @param mainInstance main handler
+ */
 class PlayHandler(mainInstance : MainHandler) {
 
     private var _mainHandler: MainHandler = mainInstance

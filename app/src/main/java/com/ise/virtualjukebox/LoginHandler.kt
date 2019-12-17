@@ -7,6 +7,13 @@
 
 package com.ise.virtualjukebox
 
+/**
+ * Loginhandler
+ *
+ * @constructor
+ *
+ * @param MainInstance main handler
+ */
 class LoginHandler(MainInstance : MainHandler) {
     private var _mainHandler: MainHandler = MainInstance
 

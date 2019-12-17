@@ -10,28 +10,58 @@ import com.ise.virtualjukebox.R
 import com.ise.virtualjukebox.recyclerView.RecyclerAdapterSettings
 import kotlinx.android.synthetic.main.fragment_settings.*
 
+/**
+ * Setting GUI fragment
+ *
+ */
 class SettingsFragment : Fragment() {
 
+    /**
+     * click-listener for connections
+     *
+     */
     interface OnClickListener {
         fun onConnectClick()
     }
 
+    /**
+     * constructor
+     */
     companion object {
         fun newInstance(): SettingsFragment {
             return SettingsFragment()
         }
     }
 
+    /**
+     * on server changed reload track- and playlist
+     *
+     */
     fun serverChanged() {
         serverListChanged()
         (activity as MainActivity).mainl.refreshTracks()
         (activity as MainActivity).playh.updatePreviousPlaylistAndCurrentTrack()
     }
 
+
+    /**
+     * on view creation pass arguments
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
+    /**
+     * After view creation load serverlist
+     *
+     * @param view
+     * @param savedInstanceState
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -49,6 +79,10 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    /**
+     * reload serverlist
+     *
+     */
     private fun serverListChanged() {
         val serverList = (activity as MainActivity).mainl.getActualServerList()
         rvServer.adapter = RecyclerAdapterSettings(serverList, (activity as MainActivity).settingsh, object: OnClickListener {
