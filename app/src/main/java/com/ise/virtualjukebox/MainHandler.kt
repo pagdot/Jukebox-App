@@ -213,8 +213,8 @@ class MainHandler(private var _mainHandler: MainActivity) {
     fun searchTrack(input: String, listSize : Int) :  MutableList<Track>?{
         val found = core
         var list : MutableList<Track>? = null
-        val countDownLatch = CountDownLatch(1)
         if(found != null) {
+            val countDownLatch = CountDownLatch(1)
             found.net?.getTracks(input, listSize, object : JukeboxApi.JukeboxApiCallback {
                 override fun onSuccess() {
                     list = found.net?.searchTracks
@@ -226,9 +226,8 @@ class MainHandler(private var _mainHandler: MainActivity) {
                     countDownLatch.countDown()
                 }
             })
+            countDownLatch.await()
         }
-
-        countDownLatch.await()
         return list
     }
     private fun convertToVoteTrack(list : MutableList<Track>?) : MutableList<VoteTrack>?{
