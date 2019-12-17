@@ -9,6 +9,10 @@ import android.widget.Toast
 import com.ise.virtualjukebox.R
 import kotlinx.android.synthetic.main.fragment_login.*
 
+/**
+ * Login GUI fragment
+ *
+ */
 class LoginFragment : Fragment() {
 
     companion object {
@@ -17,10 +21,24 @@ class LoginFragment : Fragment() {
         }
     }
 
+    /**
+     * on view creation pass arguments
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
+    /**
+     * After View creation
+     *
+     * @param view created view
+     * @param savedInstanceState save state from previous view
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
