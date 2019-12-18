@@ -1,175 +1,112 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.3.0">
-  <zoom_level>8</zoom_level>
+  <zoom_level>4</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>400</x>
-      <y>256</y>
-      <w>240</w>
-      <h>96</h>
-    </coordinates>
-    <panel_attributes>HttpApi
---
-- address : string
-- port : int
---
-+ HttpApi(servername:string, port : int)
-+ Request(HttpRequest) : HttpResponse</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>208</x>
-      <y>424</y>
-      <w>304</w>
-      <h>136</h>
+      <x>868</x>
+      <y>712</y>
+      <w>228</w>
+      <h>92</h>
     </coordinates>
     <panel_attributes>JukeboxApi
 --
-- http : HttpApi
-- server : Server
+- api : HttpApi
+- jsonParser : JsonParser
++ queues : Queues
++ searchTracks : Track[]
++ getQueuesBlocked : boolean
 --
-+ JukeboxApi(server : string, token : string)
-+ queryTracks() -&gt; Callback(status, Track[])
-+ getCurrentQueues() -&gt; Callback(status, Queues)
-+ addTrack(id : int) -&gt; Callback(status)
-+ setVote(id : int, voted : bool) -&gt; Callback(status)
++ JukeboxApi(server : string)
++ disconnectClient()
++ getSessionID(nickname : String, cb : JukeboxApiCallback)
++ getTracks(searchPattern : String, maxEntries : Int, cb : JukeboxApiCallback)
++ getCurrentQueues(cb : JukeboxApiCallback)  {
++ addTrackToQueue(trackID : String, cb : JukeboxApiCallback)
++ voteTrack(trackID : String, vote : Int, cb : JukeboxApiCallback)
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>344</y>
-      <w>48</w>
-      <h>120</h>
+      <x>1092</x>
+      <y>784</y>
+      <w>52</w>
+      <h>12</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;130.0;40.0;130.0;40.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>320</x>
-      <y>176</y>
-      <w>160</w>
-      <h>48</h>
-    </coordinates>
-    <panel_attributes>HttpRequest
---
-+ type : HttpRequestType
-+ data : string</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>568</x>
-      <y>168</y>
-      <w>160</w>
-      <h>64</h>
-    </coordinates>
-    <panel_attributes>HttpResponse
---
-+ status : int
-+ error : string
-+ data : string</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>360</x>
-      <y>216</y>
-      <w>56</w>
-      <h>88</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;90.0;50.0;90.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>632</x>
-      <y>224</y>
-      <w>56</w>
-      <h>80</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
-    <additional_attributes>50.0;10.0;50.0;80.0;10.0;80.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>760</x>
-      <y>416</y>
-      <w>216</w>
-      <h>64</h>
+      <x>892</x>
+      <y>656</y>
+      <w>108</w>
+      <h>32</h>
     </coordinates>
     <panel_attributes>Queues
 --
 + current : PlayingTrack
-+ queue : QueueTrack[]</panel_attributes>
++ normal : VoteTrack[]
++ admin : Track[]</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>880</x>
-      <y>312</y>
-      <w>160</w>
-      <h>64</h>
+      <x>952</x>
+      <y>600</y>
+      <w>80</w>
+      <h>32</h>
     </coordinates>
-    <panel_attributes>QueueTrack
+    <panel_attributes>VoteTrack
 --
-+ admin : bool
 + votes : int
-+ current_vote : bool</panel_attributes>
++ hasVoted : int</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>784</x>
-      <y>160</y>
-      <w>160</w>
-      <h>120</h>
+      <x>904</x>
+      <y>524</y>
+      <w>80</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>Track
 --
-+ track_id : string
-+ tilte : string
++ trackId : string
++ title : string
 + album : string
 + artist : string
 + duration : int
-+ icon_uri : string
-+ added_by : string</panel_attributes>
++ iconUri : string
++ addedBy : string</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>688</x>
-      <y>336</y>
-      <w>160</w>
-      <h>56</h>
+      <x>856</x>
+      <y>612</y>
+      <w>80</w>
+      <h>32</h>
     </coordinates>
     <panel_attributes>PlayingTrack
 --
 + playing : bool
-+ playing_for : int</panel_attributes>
++ playingFor : int</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>760</x>
-      <y>272</y>
-      <w>80</w>
-      <h>80</h>
+      <x>892</x>
+      <y>580</y>
+      <w>40</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>80.0;10.0;80.0;30.0;10.0;30.0;10.0;80.0</additional_attributes>
@@ -177,10 +114,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>904</x>
-      <y>272</y>
-      <w>72</w>
-      <h>56</h>
+      <x>964</x>
+      <y>580</y>
+      <w>36</w>
+      <h>28</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;30.0;70.0;30.0;70.0;50.0</additional_attributes>
@@ -188,154 +125,699 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>720</x>
-      <y>384</y>
+      <x>844</x>
+      <y>636</y>
       <w>56</w>
-      <h>64</h>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;60.0;50.0;60.0</additional_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0;10.0;70.0;120.0;70.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>968</x>
-      <y>368</y>
-      <w>56</w>
-      <h>104</h>
+      <x>996</x>
+      <y>624</y>
+      <w>52</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
-    <additional_attributes>50.0;10.0;50.0;110.0;10.0;110.0</additional_attributes>
+    <additional_attributes>90.0;10.0;110.0;10.0;110.0;110.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>456</y>
-      <w>272</w>
-      <h>24</h>
+      <x>996</x>
+      <y>680</y>
+      <w>124</w>
+      <h>52</h>
     </coordinates>
-    <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;290.0;10.0;290.0;110.0;250.0;110.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>272</x>
-      <y>624</y>
-      <w>240</w>
-      <h>96</h>
+      <x>1176</x>
+      <y>640</y>
+      <w>208</w>
+      <h>52</h>
     </coordinates>
-    <panel_attributes>Main
+    <panel_attributes>JsonParser
 --
-+ server : Server
-- api : JukeboxApi
-- ui : JukeboxUI
 --
-+ main()</panel_attributes>
+- parsePlayingTrackFromJsonObject(jsonObj : JSONObject) : PlayingTrack
+- parseTrackListFromJsonArray(jsonDataArray : JSONArray) : Track[]
+- parseVoteTrackListFromJsonArray (jsonDataArray : JSONArray) : Track[]
++ parseQueuesFromResponse (jsonDataString : String) : Queues
++ parseTrackListFromResponse (jsonDataString : String?) : Track[]
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>Relation</id>
+    <id>UMLClass</id>
     <coordinates>
-      <x>232</x>
-      <y>552</y>
-      <w>56</w>
-      <h>136</h>
+      <x>384</x>
+      <y>172</y>
+      <w>92</w>
+      <h>60</h>
     </coordinates>
-    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;150.0;50.0;150.0</additional_attributes>
+    <panel_attributes>PlaylistFragment
+--
+- isPlaying : Boolean
+- pStatus : Int
+- fragmentDestroyed : Boolean
+--
++ run()
++ voteChanged()
++ playlistContentChanged()
++ currentTrackChanged()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1136</x>
+      <y>776</y>
+      <w>208</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>HttpApi
+--
+- restClient : RestClient
+- serverName : string
+--
++ HttpApi(serverName : string)
++ disconnectClient()
++ getSessionID(nickname : String, cb : HttpCallback)
++ getTracks(searchPattern : String, max_entries : Int, cb : HttpCallback)
++ getCurrentQueues(cb : HttpCallback)
++ addTrackToQueue(trackID : String, cb : HttpCallback)
++ voteTrack(trackID : String, vote : Int, cb : HttpCallback)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>704</x>
+      <y>816</y>
+      <w>392</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>RestClient
+--
+- client : OkHttpClient
+--
+- call(method : string, scheme : String, host : String, segment : String[], parameters : Parameter[], bodyPayload : String, cb : HttpCallback)
++ queueGetCall(scheme : String, host : String, segment : String[], parameters : Parameter[], bodyPayload : String, cb : HttpCallback)
++ queuePostCall(scheme : String, host : String, segment : String[], parameters : Parameter[], bodyPayload : String, cb : HttpCallback)
++ queuePutCall(scheme : String, host : String, segment : String[], parameters : Parameter[], bodyPayload : String, cb : HttpCallback)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>936</x>
+      <y>164</y>
+      <w>136</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>LoginHandler
+--
+- _mainHandler : MainHandler
+- _ip : string
+- _name : string
+--
++ LoginHandler(MainInstance : MainHandler)
++ setServerIP(IP:String) : Boolean
++ setUserName(Name:String) : Boolean
++ createConnection()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>512</x>
+      <y>308</y>
+      <w>224</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>MainHandler
+--
+- _mainHandler: MainActivity
+- core : ServerPair
++ serverList : ServerPair[]
++ trackList : VoteTrack[]
++ currTrack : PlayingTrack
++ anyServerConnection : boolean
+--
++ MainHandler(_mainHandler: MainActivity)
+- createNewServerWithoutConnect(serverIp : String, name : String) : Boolean
++ backProcess()
++ createNewServer(name : String, serverIp : String)
+- checkIfValid(serverIp: String): Boolean
++ storeServerList(){
++ readServerList()
+- _connectToServerSubHandler(Net : JukeboxApi , Name : String) : RetVal
+- connectToServer(name:String, serverIp : String) : RetVal
++ connectToExistingServer(serverIp: String) : PublicRetClass
++ disconnectAllServer()
+- disconnectFromServer(ServerIp: String)
++ getActualServerList() : ServerPair[]
++ searchTrack(input: String, listSize : Int) : Track[]
+- convertToVoteTrack(list : Track[]) : VoteTrack[]
++ refreshTracks()
++ getTracks() : VoteTrack
++ addOnTrack(song : Track): PublicRetClass
++ currentTrack() : PlayingTrack
++ sendToast(ToBeSent: String)
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>884</x>
+      <y>300</y>
+      <w>236</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>PlayHandler
+--
+- _mainHandler : MainHandler
+- _previousState : VoteTrack[]
+- _currentTrack : PlayingTrack
+--
++ PlayHandler(mainInstance : MainHandler)
+- compareItemWithoutVote(TrackA : VoteTrack, TrackB: VoteTrack): Boolean
+- compareItemWithVote(TrackA : VoteTrack, TrackB: VoteTrack): Boolean
+- compareValues(ListA : VoteTrack[], ListB : VoteTrack[]) : Boolean
++ copyList(ListToCpy : VoteTrack[]): VoteTrack[]
++ playlistChanged(): VoteTrack[]
+- compareCurrentSong(TrackA : PlayingTrack, TrackB : PlayingTrack): Boolean
++ currentSongChanged(): PlayingTrack
++ songPaused(): Boolean
++ songResumed(): Boolean
++ vote(Song: VoteTrack): Boolean
++ unvote(Song: VoteTrack): Boolean
++ refresh()
++ updatePreviousPlaylistAndCurrentTrack()
++ getPlaylist(): VoteTrack[]
++ getCurrentTrack(): PlayingTrack
+
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>904</x>
+      <y>236</y>
+      <w>200</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>SearchHandler
+--
+- _mainHandler: MainHandler
+- _listLength : Int
+--
++ SearchHandler(MainInstance : MainHandler, searchListLength : Int)
++ searchSong(Song:String) : Track[]
++ addToPlaylist( Song: Track) : MainHandler.PublicRetClass</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>860</x>
+      <y>456</y>
+      <w>288</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>SettingsHandler
+--
+- _mainHandler: MainHandler
+--
++ SettingsHandler(MainInstance : MainHandler)
++ connect(ServerIP: String) : MainHandler.PublicRetClass
++ fetchServerList() : MainHandler.ServerPair[]
++ AddServer(Name: String, ServerIP: String, CB:SettingsHandlerCallback) : MainHandler.ServerPair[]
+</panel_attributes>
+    <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>592</x>
-      <y>584</y>
-      <w>288</w>
-      <h>152</h>
+      <y>204</y>
+      <w>160</w>
+      <h>92</h>
     </coordinates>
-    <panel_attributes>JukeboxUI
+    <panel_attributes>MainActivity
 --
-- queue : Queues
-- server : Server
-- serverChanged : Callback(server : string)
+- mainl : MainHandler
+- loginh : LoginHandler
+- settingsh : SettingsHandler
+- playh : PlayHandler
+- searchh : SearchHandler
+- activeScreen : Screens
+- screenChange : Boolean
 --
-+ JukeboxUI(serverChanged : Callback(server), )
-+ OnQueueUpdate(queue : Queues) : void
-+ OnServerUpdate(server : string) : void
-+ OnUsernameUpdate(username : string) : void
-+ OnSearchResult(result : Track[]) : void</panel_attributes>
++ sendToast(ToBeSent: String)
++ storePrefs(Prefs : String, Name: String, Store : String)
++ loadPrefs(Name: String, Store : String) : String
++ spawnBackgroundThread()
++ switchFragment(screenName: Screens)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>400</x>
+      <y>320</y>
+      <w>64</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>LoginFragment
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>396</x>
+      <y>240</y>
+      <w>72</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>SettingsFragment
+--
+--
++ serverChanged()
+- serverListChanged()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>400</x>
+      <y>284</y>
+      <w>64</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>SearchFragment
+--
+--
++ trackAdded()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>680</y>
+      <x>748</x>
+      <y>184</y>
+      <w>196</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;100.0;140.0;100.0;140.0;10.0;470.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>748</x>
+      <y>152</y>
+      <w>424</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;150.0;110.0;150.0;110.0;10.0;1040.0;10.0;1040.0;260.0;890.0;260.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>748</x>
+      <y>276</y>
+      <w>144</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;10.0;140.0;200.0;340.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>732</x>
+      <y>416</y>
+      <w>136</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;270.0;10.0;270.0;140.0;320.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>472</x>
+      <y>208</y>
+      <w>128</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>300.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>464</x>
+      <y>248</y>
+      <w>136</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>460</x>
+      <y>256</y>
+      <w>140</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>330.0;10.0;40.0;10.0;40.0;100.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>460</x>
+      <y>264</y>
+      <w>140</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>330.0;10.0;60.0;10.0;60.0;170.0;10.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>488</x>
+      <y>272</y>
+      <w>112</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>60.0;200.0;10.0;200.0;10.0;10.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>496</x>
+      <y>280</y>
       <w>104</w>
-      <h>24</h>
+      <h>68</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>40.0;150.0;10.0;150.0;10.0;10.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>584</x>
+      <y>504</y>
+      <w>68</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>ServerPair
+--
++ net: JukeboxApi
++ name: String
++ ip : String
++ isInit : Boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>488</x>
+      <y>436</y>
+      <w>104</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0;10.0;200.0;240.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1092</x>
+      <y>680</y>
+      <w>92</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>210.0;10.0;140.0;10.0;140.0;200.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>980</x>
+      <y>560</y>
+      <w>164</w>
+      <h>196</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;390.0;10.0;390.0;470.0;290.0;470.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>648</x>
+      <y>520</y>
+      <w>228</w>
+      <h>248</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>550.0;600.0;270.0;600.0;270.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1092</x>
+      <y>832</y>
+      <w>52</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>110.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>872</x>
-      <y>472</y>
-      <w>80</w>
-      <h>200</h>
+      <x>732</x>
+      <y>452</y>
+      <w>228</w>
+      <h>160</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
-    <additional_attributes>80.0;10.0;80.0;230.0;10.0;230.0</additional_attributes>
+    <additional_attributes>550.0;380.0;180.0;380.0;180.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
-    <id>UMLClass</id>
+    <id>Relation</id>
     <coordinates>
-      <x>632</x>
-      <y>488</y>
+      <x>732</x>
+      <y>468</y>
+      <w>132</w>
+      <h>164</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>310.0;390.0;120.0;390.0;120.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1028</x>
+      <y>376</y>
+      <w>156</w>
+      <h>236</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>230.0;10.0;370.0;10.0;370.0;570.0;10.0;570.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>788</x>
+      <y>396</y>
+      <w>104</w>
+      <h>228</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>240.0;10.0;10.0;10.0;10.0;550.0;170.0;550.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>648</x>
+      <y>492</y>
+      <w>220</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;50.0;450.0;50.0;450.0;10.0;530.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>980</x>
+      <y>264</y>
+      <w>192</w>
+      <h>284</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;690.0;460.0;690.0;460.0;10.0;310.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>732</x>
+      <y>196</y>
+      <w>212</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;310.0;210.0;310.0;210.0;10.0;510.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>732</x>
+      <y>272</y>
+      <w>180</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;160.0;240.0;160.0;240.0;10.0;430.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>732</x>
+      <y>380</y>
       <w>160</w>
-      <h>80</h>
+      <h>12</h>
     </coordinates>
-    <panel_attributes>Server
---
-+ address : string
-+ port : int
-+ username : string
-+ token : string</panel_attributes>
-    <additional_attributes/>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;380.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>520</y>
-      <w>144</w>
-      <h>24</h>
+      <x>732</x>
+      <y>428</y>
+      <w>136</w>
+      <h>64</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;160.0;10.0</additional_attributes>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;240.0;10.0;240.0;140.0;320.0;140.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>536</y>
+      <x>732</x>
+      <y>480</y>
       <w>144</w>
-      <h>128</h>
+      <h>276</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;140.0;50.0;140.0;50.0;10.0;160.0;10.0</additional_attributes>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>340.0;670.0;90.0;670.0;90.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>784</x>
-      <y>528</y>
-      <w>144</w>
+      <x>732</x>
+      <y>440</y>
+      <w>180</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>430.0;310.0;210.0;310.0;210.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>836</x>
+      <y>628</y>
+      <w>40</w>
       <h>104</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>120.0;110.0;160.0;110.0;160.0;10.0;10.0;10.0</additional_attributes>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>80.0;240.0;10.0;240.0;10.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1028</x>
+      <y>616</y>
+      <w>104</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>170.0;300.0;240.0;300.0;240.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>980</x>
+      <y>548</y>
+      <w>204</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>490.0;260.0;460.0;260.0;460.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1028</x>
+      <y>608</y>
+      <w>156</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>370.0;130.0;300.0;130.0;300.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>996</x>
+      <y>672</y>
+      <w>188</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>450.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>932</x>
+      <y>632</y>
+      <w>252</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>610.0;90.0;350.0;90.0;350.0;10.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>
