@@ -12,22 +12,36 @@ import kotlinx.android.synthetic.main.fragment_playlist.*
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_login.*
 
-
+/**
+ * Playlist GUI fragment
+ *
+ */
 class PlaylistFragment : Fragment() {
     private var isPlaying : Boolean = false
     private var pStatus : Int = 0
     private var fragmentDestroyed : Boolean = false
 
+    /**
+     * Click-listener for votes
+     *
+     */
     interface OnClickListener {
         fun onVoteClick()
     }
 
+    /**
+     * Constructor
+     */
     companion object {
         fun newInstance(): PlaylistFragment {
             return PlaylistFragment()
         }
     }
 
+    /**
+     * Update progress bar
+     *
+     */
     fun run() {
         (activity as MainActivity).spawnBackgroundThread()
         Thread(Runnable {
@@ -47,16 +61,33 @@ class PlaylistFragment : Fragment() {
         }).start()
     }
 
+    /**
+     * Refresh Playlist after changing a vote
+     *
+     */
     fun voteChanged() {
         (activity as MainActivity).mainl.refreshTracks()
         (activity as MainActivity).playh.updatePreviousPlaylistAndCurrentTrack()
         playlistContentChanged()
     }
 
+
+    /**
+     * on view creation pass arguments
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_playlist, container, false)
     }
 
+    /**
+     * On fragment resume load playlist and current song
+     *
+     */
     override fun onResume() {
         super.onResume()
 
@@ -89,6 +120,10 @@ class PlaylistFragment : Fragment() {
         run()
     }
 
+    /**
+     * Update playlist
+     *
+     */
     fun playlistContentChanged() {
         rvPlaylist.layoutManager = LinearLayoutManager(context)
         val playlist = (activity as MainActivity).playh.getPlaylist()
@@ -101,6 +136,10 @@ class PlaylistFragment : Fragment() {
         }
     }
 
+    /**
+     * Update current track
+     *
+     */
     fun currentTrackChanged() {
         val currentSong     = (activity as MainActivity).playh.getCurrentTrack()
         if(currentSong != null) // current song changed
@@ -121,6 +160,10 @@ class PlaylistFragment : Fragment() {
         }
     }
 
+    /**
+     * Disable fragment
+     *
+     */
     override fun onDetach ()
     {
         fragmentDestroyed = true

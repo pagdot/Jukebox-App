@@ -1,5 +1,9 @@
 package com.ise.virtualjukebox.jukeboxApi.dataStructure
 
+/**
+ * Track
+ *
+ */
 open class Track {
     var trackId : String = ""
     var title : String = ""

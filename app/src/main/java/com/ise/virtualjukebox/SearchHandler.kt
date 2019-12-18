@@ -10,6 +10,14 @@ package com.ise.virtualjukebox
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.Track
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 
+/**
+ * Search handler
+ *
+ * @constructor
+ *
+ * @param MainInstance main handler
+ * @param searchListLength max entries in searched tracks
+ */
 class SearchHandler(MainInstance : MainHandler, searchListLength : Int) {
     private var _mainHandler: MainHandler = MainInstance
     private val _listLength : Int = searchListLength

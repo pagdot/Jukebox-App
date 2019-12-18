@@ -11,6 +11,13 @@ import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
 
+/**
+ * Jukebox API class
+ *
+ * @constructor
+ *
+ * @param hostName server address
+ */
 class JukeboxApi(hostName : String) {
     private var api = HttpApi(hostName)
     private var jsonParser = JsonParser()
@@ -22,6 +29,10 @@ class JukeboxApi(hostName : String) {
         searchTracks.clear()
     }
 
+    /**
+     * API callback declaration
+     *
+     */
     interface JukeboxApiCallback {
 
         /**
@@ -31,13 +42,27 @@ class JukeboxApi(hostName : String) {
          */
         fun onFailure(errorClass : apiError, exception : Exception?)
 
+        /**
+         * Called on successfull response
+         *
+         */
         fun onSuccess()
     }
 
+    /**
+     * Disconnect
+     *
+     */
     fun disconnectClient() {
         api.disconnectClient()
     }
 
+    /**
+     * Retrieve session ID
+     *
+     * @param nickname User nickname
+     * @param cb callback on completion
+     */
     fun getSessionID(nickname :String, cb : JukeboxApiCallback) {
         api.getSessionID(nickname, object : RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
@@ -70,6 +95,14 @@ class JukeboxApi(hostName : String) {
             }
         })
     }
+
+    /**
+     * search for tracks on server
+     *
+     * @param searchPattern pattern to search for
+     * @param maxEntries max entries in search
+     * @param cb callback on completion
+     */
     fun getTracks(searchPattern : String, maxEntries : Int, cb : JukeboxApiCallback) {
         api.getTracks(searchPattern, maxEntries, object : RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
@@ -100,6 +133,12 @@ class JukeboxApi(hostName : String) {
             }
         })
     }
+
+    /**
+     * retrieve current queues from server
+     *
+     * @param cb
+     */
     fun getCurrentQueues(cb : JukeboxApiCallback)  {
         if(getQueuesBlcoked) {
             cb.onFailure(apiError(null, null), null)
@@ -139,6 +178,12 @@ class JukeboxApi(hostName : String) {
         }
     }
 
+    /**
+     * Add track to normal queue
+     *
+     * @param trackID id of track
+     * @param cb callback on completion
+     */
     fun addTrackToQueue(trackID : String, cb : JukeboxApiCallback) {
         api.addTrackToQueue(trackID, object : RestClient.HttpCallback {
             override fun onSuccess(response: Response) {
@@ -164,6 +209,13 @@ class JukeboxApi(hostName : String) {
         })
     }
 
+    /**
+     * Set/cancel vote on track
+     *
+     * @param trackID id of track
+     * @param vote Set/cancel vote
+     * @param cb callback on completion
+     */
     fun voteTrack(trackID : String, vote : Int, cb : JukeboxApiCallback) {
         api.voteTrack(trackID, vote, object : RestClient.HttpCallback {
             override fun onSuccess(response: Response) {

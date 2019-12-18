@@ -18,6 +18,13 @@ import com.ise.virtualjukebox.jukeboxApi.dataStructure.VoteTrack
 import com.ise.virtualjukebox.jukeboxApi.dataStructure.apiError
 import java.util.concurrent.CountDownLatch
 
+/**
+ * Main handler
+ *
+ * @constructor
+ *
+ * @param _mainHandler main activity
+ */
 class MainHandler(private var _mainHandler: MainActivity) {
     private var _fName = "ICC"
 

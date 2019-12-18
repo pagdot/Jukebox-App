@@ -16,6 +16,13 @@ import com.ise.virtualjukebox.SettingsHandler
 import com.ise.virtualjukebox.activity.SettingsFragment
 
 
+/**
+ * Recycler adapter for serverlist
+ *
+ * @property data serverlist
+ * @property handler handler
+ * @property listener listener
+ */
 class RecyclerAdapterSettings(private val data: MutableList<MainHandler.ServerPair>, private val handler: SettingsHandler, private val listener : SettingsFragment.OnClickListener) :
 
     RecyclerView.Adapter<RecyclerAdapterSettings.ViewHolderServer>() {

@@ -1,5 +1,9 @@
 package com.ise.virtualjukebox.jukeboxApi.dataStructure
 
+/**
+ * current queues
+ *
+ */
 class Queues {
     var current : PlayingTrack? = PlayingTrack()
     var normalQueue : MutableList<VoteTrack> = mutableListOf(VoteTrack())

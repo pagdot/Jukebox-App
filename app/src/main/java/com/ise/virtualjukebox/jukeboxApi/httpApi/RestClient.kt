@@ -7,6 +7,10 @@ import android.util.Log
 import okhttp3.*
 import java.util.concurrent.TimeUnit
 
+/**
+ * basic rest client
+ *
+ */
 open class RestClient {
 
     private var client = OkHttpClient.Builder().connectTimeout(3, TimeUnit.SECONDS).build()
@@ -28,24 +32,69 @@ open class RestClient {
         fun onSuccess(response: Response)
     }
 
+    /**
+     * Close connection
+     *
+     */
     fun close() {
         client.dispatcher.executorService.shutdown()
         client.connectionPool.evictAll()
         client.cache?.close()
     }
 
+    /**
+     * HTTP Get
+     *
+     * @param scheme HTTP scheme
+     * @param host Host
+     * @param segment segment list
+     * @param parameters parameter list
+     * @param bodyPayload payload (should be empty)
+     * @param cb callback on completion
+     */
     fun queueGetCall(scheme : String, host : String, segment : List<String>, parameters : HashMap<String, String>?, bodyPayload : String?, cb : HttpCallback) {
         this.call("GET", scheme, host, segment, parameters, bodyPayload, cb)
     }
 
+    /**
+     * HTTP Post
+     *
+     * @param scheme HTTP scheme
+     * @param host Host
+     * @param segment segment list
+     * @param parameters parameter list
+     * @param bodyPayload payload
+     * @param cb callback on completion
+     */
     fun quePostCall(scheme : String, host : String, segment : List<String>, parameters : HashMap<String, String>?, bodyPayload : String?, cb : HttpCallback) {
         this.call("POST", scheme, host, segment, parameters, bodyPayload, cb)
     }
 
+    /**
+     * HTTP Put
+     *
+     * @param scheme HTTP scheme
+     * @param host Host
+     * @param segment segment list
+     * @param parameters parameter list
+     * @param bodyPayload payload
+     * @param cb callback on completion
+     */
     fun quePutCall(scheme : String, host : String, segment : List<String>, parameters : HashMap<String, String>?, bodyPayload : String?, cb : HttpCallback) {
         this.call("PUT", scheme, host, segment, parameters, bodyPayload, cb)
     }
 
+    /**
+     * Basic HTTP call
+     *
+     * @param method method (GET, POST, PUT, ...)
+     * @param scheme HTTP scheme
+     * @param host HTTP host
+     * @param segments segment list
+     * @param parameters parameter list
+     * @param bodyPayload payload
+     * @param cb callback on completion
+     */
     private fun call(method : String, scheme : String, host : String, segments : List<String>, parameters : HashMap<String, String>?, bodyPayload : String?, cb : HttpCallback) {
         val request : Request
         val urlBuilder = HttpUrl.Builder().scheme(scheme).host(host).port(8888)
